@@ -1,0 +1,8 @@
+bin
+obj
+dist
+node_modules
+.vs
+.idea
+*.user
+packages
