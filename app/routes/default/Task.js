@@ -51,7 +51,8 @@ class TaskCmp extends VDOM.Component {
                         this.dom.el = el
                     }}
                     tabIndex={0}
-                    onClick={::this.onClick}>
+                    onClick={::this.onClick}
+                    onDoubleClick={e=>{this.toggleEditMode()}}>
             { !this.state.edit && this.renderContent() }
             { this.state.edit && this.renderEditor() }
         </div>

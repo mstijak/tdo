@@ -24,6 +24,13 @@ if (module.hot) {
         store.load(module.hot.data.state);
 }
 
+function updateHash() {
+    store.set('hash', window.location.hash || '#')
+}
+
+updateHash();
+setInterval(updateHash, 100);
+
 Widget.resetCounter(); //preserve React keys
 Debug.enable('app-data');
 
