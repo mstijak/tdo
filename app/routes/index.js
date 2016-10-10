@@ -1,5 +1,5 @@
 import {HtmlElement} from 'cx/ui/HtmlElement';
-import Default from './Default';
+import Default from './default';
 
 export default <cx>
     <div class="cxb-layout">
