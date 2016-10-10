@@ -4,5 +4,12 @@ dependencies:
 
 general:
   branches:
-    only:
-      - master
+    ignore:
+      - gh-pages
+
+deployment:
+  staging:
+    branch: master
+    commands:
+      - npm run build
+      - ./config/deploy-ghpages.sh dist

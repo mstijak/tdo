@@ -28,7 +28,7 @@ var specific = {
     ],
 
     output: {
-        publicPath: './'
+        publicPath: '/tdo/'
     }
 };
 
