@@ -12,4 +12,4 @@ deployment:
     branch: master
     commands:
       - npm run build
-      - ./config/deploy-ghpages.sh dist
+      - sh ./config/deploy-ghpages.sh dist

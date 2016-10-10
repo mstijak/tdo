@@ -10,3 +10,11 @@ A flexible TODO list with the following features
 - Gist or Google Drive save
 - Ability to work with a large number of tasks
 - Different views
+
+### Deployment
+
+The project is auto deployed to GH Pages using CircleCI.
+ 
+Thanks to https://github.com/Villanuevand/deployment-circleci-gh-pages for 
+providing instructions.
+
