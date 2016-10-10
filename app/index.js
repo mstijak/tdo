@@ -2,6 +2,7 @@ import {startAppLoop} from 'cx/app/startAppLoop';
 import {Store} from 'cx/data/Store';
 import Routes from './routes';
 import {Widget} from 'cx/ui/Widget';
+import {Debug} from 'cx/util/Debug';
 import './index.scss';
 
 const store = new Store();
@@ -24,5 +25,6 @@ if (module.hot) {
 }
 
 Widget.resetCounter(); //preserve React keys
+Debug.enable('app-data');
 
 stop = startAppLoop(document.getElementById('app'), store, Routes);

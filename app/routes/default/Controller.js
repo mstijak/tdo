@@ -1,34 +1,67 @@
 import {Controller} from 'cx/ui/Controller';
+import {append} from 'cx/data/ops/append';
+import {KeyCode} from 'cx/util/KeyCode';
+import uid from 'uid';
 
 export default class extends Controller {
     init() {
         super.init();
 
-        this.store.init('lists', [{
-            id: 1,
-            name: 'Bugs'
-        }, {
-            id: 2,
-            name: 'Features'
-        }, {
-            id: 3,
-            name: 'Ideas'
-        }]);
+        this.loadLists();
+        this.addTrigger('lists', ['lists'], (lists) => {
+            localStorage['lists'] = JSON.stringify(lists, null, 2);
+        });
 
-
-        this.store.init('tasks', [{
-            id: 1,
-            name: "Fiddle: Saved doesn't appear anymore"
-        }, {
-            id: 2,
-            name: 'grid empty text'
-        }, {
-            id: 3,
-            name: 'visible: false in grid column'
-        }]);
+        this.loadTasks();
+        this.addTrigger('tasks', ['tasks'], (tasks) => {
+            localStorage['tasks'] = JSON.stringify(tasks, null, 2);
+        });
     }
 
-    onItemClick(e, {store}) {
-        store.set('$task.edit', true);
+    loadLists() {
+        var lists = localStorage['lists'];
+        if (lists) {
+            this.store.set('lists', JSON.parse(lists));
+        }
+    }
+
+    loadTasks() {
+        var tasks = localStorage['tasks'];
+        if (tasks) {
+            this.store.set('tasks', JSON.parse(tasks));
+        }
+    }
+
+    onItemClick(e, instance) {
+        instance.toggleEditMode();
+    }
+
+    addTask(e, {store}) {
+        var listId = store.get('$list.id');
+        this.store.update('tasks', append, {
+            id: uid(),
+            listId
+        });
+        e.preventDefault();
+    }
+
+    onTaskKeyDown(e, instance) {
+        let t = instance.data.task;
+        let tasks = this.store.get('tasks');
+
+        switch (e.keyCode) {
+            case KeyCode.delete:
+                this.store.update('tasks', tasks => tasks.filter(x=>x != t));
+                break;
+
+            case KeyCode.insert:
+                let index = tasks.indexOf(t);
+                let nt = {
+                    id: uid(),
+                    listId: t.listId
+                };
+                this.store.set('tasks', [...tasks.slice(0, index), nt, ...tasks.slice(index)]);
+                break;
+        }
     }
 }

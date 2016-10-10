@@ -4,7 +4,7 @@ import Default from './Default';
 export default <cx>
     <div class="cxb-layout">
         <header class="cxe-layout-header">
-            <h1>to do</h1>
+            <h1>tdo</h1>
         </header>
         <main class="cxe-layout-main">
             <Default />

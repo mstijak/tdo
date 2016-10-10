@@ -1,0 +1,3 @@
+dependencies:
+  pre:
+    npm install npm@latest -g

@@ -1,8 +1,12 @@
+$font-size: 12.5px;
+
+$cx-input-font-size: $font-size;
 @import "~cx-core/src/index";
+
 
 html {
   height: 100%;
-  font-size: 12.5px;
+  font-size: $font-size;
 }
 
 body {

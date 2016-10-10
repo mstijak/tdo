@@ -26,7 +26,8 @@
   "dependencies": {
     "cx-core": "^16.10.3",
     "cx-react": "^16.8.4",
-    "marked": "^0.3.6"
+    "marked": "^0.3.6",
+    "uid": "0.0.2"
   },
   "devDependencies": {
     "babel-core": "^6.17.0",
@@ -42,6 +43,7 @@
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
     "webpack": "^2.1.0-beta.25",
-    "webpack-dev-server": "^2.1.0-beta.8"
+    "webpack-dev-server": "^2.1.0-beta.8",
+    "webpack-merge": "^0.14.1"
   }
 }

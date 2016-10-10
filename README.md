@@ -1,4 +1,4 @@
-# tDo
+# tdo
 
 A flexible TODO list with the following features
 

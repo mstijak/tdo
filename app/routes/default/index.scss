@@ -4,15 +4,61 @@
 }
 
 .cxb-tasklist {
-  width: 20rem;
-  padding: 1rem;
+  min-width: 10rem;
+  padding: 1rem 2rem ;
 }
 
 .cxe-tasklist-header {
   font-size: 1rem;
-  margin: 0;
+  margin: 0 0 1rem 0;
+}
+
+.cxe-tasklist-add {
+  display: block;
+  padding: 0.5rem 0.5rem 0.5rem 2.5rem;
 }
 
 .cxb-task {
-  padding: 1rem;
+
+  &:focus {
+    outline: none;
+  }
+
+  padding: 0 0.5rem 0 2.5rem;
+  transition: max-height 0.2s;
+
+
+  p {
+    margin: 0.5rem 0 0.5rem 0;
+    white-space: pre-wrap;
+  }
+
+  input[type="checkbox"] {
+    position: absolute;
+    left: 0.5rem;
+    top: 0.5rem;
+  }
+
+  textarea {
+    width: 100%;
+    background: rgba(128, 128, 128, 0.1);
+    color: white;
+    border: none;
+    font-family: inherit;
+    padding: 0.5rem 0;
+    font-size: inherit;
+    white-space: pre;
+    overflow: hidden;
+
+    &:focus {
+      outline: none;
+    }
+  }
 }
+
+.cxe-task-content {
+  .cxb-task.cxs-completed & {
+    opacity: 0.3;
+  }
+}
+
