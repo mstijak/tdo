@@ -5,7 +5,7 @@ const webpack = require('webpack'),
     paths = {
         root: path.join(__dirname, '../'),
         app: path.join(__dirname, '../app/'),
-        dist: path.join(__dirname, '../docs/')
+        dist: path.join(__dirname, '../dist/')
     };
 
 module.exports = {
