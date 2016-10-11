@@ -1,0 +1,13 @@
+.cxb-help {
+  padding: 3rem;
+
+  code {
+    text-align: center;
+    display: inline-block;
+    width: 6rem;
+
+    &:last-child {
+      margin-right: 3rem;
+    }
+  }
+}

@@ -2,13 +2,17 @@
   display: flex;
   padding: 1rem;
 
+  .spacer {
+    width: 6rem;
+  }
+
   h1 {
     margin: 0;
     font-size: 1.5rem;
   }
 
   a {
-    margin: 0.5rem 1rem 0 2rem;
+    padding: 0.5rem 1rem;
   }
 }
 
@@ -32,3 +36,4 @@
 
 @import "default/index";
 @import "settings/index";
+@import "help/index";

@@ -14,9 +14,16 @@ import Controller from './Controller';
 
 export default <cx>
     <div class="cxb-settings" controller={Controller}>
-        <h4>GitHub</h4>
+        <h2>Settings</h2>
+        <h3>GitHub</h3>
         <div visible:expr="{$page.gh.verified}">
-            Your tasks are persisted to <a href:tpl="https://gist.github.com/mstijak/{$page.gh.gistId}">this gist</a>.
+            <p preserveWhitespace>
+                Your tasks are persisted to <a href:tpl="https://gist.github.com/mstijak/{$page.gh.gistId}">this gist</a>.
+            </p>
+            <p preserveWhitespace>
+                <a href="#" onClick="unlink">Unlink completely</a>
+                <a href="#" onClick="changeGist">Switch gists</a>
+            </p>
         </div>
         <div layout={LabelsLeftLayout} visible:expr="!{$page.gh.verified}">
             <Md>

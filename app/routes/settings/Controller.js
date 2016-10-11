@@ -41,4 +41,17 @@ export default class extends Controller {
         let gh = this.store.get('$page.gh');
         localStorage.gh = JSON.stringify(gh);
     }
+
+    unlink(e) {
+        e.preventDefault();
+        this.store.set('$page.gh', null);
+        localStorage.gh = null;
+    }
+
+    changeGist(e) {
+        e.preventDefault();
+        this.store.set('$page.gh.verified', false);
+    }
+
+
 }
