@@ -24,13 +24,17 @@ export default <cx>
         <div class="cxe-taskboard-error" visible:expr="{$page.status}=='error'">
             Error occurred while fetching data from GitHub. <Button onClick="load">Retry</Button>
         </div>
-        <div>
-            <Repeater records:bind="lists" recordName="$list">
-                <div class="cxb-tasklist">
+        <div class="cxe-taskboard-lists">
+            <Repeater records:bind="lists" recordName="$list" keyField="id">
+                <div class="cxb-tasklist" style:bind="$list.listStyle">
                     <div>
-                        <h2 class="cxe-tasklist-header" text:bind="$list.name" onClick={(e, {store}) => { store.set('$list.edit', true)}} />
+                        <h2
+                            class="cxe-tasklist-header"
+                            text:bind="$list.name"
+                            style:bind="$list.headerStyle"
+                            onClick={(e, {store}) => { store.set('$list.edit', true)}} />
                         <ListEditor visible:expr="!!{$list.edit}" />
-                        <Menu visible:expr="!{$list.edit}">
+                        <Menu>
                             <Repeater records:bind="tasks"
                                       recordName="$task"
                                       keyField="id"

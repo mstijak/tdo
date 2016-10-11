@@ -1,16 +1,17 @@
-.cxb-taskboard {
-  display: flex;
-  flex-direction: row;
-}
-
 .cxe-taskboard-loading,
 .cxe-taskboard-error {
   padding: 3rem;
 }
 
+.cxe-taskboard-lists {
+  display: flex;
+  flex-direction: row;
+}
+
 .cxb-tasklist {
-  min-width: 10rem;
-  padding: 1rem 2rem ;
+  min-width: 15rem;
+  max-width: 30rem;
+  padding: 1rem 1.5rem ;
 }
 
 .cxe-tasklist-header {
@@ -52,8 +53,8 @@
     font-family: inherit;
     padding: 0.5rem 0;
     font-size: inherit;
-    white-space: pre;
     overflow: hidden;
+    display: block;
 
     &:focus {
       outline: none;
@@ -65,5 +66,16 @@
   .cxb-task.cxs-completed & {
     opacity: 0.3;
   }
+}
+
+.cxb-listeditor {
+  animation-name: maxHeight1000;
+  animation-duration: 1s;
+  overflow: hidden;
+}
+
+@keyframes maxHeight1000 {
+  from { max-height: 0; }
+  to { max-height: 1000px; }
 }
 

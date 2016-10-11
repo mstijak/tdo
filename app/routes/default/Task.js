@@ -77,7 +77,7 @@ class TaskCmp extends VDOM.Component {
     renderEditor() {
         var {data} = this.props.instance;
         return <textarea defaultValue={data.task.name}
-                         onClick={e=>e.stopPropagation()}
+                         onMouseDown={e=>{e.stopPropagation();}}
                          onKeyDown={::this.onEditorKeyDown}
                          ref={c=> {
                              this.dom.editor = c;
@@ -100,7 +100,8 @@ class TaskCmp extends VDOM.Component {
 
         instance.set('task', {
             ...data.task,
-            completed: completed
+            completed: completed,
+            completeDate: new Date().toISOString()
         });
     }
 

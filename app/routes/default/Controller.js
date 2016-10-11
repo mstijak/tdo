@@ -107,4 +107,30 @@ export default class extends Controller {
                 break;
         }
     }
+
+    listMoveLeft(e, {store}) {
+        var {lists, $list} = store.getData();
+        var index = lists.indexOf($list);
+        if (index > 0) {
+            store.set('lists', [
+                ...lists.slice(0, index - 1),
+                $list,
+                lists[index - 1],
+                ...lists.slice(index + 1)
+            ]);
+        }
+    }
+
+    listMoveRight(e, {store}) {
+        var {lists, $list} = store.getData();
+        var index = lists.indexOf($list);
+        if (index + 1 < lists.length) {
+            store.set('lists', [
+                ...lists.slice(0, index),
+                lists[index + 1],
+                $list,
+                ...lists.slice(index + 2)
+            ]);
+        }
+    }
 }
