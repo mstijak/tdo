@@ -1,42 +1,58 @@
 import {Controller} from 'cx/ui/Controller';
 import {append} from 'cx/data/ops/append';
 import {KeyCode} from 'cx/util/KeyCode';
+import {Gists} from '../../services/Gists';
+
 import uid from 'uid';
 
 export default class extends Controller {
     init() {
         super.init();
 
-        this.loadLists();
-        this.addTrigger('lists', ['lists'], (lists) => {
-            localStorage['lists'] = JSON.stringify(lists, null, 2);
-        });
+        this.load();
 
-        this.loadTasks();
-        this.addTrigger('tasks', ['tasks'], (tasks) => {
-            localStorage['tasks'] = JSON.stringify(tasks, null, 2);
-        });
+        this.addTrigger('persist', ['lists', 'tasks'], ::this.persist);
     }
 
-    loadLists() {
-        var lists = localStorage['lists'];
-        if (lists) {
-            this.store.set('lists', JSON.parse(lists));
-        } else {
-            this.store.set('lists', [{
-                id: uid(),
-                name: 'List 1'
-            }]);
-        }
-    }
+    persist() {
+        var {tasks, lists} = this.store.getData();
 
-    loadTasks() {
-        var tasks = localStorage['tasks'];
-        if (tasks) {
-            this.store.set('tasks', JSON.parse(tasks));
+        var gh = localStorage.gh && JSON.parse(localStorage.gh);
+
+        if (gh && gh.token && gh.gistId) {
+            let gists = new Gists(gh);
+            gists.update({
+                lists,
+                tasks
+            })
         }
         else {
-            this.store.set('tasks', []);
+            localStorage.tasks = JSON.stringify(tasks);
+            localStorage.lists = JSON.stringify(lists);
+        }
+    }
+
+    load() {
+        var gh = localStorage.gh && JSON.parse(localStorage.gh);
+        if (gh && gh.token && gh.gistId) {
+            let gists = new Gists(gh);
+            this.store.set('$page.status', 'loading');
+            gists.load()
+                .then(x=> {
+                    this.store.set('tasks', x.tasks || []);
+                    this.store.set('lists', x.lists || []);
+                    this.store.set('$page.status', 'ok');
+                })
+                .catch(e=> {
+                    console.log(e);
+                    this.store.set('$page.status', 'error');
+                });
+        }
+        else {
+            this.store.set('tasks', localStorage.tasks && JSON.parse(localStorage.tasks) || []);
+            this.store.set('lists', localStorage.lists && JSON.parse(localStorage.lists) || []);
+            if (this.store.get('lists').length == 0)
+                this.addList();
         }
     }
 
@@ -45,12 +61,14 @@ export default class extends Controller {
     }
 
     addList(e) {
-        e.preventDefault();
+        if (e)
+            e.preventDefault();
 
         this.store.update('lists', append, {
             id: uid(),
             name: 'New List',
-            edit: true
+            edit: true,
+            created: new Date().toISOString()
         });
     }
 
@@ -59,12 +77,17 @@ export default class extends Controller {
         this.store.update('lists', lists => lists.filter(x=>x != l));
     }
 
+    prepareTask(listId) {
+        return  {
+            id: uid(),
+            listId,
+            created: new Date().toISOString()
+        }
+    }
+
     addTask(e, {store}) {
         var listId = store.get('$list.id');
-        this.store.update('tasks', append, {
-            id: uid(),
-            listId
-        });
+        this.store.update('tasks', append, this.prepareTask(listId));
         e.preventDefault();
     }
 
@@ -79,10 +102,7 @@ export default class extends Controller {
 
             case KeyCode.insert:
                 let index = tasks.indexOf(t);
-                let nt = {
-                    id: uid(),
-                    listId: t.listId
-                };
+                let nt = this.prepareTask(t.listId);
                 this.store.set('tasks', [...tasks.slice(0, index), nt, ...tasks.slice(index)]);
                 break;
         }

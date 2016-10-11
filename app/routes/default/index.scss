@@ -3,6 +3,11 @@
   flex-direction: row;
 }
 
+.cxe-taskboard-loading,
+.cxe-taskboard-error {
+  padding: 3rem;
+}
+
 .cxb-tasklist {
   min-width: 10rem;
   padding: 1rem 2rem ;

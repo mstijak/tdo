@@ -6,7 +6,7 @@ import {LabelsTopLayout} from 'cx/ui/layout/LabelsTopLayout';
 export default <cx>
     <div>
         <div layout={LabelsTopLayout}>
-            <TextField value:bind="$list.name" label="Name" />
+            <TextField value:bind="$list.name" label="Name" autoFocus />
         </div>
 
         <br/>

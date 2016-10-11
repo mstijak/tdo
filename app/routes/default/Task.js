@@ -132,7 +132,8 @@ class TaskCmp extends VDOM.Component {
 
         instance.set('task', {
             ...data.task,
-            name: e.target.value
+            name: e.target.value,
+            lastChange: new Date().toISOString()
         });
     }
 

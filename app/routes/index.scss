@@ -6,7 +6,11 @@
     margin: 0;
     font-size: 1.5rem;
   }
+
+  a {
+    margin: 0.5rem 1rem 0 2rem;
+  }
 }
 
 @import "default/index";
-@import "github/index";
+@import "settings/index";
