@@ -12,5 +12,23 @@
   }
 }
 
+.cxb-textfield.cxm-search {
+  margin: 0 2em;
+  width: auto;
+
+  .cxe-textfield-input {
+    background: transparent;
+    color: inherit;
+    border: none;
+    height: auto;
+    width: 20rem;
+    transition: width 0.5s;
+
+    &:placeholder-shown {
+      width: 10rem;
+    }
+  }
+}
+
 @import "default/index";
 @import "settings/index";

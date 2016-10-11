@@ -11,9 +11,22 @@ import {Task} from './Task';
 import Controller from './Controller';
 import ListEditor from './ListEditor';
 
+let searchTerms = null;
+let searchQuery = null;
 
-function filterItems(item, list) {
-    return item.listId == list.id;
+
+function filterItems(item, {search, list}) {
+    if (item.listId != list.id)
+        return false;
+
+    if (!item.isNew && search && search.query) {
+        if (searchQuery != search.query) {
+            searchTerms = search.query.split(' ').map(w=>new RegExp(w, 'gi'));
+            searchQuery = search.query;
+        }
+        return item.name && searchTerms.every(ex=>item.name.match(ex));
+    }
+    return true;
 }
 
 export default <cx>
@@ -26,7 +39,7 @@ export default <cx>
         </div>
         <div class="cxe-taskboard-lists">
             <Repeater records:bind="lists" recordName="$list" keyField="id">
-                <div class="cxb-tasklist" style:bind="$list.listStyle">
+                <div class="cxb-tasklist" style:bind="$list.listStyle" onKeyDown="onTaskListKeyDown">
                     <div>
                         <h2
                             class="cxe-tasklist-header"
@@ -39,7 +52,10 @@ export default <cx>
                                       recordName="$task"
                                       keyField="id"
                                       filter={filterItems}
-                                      filterParams:bind="$list">
+                                      filterParams={{
+                                          list: {bind: '$list'},
+                                          search: {bind: 'search'}
+                                      }}>
                                 <Task bind="$task" onKeyDown="onTaskKeyDown" />
                             </Repeater>
                             <a class="cxe-tasklist-add" onClick="addTask" href="#">Add Task</a>
@@ -47,7 +63,11 @@ export default <cx>
                     </div>
                 </div>
             </Repeater>
-            <a class="cxe-tasklist-add" onClick="addList" href="#">Add List</a>
+            <div class="cxb-tasklist" onKeyDown="onTaskListKeyDown">
+                <Menu>
+                    <a class="cxe-tasklist-add" onClick="addList" href="#">Add List</a>
+                </Menu>
+            </div>
         </div>
     </div>
 </cx>;

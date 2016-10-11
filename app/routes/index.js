@@ -2,6 +2,7 @@ import {HtmlElement} from 'cx/ui/HtmlElement';
 import Default from './default';
 import Settings from './settings';
 import {Tab} from 'cx/ui/nav/Tab';
+import {TextField} from 'cx/ui/form/TextField';
 import {Route} from 'cx/ui/nav/Route';
 import {Sandbox} from 'cx/ui/Sandbox';
 
@@ -12,6 +13,7 @@ export default <cx>
             <h1>tdo</h1>
             <a href="#">Tasks</a>
             <a href="#settings">Settings</a>
+            <TextField value:bind="search.query" placeholder="Search..." mod="search" />
         </header>
         <main class="cxe-layout-main">
             <Sandbox key:bind="hash" storage:bind="pages">

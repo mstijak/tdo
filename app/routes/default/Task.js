@@ -131,11 +131,15 @@ class TaskCmp extends VDOM.Component {
         let {instance} = this.props;
         let {data} = instance;
 
-        instance.set('task', {
+        var task = {
             ...data.task,
             name: e.target.value,
             lastChange: new Date().toISOString()
-        });
+        };
+
+        delete task.isNew;
+
+        instance.set('task', task);
     }
 
     onEditorKeyDown(e) {

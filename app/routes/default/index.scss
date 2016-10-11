@@ -6,11 +6,11 @@
 .cxe-taskboard-lists {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .cxb-tasklist {
-  min-width: 15rem;
-  max-width: 30rem;
+  width: 30rem;
   padding: 1rem 1.5rem ;
 }
 

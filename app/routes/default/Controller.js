@@ -2,6 +2,7 @@ import {Controller} from 'cx/ui/Controller';
 import {append} from 'cx/data/ops/append';
 import {KeyCode} from 'cx/util/KeyCode';
 import {Gists} from '../../services/Gists';
+import {FocusManager} from 'cx/ui/FocusManager';
 
 import uid from 'uid';
 
@@ -78,10 +79,11 @@ export default class extends Controller {
     }
 
     prepareTask(listId) {
-        return  {
+        return {
             id: uid(),
             listId,
-            created: new Date().toISOString()
+            created: new Date().toISOString(),
+            isNew: true
         }
     }
 
@@ -104,6 +106,20 @@ export default class extends Controller {
                 let index = tasks.indexOf(t);
                 let nt = this.prepareTask(t.listId);
                 this.store.set('tasks', [...tasks.slice(0, index), nt, ...tasks.slice(index)]);
+                break;
+        }
+    }
+
+    onTaskListKeyDown(e, instance) {
+        switch (e.keyCode) {
+            case KeyCode.left:
+                if (e.currentTarget.previousSibling)
+                    FocusManager.focusFirst(e.currentTarget.previousSibling);
+                break;
+
+            case KeyCode.right:
+                if (e.currentTarget.nextSibling)
+                    FocusManager.focusFirst(e.currentTarget.nextSibling);
                 break;
         }
     }
