@@ -11,9 +11,12 @@ export default <cx>
     <div class="cxb-layout">
         <header class="cxe-layout-header">
             <h1>tdo</h1>
+            <TextField value:bind="search.query" placeholder="Search..." mod="search" />
             <a href="#">Tasks</a>
             <a href="#settings">Settings</a>
-            <TextField value:bind="search.query" placeholder="Search..." mod="search" />
+            <a href="#keyboard">Keyboard Shortcuts</a>
+            <a href="https://github.com/mstijak/tdo" target="_blank">Fork or report a problem</a>
+
         </header>
         <main class="cxe-layout-main">
             <Sandbox key:bind="hash" storage:bind="pages">
