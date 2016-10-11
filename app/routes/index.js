@@ -15,8 +15,8 @@ export default <cx>
             <a href="#">Tasks</a>
             <a href="#settings">Settings</a>
             <a href="#keyboard">Keyboard Shortcuts</a>
-            <a href="https://github.com/mstijak/tdo" target="_blank">Fork or report a problem</a>
-
+            <a href="https://github.com/mstijak/tdo" target="_blank">Bug/Feature</a>
+            <a href:tpl="http://twitter.com/home?status=tdo - hackable TODO list #todo" target="_blank">Tweet</a>
         </header>
         <main class="cxe-layout-main">
             <Sandbox key:bind="hash" storage:bind="pages">
