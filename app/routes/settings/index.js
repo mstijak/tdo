@@ -14,13 +14,12 @@ import Controller from './Controller';
 
 export default <cx>
     <div class="cxb-settings" controller={Controller}>
+        <h4>GitHub</h4>
         <div visible:expr="{$page.gh.verified}">
             Your tasks are persisted to <a href:tpl="https://gist.github.com/mstijak/{$page.gh.gistId}">this gist</a>.
         </div>
         <div layout={LabelsLeftLayout} visible:expr="!{$page.gh.verified}">
             <Md>
-                ### GitHub
-
                 GitHub gists can be used to store task data. In order to connect with GitHub please [create a GitHub Personal
                 Access Token](https://github.com/settings/tokens) with **gist** scope and paste it below.
                 The token will enable read/write access to your GitHub gists. Tokens are stored in **localStorage**, so don't do
