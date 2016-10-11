@@ -3,6 +3,7 @@ import Default from './default';
 import GitHub from './github';
 import {Tab} from 'cx/ui/nav/Tab';
 import {Route} from 'cx/ui/nav/Route';
+import {Sandbox} from 'cx/ui/Sandbox';
 
 
 export default <cx>
@@ -15,12 +16,14 @@ export default <cx>
             </div>
         </header>
         <main class="cxe-layout-main">
-            <Route url:bind="hash" route="#">
-                <Default />
-            </Route>
-            <Route url:bind="hash" route="#github">
-                <GitHub />
-            </Route>
+            <Sandbox key:bind="hash" storage:bind="pages">
+                <Route url:bind="hash" route="#">
+                    <Default />
+                </Route>
+                <Route url:bind="hash" route="#github">
+                    <GitHub />
+                </Route>
+            </Sandbox>
         </main>
     </div>
 </cx>;
