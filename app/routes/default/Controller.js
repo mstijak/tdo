@@ -32,8 +32,7 @@ export default class extends Controller {
             }, 5000);
         }
         else {
-            localStorage.tasks = JSON.stringify(tasks);
-            localStorage.lists = JSON.stringify(lists);
+            localStorage.tdo = JSON.stringify(tdo);
         }
     }
 
