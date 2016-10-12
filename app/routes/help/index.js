@@ -16,7 +16,7 @@ export default <cx>
         <Md>
             ## Help
 
-            General rule is that double-click is used to switch to edit mode (lists and tasks).
+            Double-click is used to edit lists and tasks.
 
             ### Keyboard Shortcuts (Windows)
 

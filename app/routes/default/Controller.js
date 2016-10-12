@@ -23,8 +23,13 @@ export default class extends Controller {
         var gh = localStorage.gh && JSON.parse(localStorage.gh);
 
         if (gh && gh.token && gh.gistId) {
-            let gists = new Gists(gh);
-            gists.update(tdo)
+            if (this.saveTaskId)
+                clearTimeout(this.saveTaskId);
+            this.saveTaskId = setTimeout(()=> {
+                delete this.saveTaskId;
+                let gists = new Gists(gh);
+                gists.update(tdo);
+            }, 5000);
         }
         else {
             localStorage.tasks = JSON.stringify(tasks);
@@ -61,7 +66,7 @@ export default class extends Controller {
             this.store.set('tdo', data);
             this.gotoFirstBoard();
             if (this.store.get('tdo.lists').length == 0)
-                this.addList();
+                this.addList(null, {store: this.store});
         }
     }
 
@@ -107,6 +112,52 @@ export default class extends Controller {
         e.preventDefault();
     }
 
+    moveTaskUp(e, {store}) {
+        e.stopPropagation();
+        e.preventDefault();
+        let {tdo, $task} = store.getData();
+        let {tasks} = tdo;
+        let index = tasks.indexOf($task);
+        let insertPos = -1;
+        for (var i = index - 1; i >= 0; i--)
+            if (tasks[i].listId == $task.listId) {
+                insertPos = i;
+                break;
+            }
+        if (insertPos != -1) {
+            this.store.set('tdo.tasks', [
+                ...tasks.slice(0, insertPos),
+                $task,
+                ...tasks.slice(insertPos, index),
+                ...tasks.slice(index + 1)
+            ]);
+        }
+    }
+
+    moveTaskDown(e, {store}) {
+        e.stopPropagation();
+        e.preventDefault();
+        let {tdo, $task} = store.getData();
+        let {tasks} = tdo;
+        let index = tasks.indexOf($task);
+        let insertPos = -1;
+
+        for (var i = index + 1; i < tasks.length; i++)
+            if (tasks[i].listId == $task.listId) {
+                insertPos = i;
+                break;
+            }
+
+        if (insertPos != -1) {
+            this.store.set('tdo.tasks', [
+                ...tasks.slice(0, index),
+                ...tasks.slice(index + 1, insertPos),
+                $task,
+                ...tasks.slice(insertPos)
+            ]);
+        }
+    }
+
     onTaskKeyDown(e, instance) {
         let t = instance.data.task;
         let tasks = this.store.get('tdo.tasks');
@@ -120,6 +171,14 @@ export default class extends Controller {
                 let index = tasks.indexOf(t);
                 let nt = this.prepareTask(t.listId);
                 this.store.set('tdo.tasks', [...tasks.slice(0, index), nt, ...tasks.slice(index)]);
+                break;
+
+            case KeyCode.up:
+                if (e.ctrlKey) this.moveTaskUp(e, instance);
+                break;
+
+            case KeyCode.down:
+                if (e.ctrlKey) this.moveTaskDown(e, instance);
                 break;
         }
     }
