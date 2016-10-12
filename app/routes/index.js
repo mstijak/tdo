@@ -32,7 +32,10 @@ export default <cx>
             <TextField value:bind="search.query" placeholder="Search..." mod="search" />
 
             <Repeater records:bind="tdo.boards">
-                <a href:tpl="#{$record.id}" class={{active: {expr: '{hash}=="#" + {$record.id}'}}} text:bind="$record.name" />
+                <a href:tpl="#{$record.id}"
+                   class={{active: {expr: '{hash}=="#" + {$record.id}'}}}
+                   style:bind="$record.headerStyle"
+                   text:bind="$record.name" />
             </Repeater>
             <a href="#" onClick={addBoard}>Add Board</a>
 

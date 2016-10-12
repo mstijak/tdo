@@ -1,6 +1,7 @@
 import {HtmlElement} from 'cx/ui/HtmlElement';
 import {TextField} from 'cx/ui/form/TextField';
 import {TextArea} from 'cx/ui/form/TextArea';
+import {LookupField} from 'cx/ui/form/LookupField';
 import {Button} from 'cx/ui/Button';
 import {LabelsTopLayout} from 'cx/ui/layout/LabelsTopLayout';
 
@@ -11,6 +12,16 @@ export default <cx>
                 value:bind="$list.name"
                 label="Name"
                 autoFocus
+                style="width:100%;"
+            />
+        </div>
+
+        <div layout={{ type: LabelsTopLayout, mod: 'stretch' }}>
+            <LookupField
+                value:bind="$list.boardId"
+                label="Board"
+                options:bind="tdo.boards"
+                optionTextField="name"
                 style="width:100%;"
             />
         </div>

@@ -46,14 +46,14 @@ export default <cx>
         <div class="cxe-taskboard-error" visible:expr="{$page.status}=='error'">
             Error occurred while fetching data from GitHub. <Button onClick="load">Retry</Button>
         </div>
-        <div class="cxe-taskboard-lists">
-            <Repeater
-                records:bind="tdo.boards"
-                recordName="$board"
-                keyField="id"
-                filter={filterBoards}
-                filterParams:bind="$route.boardId"
-            >
+        <Repeater
+            records:bind="tdo.boards"
+            recordName="$board"
+            keyField="id"
+            filter={filterBoards}
+            filterParams:bind="$route.boardId"
+        >
+            <div class="cxe-taskboard-lists" style:bind="$board.style">
                 <Repeater
                     records:bind="tdo.lists"
                     recordName="$list"
@@ -61,32 +61,30 @@ export default <cx>
                     filter={filterLists}
                     filterParams:bind="$board.id"
                 >
-                    <div class="cxb-tasklist" style:bind="$list.listStyle" onKeyDown="onTaskListKeyDown">
-                        <div>
-                            <h2
-                                class="cxe-tasklist-header"
-                                text:bind="$list.name"
-                                style:bind="$list.headerStyle"
-                                onDoubleClick={(e, {store}) => { store.set('$list.edit', true)}} />
-                            <ListEditor visible:expr="!!{$list.edit}" />
-                            <Menu>
-                                <Repeater records:bind="tdo.tasks"
-                                          recordName="$task"
-                                          keyField="id"
-                                          filter={filterItems}
-                                          filterParams={{
-                                              list: {bind: '$list'},
-                                              search: {bind: 'search'}
-                                          }}>
-                                    <Task bind="$task" onKeyDown="onTaskKeyDown" />
-                                </Repeater>
-                                <a class="cxe-tasklist-add" onClick="addTask" href="#">Add Task</a>
-                            </Menu>
-                        </div>
+                    <div class="cxb-tasklist" onKeyDown="onTaskListKeyDown" style:bind="$list.listStyle">
+                        <h2
+                            class="cxe-tasklist-header"
+                            text:bind="$list.name"
+                            style:bind="$list.headerStyle"
+                            onDoubleClick={(e, {store}) => { store.set('$list.edit', true)}} />
+                        <ListEditor visible:expr="!!{$list.edit}" />
+                        <Menu class="cxe-tasklist-items">
+                            <Repeater records:bind="tdo.tasks"
+                                      recordName="$task"
+                                      keyField="id"
+                                      filter={filterItems}
+                                      filterParams={{
+                                          list: {bind: '$list'},
+                                          search: {bind: 'search'}
+                                      }}>
+                                <Task bind="$task" onKeyDown="onTaskKeyDown" />
+                            </Repeater>
+                            <a class="cxe-tasklist-add" onClick="addTask" href="#">Add Task</a>
+                        </Menu>
                     </div>
                 </Repeater>
                 <div class="cxb-tasklist" onKeyDown="onTaskListKeyDown">
-                    <Menu>
+                    <Menu class="cxe-tasklist-items">
                         <a class="cxe-tasklist-add"
                            onClick="addList"
                            href="#"
@@ -103,7 +101,7 @@ export default <cx>
                     </Menu>
                     <BoardEditor visible:expr="!!{$board.edit}" />
                 </div>
-            </Repeater>
-        </div>
+            </div>
+        </Repeater>
     </div>
 </cx>;
