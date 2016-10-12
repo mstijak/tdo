@@ -26,9 +26,10 @@ export class Gists {
         return this.get()
             .then(x=> {
                 var tdo = x.files['tdo.json'];
+                var data = {};
                 if (tdo && tdo.content)
-                    return JSON.parse(tdo.content);
-                return {};
+                    data = JSON.parse(tdo.content);
+                return data;
             })
     }
 
@@ -40,7 +41,7 @@ export class Gists {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                description: 'tdo tasks.',
+                description: 'tdo tasks',
                 files: this.convertFiles(data)
             })
         };

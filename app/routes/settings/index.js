@@ -15,6 +15,7 @@ import Controller from './Controller';
 export default <cx>
     <div class="cxb-settings" controller={Controller}>
         <h2>Settings</h2>
+
         <h3>GitHub</h3>
         <div visible:expr="{$page.gh.verified}">
             <p preserveWhitespace>

@@ -17,8 +17,10 @@ export default <cx>
 
         <br/>
 
-        <Button onClick="listMoveLeft">Move Left</Button>
-        <Button onClick="listMoveRight">Move Right</Button>
+        <div>
+            <Button onClick="listMoveLeft">Move Left</Button>
+            <Button onClick="listMoveRight" style="float:right">Move Right</Button>
+        </div>
 
         <div layout={{ type: LabelsTopLayout, mod: 'stretch' }}>
             <TextArea

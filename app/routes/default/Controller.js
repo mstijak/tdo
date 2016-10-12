@@ -3,6 +3,7 @@ import {append} from 'cx/data/ops/append';
 import {KeyCode} from 'cx/util/KeyCode';
 import {Gists} from '../../services/Gists';
 import {FocusManager} from 'cx/ui/FocusManager';
+import {migrate} from '../../data/migrate';
 
 import uid from 'uid';
 
@@ -10,27 +11,31 @@ export default class extends Controller {
     init() {
         super.init();
 
-        this.load();
+        if (!this.store.get('tdo'))
+            this.load();
 
-        this.addTrigger('persist', ['lists', 'tasks'], ::this.persist);
+        this.addTrigger('persist', ['tdo'], ::this.persist);
     }
 
     persist() {
-        var {tasks, lists} = this.store.getData();
+        var {tdo} = this.store.getData();
 
         var gh = localStorage.gh && JSON.parse(localStorage.gh);
 
         if (gh && gh.token && gh.gistId) {
             let gists = new Gists(gh);
-            gists.update({
-                lists,
-                tasks
-            })
+            gists.update(tdo)
         }
         else {
             localStorage.tasks = JSON.stringify(tasks);
             localStorage.lists = JSON.stringify(lists);
         }
+    }
+
+    gotoFirstBoard() {
+        var boards = this.store.get('tdo.boards');
+        if (boards.length > 0)
+            window.location.hash = '#' + boards[0].id;
     }
 
     load() {
@@ -40,9 +45,10 @@ export default class extends Controller {
             this.store.set('$page.status', 'loading');
             gists.load()
                 .then(x=> {
-                    this.store.set('tasks', x.tasks || []);
-                    this.store.set('lists', x.lists || []);
+                    migrate(x);
+                    this.store.set('tdo', x);
                     this.store.set('$page.status', 'ok');
+                    this.gotoFirstBoard();
                 })
                 .catch(e=> {
                     console.log(e);
@@ -50,32 +56,40 @@ export default class extends Controller {
                 });
         }
         else {
-            this.store.set('tasks', localStorage.tasks && JSON.parse(localStorage.tasks) || []);
-            this.store.set('lists', localStorage.lists && JSON.parse(localStorage.lists) || []);
-            if (this.store.get('lists').length == 0)
+            let data = localStorage.tdo && JSON.parse(localStorage.tdo) || this.getDefaultData();
+            migrate(data);
+            this.store.set('tdo', data);
+            this.gotoFirstBoard();
+            if (this.store.get('tdo.lists').length == 0)
                 this.addList();
         }
     }
 
-    onItemClick(e, instance) {
-        instance.toggleEditMode();
+    getDefaultData() {
+        return {
+            lists: [],
+            tasks: []
+        }
     }
 
-    addList(e) {
+    addList(e, {store}) {
         if (e)
             e.preventDefault();
 
-        this.store.update('lists', append, {
+        var boardId = store.get('$board.id') || store.get('tdo.boards')[0].id;
+
+        this.store.update('tdo.lists', append, {
             id: uid(),
             name: 'New List',
             edit: true,
-            created: new Date().toISOString()
+            created: new Date().toISOString(),
+            boardId: boardId
         });
     }
 
     deleteList(e, {store}) {
         var l = store.get('$list');
-        this.store.update('lists', lists => lists.filter(x=>x != l));
+        this.store.update('tdo.lists', lists => lists.filter(x=>x != l));
     }
 
     prepareTask(listId) {
@@ -89,23 +103,23 @@ export default class extends Controller {
 
     addTask(e, {store}) {
         var listId = store.get('$list.id');
-        this.store.update('tasks', append, this.prepareTask(listId));
+        this.store.update('tdo.tasks', append, this.prepareTask(listId));
         e.preventDefault();
     }
 
     onTaskKeyDown(e, instance) {
         let t = instance.data.task;
-        let tasks = this.store.get('tasks');
+        let tasks = this.store.get('tdo.tasks');
 
         switch (e.keyCode) {
             case KeyCode.delete:
-                this.store.update('tasks', tasks => tasks.filter(x=>x != t));
+                this.store.update('tdo.tasks', tasks => tasks.filter(x=>x != t));
                 break;
 
             case KeyCode.insert:
                 let index = tasks.indexOf(t);
                 let nt = this.prepareTask(t.listId);
-                this.store.set('tasks', [...tasks.slice(0, index), nt, ...tasks.slice(index)]);
+                this.store.set('tdo.tasks', [...tasks.slice(0, index), nt, ...tasks.slice(index)]);
                 break;
         }
     }
@@ -125,10 +139,11 @@ export default class extends Controller {
     }
 
     listMoveLeft(e, {store}) {
-        var {lists, $list} = store.getData();
+        var {tdo, $list} = store.getData();
+        var {lists} = tdo;
         var index = lists.indexOf($list);
         if (index > 0) {
-            store.set('lists', [
+            store.set('tdo.lists', [
                 ...lists.slice(0, index - 1),
                 $list,
                 lists[index - 1],
@@ -138,15 +153,49 @@ export default class extends Controller {
     }
 
     listMoveRight(e, {store}) {
-        var {lists, $list} = store.getData();
+        var {tdo, $list} = store.getData();
+        var {lists} = tdo;
         var index = lists.indexOf($list);
         if (index + 1 < lists.length) {
-            store.set('lists', [
+            store.set('tdo.lists', [
                 ...lists.slice(0, index),
                 lists[index + 1],
                 $list,
                 ...lists.slice(index + 2)
             ]);
         }
+    }
+
+    boardMoveLeft(e, {store}) {
+        var {tdo, $board} = store.getData();
+        var {boards} = tdo;
+        var index = boards.indexOf($board);
+        if (index > 0) {
+            store.set('tdo.boards', [
+                ...boards.slice(0, index - 1),
+                $board,
+                boards[index - 1],
+                ...boards.slice(index + 1)
+            ]);
+        }
+    }
+
+    boardMoveRight(e, {store}) {
+        var {tdo, $board} = store.getData();
+        var {boards} = tdo;
+        var index = boards.indexOf($board);
+        if (index + 1 < boards.length) {
+            store.set('tdo.boards', [
+                ...boards.slice(0, index),
+                boards[index + 1],
+                $board,
+                ...boards.slice(index + 2)
+            ]);
+        }
+    }
+
+    deleteBoard(e, {store}) {
+        var b = store.get('$board');
+        this.store.update('tdo.boards', boards => boards.filter(x=>x != b));
     }
 }
