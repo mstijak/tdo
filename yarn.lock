@@ -1413,9 +1413,9 @@ currently-unhandled@^0.4.1:
   dependencies:
     array-find-index "^1.0.1"
 
-cx-core@^16.10.4:
-  version "16.10.4"
-  resolved "https://registry.yarnpkg.com/cx-core/-/cx-core-16.10.4.tgz#ed2fb8287851748fadbfc6d0795de3e3e8fc968d"
+cx-core:
+  version "16.10.5"
+  resolved "https://registry.yarnpkg.com/cx-core/-/cx-core-16.10.5.tgz#248a02928d4ddcdb4426fae16ba55255f576723e"
   dependencies:
     intl-io "^0.2.0"
     route-parser "^0.0.5"

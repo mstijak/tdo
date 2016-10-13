@@ -148,12 +148,38 @@ export default class extends Controller {
             }
 
         if (insertPos != -1) {
+            console.log(tasks, index, insertPos);
             this.store.set('tdo.tasks', [
                 ...tasks.slice(0, index),
-                ...tasks.slice(index + 1, insertPos),
+                ...tasks.slice(index + 1, insertPos + 1),
                 $task,
-                ...tasks.slice(insertPos)
+                ...tasks.slice(insertPos + 1)
             ]);
+            console.log(this.store.get('tdo.tasks'));
+        }
+    }
+
+    moveTaskRight(e, {store}) {
+        e.stopPropagation();
+        e.preventDefault();
+        let {tdo, $task} = store.getData();
+        let {lists} = tdo;
+        var listIndex = lists.findIndex(a=>a.id == $task.listId);
+        if (listIndex != -1 && listIndex + 1 < lists.length) {
+            store.set('$task.listId', lists[listIndex + 1].id);
+            store.set('activeTaskId', $task.id);
+        }
+    }
+
+    moveTaskLeft(e, {store}) {
+        e.stopPropagation();
+        e.preventDefault();
+        let {tdo, $task} = store.getData();
+        let {lists} = tdo;
+        var listIndex = lists.findIndex(a=>a.id == $task.listId);
+        if (listIndex > 0) {
+            store.set('$task.listId', lists[listIndex - 1].id);
+            store.set('activeTaskId', $task.id);
         }
     }
 
@@ -178,6 +204,14 @@ export default class extends Controller {
 
             case KeyCode.down:
                 if (e.ctrlKey) this.moveTaskDown(e, instance);
+                break;
+
+            case KeyCode.right:
+                if (e.ctrlKey) this.moveTaskRight(e, instance);
+                break;
+
+            case KeyCode.left:
+                if (e.ctrlKey) this.moveTaskLeft(e, instance);
                 break;
         }
     }

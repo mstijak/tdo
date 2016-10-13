@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/mstijak/tdo#readme",
   "dependencies": {
-    "cx-core": "^16.10.4",
+    "cx-core": "^16.10.5",
     "cx-react": "^16.8.4",
     "marked": "^0.3.6",
     "uid": "0.0.2"
