@@ -1,3 +1,11 @@
+@import "~cx-core/src/ui/form/variables";
+
+$cx-input-default: map_merge($cx-input-default, (
+  color: rgba(255, 255, 255, 0.9),
+  background: rgba(255, 255, 255, 0.1),
+  border-color: rgba(128, 128, 128, 0.1)
+));
+
 $font-size: 12.5px;
 
 $cx-input-font-size: $font-size;
