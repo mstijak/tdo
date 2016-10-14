@@ -9,24 +9,11 @@ import {FirstVisibleChildLayout} from 'cx/ui/layout/FirstVisibleChildLayout';
 import Default from './default';
 import Settings from './settings';
 import Help from './help';
+import Controller from './Controller';
 
-import {append} from 'cx/data/ops/append';
-import uid from 'uid';
-
-function addBoard(e, {store}) {
-    e.preventDefault();
-    var board = {
-        id: uid(),
-        name: 'New Board',
-        created: new Date().toISOString(),
-        edit: true
-    };
-    store.update('tdo.boards', append, board);
-    window.location.hash = '#' + board.id;
-}
 
 export default <cx>
-    <div class="cxb-layout">
+    <div class="cxb-layout" controller={Controller}>
         <header class="cxe-layout-header">
             <h1>tdo</h1>
             <TextField value:bind="search.query" placeholder="Search..." mod="search" />
@@ -37,7 +24,7 @@ export default <cx>
                    style:bind="$record.headerStyle"
                    text:bind="$record.name" />
             </Repeater>
-            <a href="#" onClick={addBoard}>Add Board</a>
+            <a href="#" onClick="addBoard">Add Board</a>
 
             <div class="spacer" />
 
