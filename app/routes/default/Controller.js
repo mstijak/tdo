@@ -86,21 +86,24 @@ export default class extends Controller {
             id: uid(),
             name: 'New List',
             edit: true,
-            created: new Date().toISOString(),
+            createdDate: new Date().toISOString(),
             boardId: boardId
         });
     }
 
     deleteList(e, {store}) {
-        var l = store.get('$list');
-        this.store.update('tdo.lists', lists => lists.filter(x=>x != l));
+        store.update('$list', list => ({
+            ...list,
+            deleted: true,
+            deletedDate: new Date().toISOString(),
+        }));
     }
 
     prepareTask(listId) {
         return {
             id: uid(),
             listId,
-            created: new Date().toISOString(),
+            createdDate: new Date().toISOString(),
             isNew: true
         }
     }
@@ -148,14 +151,12 @@ export default class extends Controller {
             }
 
         if (insertPos != -1) {
-            console.log(tasks, index, insertPos);
             this.store.set('tdo.tasks', [
                 ...tasks.slice(0, index),
                 ...tasks.slice(index + 1, insertPos + 1),
                 $task,
                 ...tasks.slice(insertPos + 1)
             ]);
-            console.log(this.store.get('tdo.tasks'));
         }
     }
 
@@ -185,16 +186,22 @@ export default class extends Controller {
 
     onTaskKeyDown(e, instance) {
         let t = instance.data.task;
+        let {store} = instance;
         let tasks = this.store.get('tdo.tasks');
 
         switch (e.keyCode) {
             case KeyCode.delete:
-                this.store.update('tdo.tasks', tasks => tasks.filter(x=>x != t));
+                store.update('$task', task => ({
+                    ...task,
+                    deleted: true,
+                    deletedDate: new Date().toISOString()
+                }));
                 break;
 
             case KeyCode.insert:
                 let index = tasks.indexOf(t);
                 let nt = this.prepareTask(t.listId);
+                this.store.set('activeTaskId', nt.id);
                 this.store.set('tdo.tasks', [...tasks.slice(0, index), nt, ...tasks.slice(index)]);
                 break;
 
@@ -287,7 +294,10 @@ export default class extends Controller {
     }
 
     deleteBoard(e, {store}) {
-        var b = store.get('$board');
-        this.store.update('tdo.boards', boards => boards.filter(x=>x != b));
+        store.update('$board', board => ({
+            ...board,
+            deleted: true,
+            deletedDate: new Date().toISOString()
+        }));
     }
 }

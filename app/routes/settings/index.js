@@ -3,7 +3,9 @@ import {Repeater} from 'cx/ui/Repeater';
 import {List} from 'cx/ui/List';
 import {Menu} from 'cx/ui/nav/Menu';
 import {TextField} from 'cx/ui/form/TextField';
+import {NumberField} from 'cx/ui/form/NumberField';
 import {Radio} from 'cx/ui/form/Radio';
+import {Checkbox} from 'cx/ui/form/Checkbox';
 import {LabeledContainer} from 'cx/ui/form/LabeledContainer';
 import {Button} from 'cx/ui/Button';
 import {PureContainer} from 'cx/ui/PureContainer';
@@ -11,6 +13,7 @@ import {LabelsLeftLayout} from 'cx/ui/layout/LabelsLeftLayout';
 import {UseParentLayout} from 'cx/ui/layout/UseParentLayout';
 import {Md} from 'app/components/Md';
 import Controller from './Controller';
+
 
 export default <cx>
     <div class="cxb-settings" controller={Controller}>
@@ -65,6 +68,33 @@ export default <cx>
                     Create Gist
                 </Button>
             </PureContainer>
+        </div>
+
+        <h3>Maintenance</h3>
+
+        <div layout={LabelsLeftLayout}>
+            <NumberField
+                value:bind="tdo.settings.completedTasksRetentionDays"
+                label="Show completed tasks for"
+                style="width:5rem"
+                inputStyle="text-align:center"
+                help="day(s)."
+            />
+            <NumberField
+                value:bind="tdo.settings.deleteCompletedTasksAfterDays"
+                enabled:bind="tdo.settings.deleteCompletedTasks"
+                style="width:5rem"
+                inputStyle="text-align:center"
+                label={<Checkbox value:bind="tdo.settings.deleteCompletedTasks">Delete completed tasks after</Checkbox>}
+                help="day(s)"
+            />
+            <NumberField
+                value:bind="tdo.settings.purgeDeletedObjectsAfterDays"
+                label="Purge deleted objects after"
+                style="width:5rem"
+                inputStyle="text-align:center"
+                help="day(s)"
+            />
         </div>
     </div>
 </cx>;

@@ -1,4 +1,5 @@
 import uid from 'uid';
+import {cleanup} from './cleanup';
 
 var migrations = [];
 
@@ -15,8 +16,35 @@ migrations.push(function (data) {
         if (!l.boardId)
             l.boardId = data.boards[0].id;
     });
+});
 
-    return data;
+//settings
+migrations.push(function (data) {
+    if (!data.settings)
+        data.settings = {
+            completedTasksRetentionDays: 1,
+            deleteCompletedTasks: true,
+            deleteCompletedTasksAfterDays: 7,
+            purgeDeletedObjectsAfterDays: 3
+        };
+});
+
+//created => createdDate
+migrations.push(function (data) {
+    var {boards, lists, tasks} = data;
+
+    for (var array of [boards, lists, tasks]) {
+        for (var b of array) {
+            if (b.created) {
+                b.createdDate = b.created;
+                delete b.created;
+            }
+            if (b.isDeleted) {
+                b.deleted = b.isDeleted;
+                delete b.isDeleted;
+            }
+        }
+    }
 });
 
 
@@ -24,9 +52,9 @@ export function migrate(data) {
     var version = data.version || 0;
 
     for (var v = version; v < migrations.length; v++) {
-        data = migrations[v](data);
+        migrations[v](data);
         data.version = v;
     }
 
-    return data;
+    cleanup(data);
 }

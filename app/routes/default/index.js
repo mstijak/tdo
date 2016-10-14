@@ -17,7 +17,7 @@ let searchQuery = null;
 
 
 function filterItems(item, {search, list}) {
-    if (item.listId != list.id)
+    if (item.deleted || item.listId != list.id)
         return false;
 
     if (!item.isNew && search && search.query) {
@@ -31,11 +31,11 @@ function filterItems(item, {search, list}) {
 }
 
 function filterBoards(b, activeBoardId) {
-    return b.id == activeBoardId;
+    return b.id == activeBoardId && !b.deleted;
 }
 
 function filterLists(l, activeBoardId) {
-    return l.boardId == activeBoardId;
+    return l.boardId == activeBoardId && !l.deleted;
 }
 
 export default <cx>
