@@ -3,6 +3,9 @@ import {cleanup} from './cleanup';
 
 var migrations = [];
 
+//zero
+migrations.push(function (data) {});
+
 //add boards
 migrations.push(function (data) {
     if (!Array.isArray(data.boards)) {
@@ -51,7 +54,7 @@ migrations.push(function (data) {
 export function migrate(data) {
     var version = data.version || 0;
 
-    for (var v = version; v < migrations.length; v++) {
+    for (var v = version + 1; v < migrations.length; v++) {
         migrations[v](data);
         data.version = v;
     }
