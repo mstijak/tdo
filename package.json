@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/mstijak/tdo#readme",
   "dependencies": {
+    "copy-webpack-plugin": "^3.0.1",
     "cx-core": "^16.10.6",
     "cx-react": "^16.8.4",
     "marked": "^0.3.6",
