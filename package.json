@@ -28,6 +28,7 @@
     "cx-core": "^16.10.6",
     "cx-react": "^16.8.4",
     "marked": "^0.3.6",
+    "redux": "^3.6.0",
     "uid": "0.0.2"
   },
   "devDependencies": {

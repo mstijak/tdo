@@ -1,11 +1,12 @@
 import {startAppLoop} from 'cx/app/startAppLoop';
-import {Store} from 'cx/data/Store';
+import {createStore, ReduxStoreView} from 'cx-redux';
 import Routes from './routes';
 import {Widget} from 'cx/ui/Widget';
 import {Debug} from 'cx/util/Debug';
 import './index.scss';
+import reducer from './reducers';
 
-const store = new Store();
+const store = new ReduxStoreView(createStore(reducer));
 
 var stop;
 if (module.hot) {

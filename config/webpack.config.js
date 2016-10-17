@@ -12,7 +12,8 @@ module.exports = {
     resolve: {
         alias: {
             cx: paths.root + 'node_modules/cx-core/src/',
-            app: paths.app
+            app: paths.app,
+            "cx-redux": paths.root + "lib/cx-redux/"
             //uncomment the line below to alias cx-react to cx-preact or some other React replacement library
             //'cx-react': 'cx-preact',
         }
