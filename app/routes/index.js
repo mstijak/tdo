@@ -39,7 +39,7 @@ export default <cx>
             <a href={`http://twitter.com/home?status=${encodeURIComponent("tdo - hackable todo list #todo https://goo.gl/rhkuYP")}`} target="_blank">Tweet</a>
         </header>
         <main class="cxe-layout-main">
-            <Sandbox key:bind="hash" storage:bind="pages" layout={FirstVisibleChildLayout}>
+            <Sandbox key:bind="hash" storage:bind="pages" layout={FirstVisibleChildLayout} immutable>
                 <Route url:bind="hash" route="#settings">
                     <Settings />
                 </Route>

@@ -1,6 +1,7 @@
 import {HtmlElement} from 'cx/ui/HtmlElement';
 import {Repeater} from 'cx/ui/Repeater';
 import {List} from 'cx/ui/List';
+import {Text} from 'cx/ui/Text';
 import {Menu} from 'cx/ui/nav/Menu';
 import {TextField} from 'cx/ui/form/TextField';
 import {NumberField} from 'cx/ui/form/NumberField';
@@ -22,7 +23,8 @@ export default <cx>
         <h3>GitHub</h3>
         <div visible:expr="{$page.gh.verified}">
             <p preserveWhitespace>
-                Your tasks are persisted to <a href:tpl="https://gist.github.com/mstijak/{$page.gh.gistId}">this gist</a>.
+                Your tasks are persisted to the Gist
+                <a href="https://gist.github.com" text:bind="$page.gh.gistId" />.
             </p>
             <p preserveWhitespace>
                 <a href="#" onClick="unlink">Unlink completely</a>
@@ -41,8 +43,8 @@ export default <cx>
                 value:bind="$page.gh.token"
                 placeholder="GitHub Personal Access Token"
                 label="Token"
-                style="width: 30rem" />
-
+                style="width: 30rem"
+            />
 
             <LabeledContainer label="Gist">
                 <Radio value:bind="$page.initMode" option="create" text="Create a new gist" />

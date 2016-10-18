@@ -1442,6 +1442,12 @@ cx-react@^16.8.4:
     react "^15.3.2"
     react-dom "^15.3.2"
 
+cx-redux:
+  version "16.10.0"
+  resolved "https://registry.yarnpkg.com/cx-redux/-/cx-redux-16.10.0.tgz#52b76dd62dfd56e700b6b5f37581305c52857ee1"
+  dependencies:
+    redux "*"
+
 d@^0.1.1, d@~0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/d/-/d-0.1.1.tgz#da184c535d18d8ee7ba2aa229b914009fae11309"
@@ -3702,7 +3708,7 @@ reduce-function-call@^1.0.1:
   dependencies:
     balanced-match "~0.1.0"
 
-redux:
+redux, redux@*:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/redux/-/redux-3.6.0.tgz#887c2b3d0b9bd86eca2be70571c27654c19e188d"
   dependencies:

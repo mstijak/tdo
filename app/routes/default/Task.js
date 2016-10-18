@@ -101,7 +101,7 @@ class TaskCmp extends VDOM.Component {
         instance.set('task', {
             ...data.task,
             completed: completed,
-            completeDate: new Date().toISOString()
+            completedDate: new Date().toISOString()
         });
     }
 
@@ -219,5 +219,3 @@ class TaskCmp extends VDOM.Component {
         }
     }
 }
-
-export var focusTaskOnMount = null;
