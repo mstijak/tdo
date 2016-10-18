@@ -29,6 +29,7 @@
     "cx-react": "^16.8.4",
     "marked": "^0.3.6",
     "redux": "^3.6.0",
+    "redux-thunk": "^2.1.0",
     "uid": "0.0.2"
   },
   "devDependencies": {

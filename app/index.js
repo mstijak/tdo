@@ -1,12 +1,19 @@
 import {startAppLoop} from 'cx/app/startAppLoop';
 import {createStore, ReduxStoreView} from 'cx-redux';
+import { applyMiddleware } from 'redux';
 import Routes from './routes';
 import {Widget} from 'cx/ui/Widget';
 import {Debug} from 'cx/util/Debug';
 import './index.scss';
-import reducer from './reducers';
+import reducer from './data//reducers';
+import middleware from './data/middleware';
 
-const store = new ReduxStoreView(createStore(reducer));
+const reduxStore = createStore(
+    reducer,
+    applyMiddleware(...middleware)
+);
+
+const store = new ReduxStoreView(reduxStore);
 
 var stop;
 if (module.hot) {

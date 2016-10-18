@@ -1,5 +1,7 @@
-import {Controller} from 'cx/ui/Controller';
-import {Gists} from '../../services/Gists';
+import { Controller } from 'cx/ui/Controller';
+import { MsgBox } from 'cx/ui/overlay/MsgBox';
+import { Gists } from '../../data/services/Gists';
+import { loadData, loadDefault } from '../../data/actions';
 
 export default class extends Controller {
     init() {
@@ -14,7 +16,14 @@ export default class extends Controller {
         gists.get()
             .then(()=> {
                 this.persist();
-            });
+                this.store.dispatch(
+                    loadData(gh)
+                );
+            })
+            .catch(e=> {
+                MsgBox.alert('Error occurred: ' + e);
+                console.log(e);
+            })
     }
 
     create() {
@@ -38,7 +47,9 @@ export default class extends Controller {
         e.preventDefault();
         this.store.set('$page.gh', null);
         localStorage.gh = null;
-        this.store.delete('tdo');
+        this.store.dispatch(
+            loadDefault()
+        )
     }
 
     changeGist(e) {

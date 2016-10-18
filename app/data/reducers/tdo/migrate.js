@@ -8,7 +8,17 @@ migrations.push(function (data) {});
 
 //add boards
 migrations.push(function (data) {
-    if (!Array.isArray(data.boards)) {
+
+    if (!Array.isArray(data.boards))
+        data.boards = [];
+
+    if (!Array.isArray(data.lists))
+        data.lists = [];
+
+    if (!Array.isArray(data.tasks))
+        data.tasks = [];
+
+    if (data.boards.length == 0) {
         data.boards = [{
             id: uid(),
             name: 'Tasks'

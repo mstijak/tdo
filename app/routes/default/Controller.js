@@ -1,20 +1,11 @@
 import {Controller} from 'cx/ui/Controller';
 import {append} from 'cx/data/ops/append';
 import {KeyCode} from 'cx/util/KeyCode';
-import {Gists} from '../../services/Gists';
 import {FocusManager} from 'cx/ui/FocusManager';
-import {migrate} from '../../data/migrate';
-
+import {removeBoard, gotoAnyBoard} from 'app/data/actions';
 import uid from 'uid';
 
 export default class extends Controller {
-
-
-
-
-
-
-
 
     addList(e, {store}) {
         if (e)
@@ -234,10 +225,8 @@ export default class extends Controller {
     }
 
     deleteBoard(e, {store}) {
-        store.update('$board', board => ({
-            ...board,
-            deleted: true,
-            deletedDate: new Date().toISOString()
-        }));
+        var id = store.get('$board.id');
+        store.dispatch(removeBoard(id));
+        store.dispatch(gotoAnyBoard(true));
     }
 }

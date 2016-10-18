@@ -23,7 +23,7 @@ module.exports = {
         loaders: [{
             test: /\.js$/,
             //add here any ES6 based library
-            include: /(app|intl-io|cx-core|cx)/,
+            include: /(app|intl-io|cx-core|cx|redux|redux-thunk|lodash)/,
             loader: 'babel',
             query: babelCfg
         }]

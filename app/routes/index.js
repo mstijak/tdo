@@ -11,14 +11,16 @@ import Settings from './settings';
 import Help from './help';
 import Controller from './Controller';
 
-
 export default <cx>
     <div class="cxb-layout" controller={Controller}>
         <header class="cxe-layout-header">
             <h1>tdo</h1>
             <TextField value:bind="search.query" placeholder="Search..." mod="search" />
 
-            <Repeater records:bind="tdo.boards">
+            <Repeater
+                records:bind="tdo.boards"
+                filter={b=>!b.deleted}
+            >
                 <a href:tpl="#{$record.id}"
                    class={{active: {expr: '{hash}=="#" + {$record.id}'}}}
                    style:bind="$record.headerStyle"
