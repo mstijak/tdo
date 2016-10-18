@@ -6,7 +6,8 @@ import dummy from './dummyReducer';
 export default combineReducers({
     tdo,
     hash: dummy('#'),
-    search: dummy({})
+    search: dummy({}),
+    pages: dummy({})
 });
 
 

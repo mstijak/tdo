@@ -9,7 +9,7 @@ export function cleanup(data) {
 
     var boardKeys = {};
     for (var board of data.boards) {
-        if (!board.isDeleted || (board.deletedDate && new Date(board.deletedDate).getTime() - now < retention))
+        if (!board.deleted || (board.deletedDate && new Date(board.deletedDate).getTime() - now < retention))
             boardKeys[board.id] = true;
     }
     data.boards = data.boards.filter(b=>boardKeys[b.id]);
@@ -17,15 +17,15 @@ export function cleanup(data) {
 
     var listKeys = {};
     for (var list of data.lists) {
-        if (boardKeys[list.boardId] && !list.isDeleted || (list.deletedDate && new Date(list.deletedDate).getTime() - now < retention))
+        if (boardKeys[list.boardId] && !list.deleted || (list.deletedDate && new Date(list.deletedDate).getTime() - now < retention))
             listKeys[list.id] = true;
     }
     data.lists = data.lists.filter(b=>listKeys[b.id]);
 
     var taskKeys = {};
     for (var task of data.tasks) {
-        if (listKeys[task.listId] && !task.isDeleted || (task.deletedDate && new Date(task.deletedDate).getTime() - now < retention))
-            if (!task.completed || !data.settings.deleteCompletedTasks ||  (task.completedDate && new Date(task.completedDate).getTime() - now < completedTaskRetention))
+        if (listKeys[task.listId] && !task.deleted || (task.deletedDate && new Date(task.deletedDate).getTime() - now < retention))
+            if (!task.completed || !data.settings.deleteCompletedTasks || (task.completedDate && (new Date(task.completedDate).getTime() - now < completedTaskRetention)))
                 taskKeys[task.id] = true;
     }
     data.tasks = data.tasks.filter(b=>taskKeys[b.id]);
