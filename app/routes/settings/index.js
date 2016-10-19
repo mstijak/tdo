@@ -100,17 +100,19 @@ export default <cx>
             />
         </div>
 
-        <h3>Task Coloring</h3>
+        <h3>Task Styles</h3>
 
-        <Repeater records:bind="tdo.settings.taskColoring">
+        <Repeater records:bind="tdo.settings.taskStyles">
             <PureContainer layout={LabelsTopLayout}>
                 <TextField value:bind="$record.regex" label="Regex" />
                 <TextField value:bind="$record.style" label="Style" />
                 <TextField value:bind="$record.className" label="Class" />
+                <a href="#" onClick="removeTaskStyle">Remove</a>
             </PureContainer>
         </Repeater>
-
-        <Button>Add</Button>
+        <p>
+            <a href="#" onClick="addTaskStyle">Add</a>
+        </p>
 
     </div>
 </cx>;

@@ -2,6 +2,7 @@ import { Controller } from 'cx/ui/Controller';
 import { MsgBox } from 'cx/ui/overlay/MsgBox';
 import { Gists } from '../../data/services/Gists';
 import { loadData, loadDefault } from '../../data/actions';
+import { append } from 'cx/data/ops/';
 
 export default class extends Controller {
     init() {
@@ -55,5 +56,16 @@ export default class extends Controller {
     changeGist(e) {
         e.preventDefault();
         this.store.set('$page.gh.verified', false);
+    }
+
+    addTaskStyle(e) {
+        e.preventDefault();
+        this.store.update('tdo.settings.taskStyles', append, {});
+    }
+
+    removeTaskStyle(e, {store}) {
+        e.preventDefault();
+        var style = store.get('$record');
+        this.store.update('tdo.settings.taskStyles', styles => styles.filter(x=>x != style));
     }
 }

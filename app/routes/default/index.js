@@ -77,7 +77,11 @@ export default <cx>
                                           list: {bind: '$list'},
                                           search: {bind: 'search'}
                                       }}>
-                                <Task bind="$task" onKeyDown="onTaskKeyDown" />
+                                <Task
+                                    bind="$task"
+                                    styles:bind="tdo.settings.taskStyles"
+                                    onKeyDown="onTaskKeyDown"
+                                />
                             </Repeater>
                             <a class="cxe-tasklist-add" onClick="addTask" href="#">Add Task</a>
                         </Menu>

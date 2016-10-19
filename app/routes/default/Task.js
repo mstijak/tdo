@@ -1,5 +1,6 @@
 import {VDOM, Widget} from 'cx/ui/Widget';
 import marked from 'marked';
+import {getStyles} from './styling';
 
 export class Task extends Widget {
 
@@ -12,7 +13,8 @@ export class Task extends Widget {
 
     declareData() {
         super.declareData(...arguments, {
-            task: undefined
+            task: undefined,
+            styles: undefined
         })
     }
 
@@ -59,8 +61,10 @@ class TaskCmp extends VDOM.Component {
     }
 
     renderContent() {
-        var {data} = this.props.instance;
+        var {data, widget} = this.props.instance;
         var html = data.task.name ? marked(data.task.name) : '<p>&nbsp;</p>';
+
+        var styles = getStyles(data.task.name, data.styles);
 
         return [
             <input key="check" type="checkbox"
@@ -71,7 +75,11 @@ class TaskCmp extends VDOM.Component {
                        e.preventDefault();
                        e.stopPropagation();
                    }}/>,
-            <div className="cxe-task-content" key="content" dangerouslySetInnerHTML={{__html: html}}/>]
+            <div key="content"
+                 className={widget.CSS.expand("cxe-task-content", styles.className)}
+                 style={styles.style}
+                 dangerouslySetInnerHTML={{__html: html}}
+            />]
     }
 
     renderEditor() {

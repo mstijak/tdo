@@ -12,8 +12,8 @@ import Help from './help';
 import Controller from './Controller';
 
 export default <cx>
-    <Sandbox key:bind="hash" storage:bind="pages" layout={FirstVisibleChildLayout} immutable>
-        <div class="cxb-layout" controller={Controller}>
+    <div class="cxb-layout" controller={Controller}>
+        <Sandbox key:bind="hash" storage:bind="pages" immutable>
             <header class="cxe-layout-header">
                 <h1>tdo</h1>
                 <TextField value:bind="search.query" placeholder="Search..." mod="search"/>
@@ -52,6 +52,6 @@ export default <cx>
                     <Default />
                 </Route>
             </main>
-        </div>
-    </Sandbox>
+        </Sandbox>
+    </div>
 </cx>;
