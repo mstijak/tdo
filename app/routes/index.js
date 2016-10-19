@@ -25,6 +25,7 @@ export default <cx>
                 >
                     <a href:tpl="#{$record.id}"
                        class={{active: {expr: '{hash}=="#" + {$record.id}'}}}
+                       className:bind="$record.headerClass"
                        style:bind="$record.headerStyle"
                        text:bind="$record.name"
                     />

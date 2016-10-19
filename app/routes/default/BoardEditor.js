@@ -23,11 +23,29 @@ export default <cx>
         </div>
 
         <div layout={{ type: LabelsTopLayout, mod: 'stretch' }}>
+            <TextField
+                value:bind="$board.headerClass"
+                label="Header Class"
+                placeholder="CSS class"
+                style="width:100%;"
+            />
+        </div>
+
+        <div layout={{ type: LabelsTopLayout, mod: 'stretch' }}>
             <TextArea
                 value:bind="$board.headerStyle"
                 label="Header Style"
-                placeholder="color"
+                placeholder="color, font-size, ..."
                 reactOn="input"
+                style="width:100%;"
+            />
+        </div>
+
+        <div layout={{ type: LabelsTopLayout, mod: 'stretch' }}>
+            <TextField
+                value:bind="$board.className"
+                label="Board Class"
+                placeholder="CSS class"
                 style="width:100%;"
             />
         </div>
@@ -36,7 +54,7 @@ export default <cx>
             <TextArea
                 value:bind="$board.style"
                 label="Board Style"
-                placeholder="background"
+                placeholder="background, color, ..."
                 reactOn="input"
                 style="width:100%;"
             />

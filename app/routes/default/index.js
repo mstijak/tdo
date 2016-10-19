@@ -53,7 +53,10 @@ export default <cx>
             filter={filterBoards}
             filterParams:bind="$route.boardId"
         >
-            <div class="cxe-taskboard-lists" style:bind="$board.style">
+            <div
+                class:tpl="cxe-taskboard-lists {$board.className}"
+                style:bind="$board.style"
+            >
                 <Repeater
                     records:bind="tdo.lists"
                     recordName="$list"
@@ -61,9 +64,12 @@ export default <cx>
                     filter={filterLists}
                     filterParams:bind="$board.id"
                 >
-                    <div class="cxb-tasklist" onKeyDown="onTaskListKeyDown" style:bind="$list.listStyle">
+                    <div
+                        class:tpl="cxb-tasklist {$list.className}"
+                        onKeyDown="onTaskListKeyDown"
+                        style:bind="$list.listStyle">
                         <h2
-                            class="cxe-tasklist-header"
+                            class:tpl="cxe-tasklist-header {$list.headerClass}"
                             text:bind="$list.name"
                             style:bind="$list.headerStyle"
                             onDoubleClick={(e, {store}) => { store.set('$list.edit', true)}} />
