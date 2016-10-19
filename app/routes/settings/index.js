@@ -11,6 +11,7 @@ import {LabeledContainer} from 'cx/ui/form/LabeledContainer';
 import {Button} from 'cx/ui/Button';
 import {PureContainer} from 'cx/ui/PureContainer';
 import {LabelsLeftLayout} from 'cx/ui/layout/LabelsLeftLayout';
+import {LabelsTopLayout} from 'cx/ui/layout/LabelsTopLayout';
 import {UseParentLayout} from 'cx/ui/layout/UseParentLayout';
 import {Md} from 'app/components/Md';
 import Controller from './Controller';
@@ -98,5 +99,18 @@ export default <cx>
                 help="day(s)"
             />
         </div>
+
+        <h3>Task Coloring</h3>
+
+        <Repeater records:bind="tdo.settings.taskColoring">
+            <PureContainer layout={LabelsTopLayout}>
+                <TextField value:bind="$record.regex" label="Regex" />
+                <TextField value:bind="$record.style" label="Style" />
+                <TextField value:bind="$record.className" label="Class" />
+            </PureContainer>
+        </Repeater>
+
+        <Button>Add</Button>
+
     </div>
 </cx>;
