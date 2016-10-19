@@ -4,6 +4,7 @@ import {List} from 'cx/ui/List';
 import {Text} from 'cx/ui/Text';
 import {Menu} from 'cx/ui/nav/Menu';
 import {TextField} from 'cx/ui/form/TextField';
+import {TextArea} from 'cx/ui/form/TextArea';
 import {NumberField} from 'cx/ui/form/NumberField';
 import {Radio} from 'cx/ui/form/Radio';
 import {Checkbox} from 'cx/ui/form/Checkbox';
@@ -104,6 +105,7 @@ export default <cx>
 
         <Repeater records:bind="tdo.settings.taskStyles">
             <PureContainer layout={LabelsTopLayout}>
+                <span text:tpl="{[{$index}+1]}." />
                 <TextField value:bind="$record.regex" label="Regex" />
                 <TextField value:bind="$record.style" label="Style" />
                 <TextField value:bind="$record.className" label="Class" />
@@ -114,5 +116,8 @@ export default <cx>
             <a href="#" onClick="addTaskStyle">Add</a>
         </p>
 
+        <h3>Custom CSS</h3>
+
+        <TextArea value:bind="tdo.settings.css" rows={20} style="width:600px" />
     </div>
 </cx>;

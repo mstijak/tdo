@@ -13,6 +13,7 @@ import Controller from './Controller';
 
 export default <cx>
     <div class="cxb-layout" controller={Controller}>
+        <style innerHtml:bind="tdo.settings.css" />
         <Sandbox key:bind="hash" storage:bind="pages" immutable>
             <header class="cxe-layout-header">
                 <h1>tdo</h1>
