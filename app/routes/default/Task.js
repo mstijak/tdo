@@ -119,12 +119,14 @@ class TaskCmp extends VDOM.Component {
 
         switch (e.keyCode) {
             case 13:
+            case 69:
                 e.stopPropagation();
                 e.preventDefault()
                 this.toggleEditMode();
                 break;
 
             case 32:
+            case 88:
                 this.setCompleted(!data.task.completed);
                 break;
 
@@ -219,11 +221,11 @@ class TaskCmp extends VDOM.Component {
 
     componentDidUpdate() {
         if (this.state.edit) {
-            this.dom.editor.style.width = `${this.dom.editor.scrollWidth}px`;
-            if (this.dom.editor.scrollHeight > this.dom.editor.offsetHeight)
-                this.setState({
-                    editorRows: this.state.editorRows + 1
-                });
+			this.dom.editor.style.width = `${this.dom.editor.scrollWidth}px`;
+			if (this.dom.editor.scrollHeight > this.dom.editor.offsetHeight) 
+				this.setState({
+					editorRows: this.state.editorRows + 1
+			    });
         }
     }
 }

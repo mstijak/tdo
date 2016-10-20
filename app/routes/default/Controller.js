@@ -3,6 +3,7 @@ import {append} from 'cx/data/ops/append';
 import {KeyCode} from 'cx/util/KeyCode';
 import {FocusManager} from 'cx/ui/FocusManager';
 import {removeBoard, gotoAnyBoard} from 'app/data/actions';
+import {closest} from 'cx/util/DOM';
 import uid from 'uid';
 
 export default class extends Controller {
@@ -118,10 +119,15 @@ export default class extends Controller {
     onTaskKeyDown(e, instance) {
         let t = instance.data.task;
         let {store} = instance;
-        let tasks = this.store.get('tdo.tasks');
+		let tasks = this.store.get('tdo.tasks');
 
+        let code = (c) => c.charCodeAt(0);
         switch (e.keyCode) {
-            case KeyCode.delete:
+			case KeyCode.delete:
+			case code('D'):
+                if (e.keyCode === code('D') && !e.shiftKey)
+                    return;
+
                 store.update('$task', task => ({
                     ...task,
                     deleted: true,
@@ -129,39 +135,59 @@ export default class extends Controller {
                 }));
                 break;
 
-            case KeyCode.insert:
-                let index = tasks.indexOf(t);
+			case KeyCode.insert:
+            case code('I'):
+            case code('O'):
                 let nt = this.prepareTask(t.listId);
                 this.store.set('activeTaskId', nt.id);
+                let index = tasks.indexOf(t)
+                if (index < tasks.length - 1 && e.keyCode === code('O') && !e.shiftKey)
+                    index++; // Create task below
+
                 this.store.set('tdo.tasks', [...tasks.slice(0, index), nt, ...tasks.slice(index)]);
                 break;
 
-            case KeyCode.up:
+			case KeyCode.up:
                 if (e.ctrlKey) this.moveTaskUp(e, instance);
                 break;
 
-            case KeyCode.down:
+			case KeyCode.down:
                 if (e.ctrlKey) this.moveTaskDown(e, instance);
                 break;
 
-            case KeyCode.right:
+			case KeyCode.right:
                 if (e.ctrlKey) this.moveTaskRight(e, instance);
                 break;
 
-            case KeyCode.left:
+			case KeyCode.left:
                 if (e.ctrlKey) this.moveTaskLeft(e, instance);
                 break;
         }
     }
 
     onTaskListKeyDown(e, instance) {
+        let code = (c) => c.charCodeAt(0);        
         switch (e.keyCode) {
+            case code('K'):
+                var item = closest(e.target, (el) => el.classList.contains('cxe-menu-item'));
+                if (item.previousSibling)
+                    FocusManager.focusFirst(item.previousSibling);
+                break;
+
+            case code('J'):
+                var item = closest(e.target, (el) => el.classList.contains('cxe-menu-item'));
+                if (item.nextSibling)
+                    FocusManager.focusFirst(item.nextSibling);
+                break;
+
             case KeyCode.left:
+            case code('H'):
                 if (e.currentTarget.previousSibling)
                     FocusManager.focusFirst(e.currentTarget.previousSibling);
                 break;
 
             case KeyCode.right:
+            case code('L'):
                 if (e.currentTarget.nextSibling)
                     FocusManager.focusFirst(e.currentTarget.nextSibling);
                 break;

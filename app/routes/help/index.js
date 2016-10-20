@@ -20,21 +20,25 @@ export default <cx>
 
             ### Keyboard Shortcuts (Windows)
 
-            `Up` Move cursor to the previous task
+            `Up` or `k` Move cursor to the previous task
 
-            `Down` Move cursor to the next task
+            `Down` or `j` Move cursor to the next task
 
-            `Left` Move cursor to the previous list
+            `Left` or `h` Move cursor to the previous list
 
-            `Right` Move cursor to the next list
+            `Right` or `l` Move cursor to the next list
 
-            `Enter` Edit task at cursor position
+            `Enter` or `e` Edit task at cursor position
 
-            `Space` Mark task as completed
+            `Space` or `x` Mark task as completed
 
-            `Insert` Insert task at cursor position
+            `Insert` or `i` Insert task at cursor position
 
-            `Delete` Delete task
+            `o` Insert task below cursor position
+
+            `Delete` or `Shift` + `D` Delete task
+
+            `Escape` or `Ctrl` + `Enter` Exit task edit mode
 
             -----------
 
