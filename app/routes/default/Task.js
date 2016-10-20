@@ -31,7 +31,7 @@ class TaskCmp extends VDOM.Component {
 
         this.state = {
             edit: false,
-            editorRows: 1
+            scrollHeight: null
         };
 
         this.dom = {};
@@ -84,13 +84,18 @@ class TaskCmp extends VDOM.Component {
 
     renderEditor() {
         var {data} = this.props.instance;
+        var style = {};
+        if (this.state.scrollHeight) {
+            style.height = `${this.state.scrollHeight}px`;
+        }
         return <textarea defaultValue={data.task.name}
                          onMouseDown={e=>{e.stopPropagation();}}
                          onKeyDown={::this.onEditorKeyDown}
                          ref={c=> {
                              this.dom.editor = c;
                          }}
-                         rows={this.state.editorRows}
+                         style={style}
+                         rows={1}
                          onBlur={::this.onEditorBlur}
                          onChange={::this.onChange}
         />
@@ -120,6 +125,7 @@ class TaskCmp extends VDOM.Component {
         switch (e.keyCode) {
             case 13:
             case 69:
+            case 65:
                 e.stopPropagation();
                 e.preventDefault()
                 this.toggleEditMode();
@@ -195,9 +201,14 @@ class TaskCmp extends VDOM.Component {
     }
 
     toggleEditMode() {
-        this.setState({
+        var change = {
             edit: !this.state.edit
-        }, () => {
+        };
+
+        if (change.edit)
+            change.scrollHeight = null;
+
+        this.setState(change, () => {
             if (this.state.edit)
                 this.dom.editor.focus();
             else
@@ -221,11 +232,12 @@ class TaskCmp extends VDOM.Component {
 
     componentDidUpdate() {
         if (this.state.edit) {
-			this.dom.editor.style.width = `${this.dom.editor.scrollWidth}px`;
-			if (this.dom.editor.scrollHeight > this.dom.editor.offsetHeight) 
-				this.setState({
-					editorRows: this.state.editorRows + 1
-			    });
+            this.dom.editor.style.width = `${this.dom.editor.scrollWidth}px`;
+            if (this.dom.editor.scrollHeight > this.dom.editor.offsetHeight) {
+                this.setState({
+                    scrollHeight: Math.ceil(this.dom.editor.scrollHeight)
+                });
+            }
         }
     }
 }
