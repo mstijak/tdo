@@ -18,6 +18,12 @@ h2 {
   margin-top: 0;
 }
 
+code {
+  background: rgba(128, 128, 128, 0.25);
+  padding: 1px 3px;
+  border-radius: 2px;
+}
+
 .cxb-tasklist {
   border-right: 1px solid rgba(128, 128, 128, 0.1);
   border-bottom: 1px solid rgba(128, 128, 128, 0.1);
@@ -53,8 +59,8 @@ h2 {
 
 .cxb-help {
   code {
-    background: black;
-    border-radius: 5px;
+    background: rgba(128, 128, 128, 0.25);
+    border-radius: 2px;
     padding: 5px;
   }
 

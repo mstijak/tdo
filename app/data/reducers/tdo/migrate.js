@@ -1,5 +1,6 @@
 import uid from 'uid';
 import {cleanup} from './cleanup';
+import {getTutorial} from './tutorial';
 
 var migrations = [];
 
@@ -58,6 +59,28 @@ migrations.push(function (data) {
             }
         }
     }
+});
+
+//taskStyles
+migrations.push(function (data) {
+    var {settings} = data;
+
+    if (!Array.isArray(settings.taskStyles))
+        settings.taskStyles = [{
+            regex: '!important',
+            style: 'color: orange'
+        }, {
+            regex: '#idea',
+            style: 'color: yellow'
+        }];
+});
+
+//add tutorial
+migrations.push(function (data) {
+    var tutorial = getTutorial();
+    data.boards = [...data.boards, ...tutorial.boards];
+    data.lists = [...data.lists, ...tutorial.lists];
+    data.tasks = [...data.tasks, ...tutorial.tasks];
 });
 
 

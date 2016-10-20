@@ -16,7 +16,7 @@ export default <cx>
         <Md>
             ## Help
 
-            Double-click is used to edit lists and tasks.
+            Use double-click to edit lists and tasks.
 
             ### Keyboard Shortcuts (Windows)
 

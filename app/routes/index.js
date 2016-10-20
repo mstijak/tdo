@@ -35,7 +35,7 @@ export default <cx>
                 <div class="spacer"/>
 
                 <a href="#settings" class={{active: {expr: '{hash}=="#settings"'}}}>Settings</a>
-                <a href="#help" class={{active: {expr: '{hash}=="#help"'}}}>Help</a>
+                <a href="#help" class={{active: {expr: '{hash}=="#help"'}}}>Help <code>?</code></a>
 
                 <div class="spacer"/>
 

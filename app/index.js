@@ -43,3 +43,16 @@ Widget.resetCounter(); //preserve React keys
 Debug.enable('app-data');
 
 stop = startAppLoop(document.getElementById('app'), store, Routes);
+
+//is there a better way to do this
+document.body.addEventListener('keypress', e => {
+    switch (e.key) {
+        case '?':
+            if (e.target.tagName != 'INPUT') {
+                e.preventDefault();
+                e.stopPropagation();
+                window.location.hash = '#help';
+            }
+            break;
+    }
+});
