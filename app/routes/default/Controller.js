@@ -119,12 +119,12 @@ export default class extends Controller {
     onTaskKeyDown(e, instance) {
         let t = instance.data.task;
         let {store} = instance;
-		let tasks = this.store.get('tdo.tasks');
+        let tasks = this.store.get('tdo.tasks');
 
         let code = (c) => c.charCodeAt(0);
         switch (e.keyCode) {
-			case KeyCode.delete:
-			case code('D'):
+            case KeyCode.delete:
+            case code('D'):
                 if (e.keyCode === code('D') && !e.shiftKey)
                     return;
 
@@ -135,7 +135,7 @@ export default class extends Controller {
                 }));
                 break;
 
-			case KeyCode.insert:
+            case KeyCode.insert:
             case code('I'):
             case code('O'):
                 let nt = this.prepareTask(t.listId);
@@ -147,19 +147,19 @@ export default class extends Controller {
                 this.store.set('tdo.tasks', [...tasks.slice(0, index), nt, ...tasks.slice(index)]);
                 break;
 
-			case KeyCode.up:
+            case KeyCode.up:
                 if (e.ctrlKey) this.moveTaskUp(e, instance);
                 break;
 
-			case KeyCode.down:
+            case KeyCode.down:
                 if (e.ctrlKey) this.moveTaskDown(e, instance);
                 break;
 
-			case KeyCode.right:
+            case KeyCode.right:
                 if (e.ctrlKey) this.moveTaskRight(e, instance);
                 break;
 
-			case KeyCode.left:
+            case KeyCode.left:
                 if (e.ctrlKey) this.moveTaskLeft(e, instance);
                 break;
         }
