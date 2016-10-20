@@ -66,7 +66,6 @@ export default <cx>
                 >
                     <div
                         class:tpl="cxb-tasklist {$list.className}"
-                        onKeyDown="onTaskListKeyDown"
                         style:bind="$list.listStyle">
                         <h2
                             class:tpl="cxe-tasklist-header {$list.headerClass}"
@@ -74,7 +73,7 @@ export default <cx>
                             style:bind="$list.headerStyle"
                             onDoubleClick={(e, {store}) => { store.set('$list.edit', true)}} />
                         <ListEditor visible:expr="!!{$list.edit}" />
-                        <Menu class="cxe-tasklist-items">
+                        <Menu class="cxe-tasklist-items" onKeyDown="onTaskListKeyDown">
                             <Repeater records:bind="tdo.tasks"
                                       recordName="$task"
                                       keyField="id"
