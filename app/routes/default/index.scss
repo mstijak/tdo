@@ -61,6 +61,7 @@
     font-size: inherit;
     overflow: hidden;
     display: block;
+    box-sizing: border-box;
 
     &:focus {
       outline: none;
