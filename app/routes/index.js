@@ -17,7 +17,7 @@ export default <cx>
         <Sandbox key:bind="hash" storage:bind="pages" immutable>
             <header class="cxe-layout-header">
                 <h1>tdo</h1>
-                <TextField value:bind="search.query" placeholder="Search..." mod="search"/>
+                <TextField value:bind="search.query" placeholder="Search..." mod="search" id="search" />
 
                 <Repeater
                     records:bind="tdo.boards"
