@@ -32,13 +32,17 @@ export default <cx>
 
             `Space` or `x` Mark task as completed
 
-            `Insert` or `i` Insert task at cursor position
+            `/` Search
 
             `o` Insert task below cursor position
+
+            `Insert` or `i` Insert task at cursor position
 
             `Delete` or `Shift` + `D` Delete task
 
             `Escape` or `Ctrl` + `Enter` Exit task edit mode
+
+            `Escape` (when cursor is not in a task list) Move cursor to the first task list
 
             -----------
 
