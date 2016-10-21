@@ -133,6 +133,12 @@ export default class extends Controller {
                     deleted: true,
                     deletedDate: new Date().toISOString()
                 }));
+
+                var item = closest(e.target, (el) => el.classList.contains('cxe-menu-item'));
+                var elementReceivingFocus = item.nextSibling || item.previousSibling;
+                if (elementReceivingFocus)
+                    FocusManager.focusFirst(elementReceivingFocus);
+
                 break;
 
             case KeyCode.insert:
@@ -166,30 +172,32 @@ export default class extends Controller {
     }
 
     onTaskListKeyDown(e, instance) {
-        let code = (c) => c.charCodeAt(0);        
+        let code = (c) => c.charCodeAt(0),
+            list;
+
         switch (e.keyCode) {
             case code('K'):
-                var item = closest(e.target, (el) => el.classList.contains('cxe-menu-item'));
-                if (item.previousSibling)
-                    FocusManager.focusFirst(item.previousSibling);
-                break;
-
-            case code('J'):
-                var item = closest(e.target, (el) => el.classList.contains('cxe-menu-item'));
-                if (item.nextSibling)
-                    FocusManager.focusFirst(item.nextSibling);
-                break;
-
-            case KeyCode.left:
-            case code('H'):
                 if (e.currentTarget.previousSibling)
                     FocusManager.focusFirst(e.currentTarget.previousSibling);
                 break;
 
-            case KeyCode.right:
-            case code('L'):
+            case code('J'):
                 if (e.currentTarget.nextSibling)
                     FocusManager.focusFirst(e.currentTarget.nextSibling);
+                break;
+
+            case KeyCode.left:
+            case code('H'):
+                list = closest(e.target, (el) => el.classList.contains('cxb-tasklist'));
+                if (list.previousSibling)
+                    FocusManager.focusFirst(list.previousSibling);
+                break;
+
+            case KeyCode.right:
+            case code('L'):
+                list = closest(e.target, (el) => el.classList.contains('cxb-tasklist'));
+                if (list.nextSibling)
+                    FocusManager.focusFirst(list.nextSibling);
                 break;
         }
     }
