@@ -60,7 +60,7 @@ document.body.addEventListener('keyup', e => {
             if (!document.activeElement.classList.contains('cxb-task')) {
                 e.preventDefault();
                 e.stopPropagation();
-                var els = document.getElementsByClassName('cxe-menu-item');
+                var els = document.getElementsByClassName('cxb-task');
                 if (els && els.length > 0)
                     FocusManager.focusFirst(els[0]);
             }
