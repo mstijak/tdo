@@ -67,7 +67,7 @@ document.body.addEventListener('keyup', e => {
             break;
 
         case '/':
-            if (e.target.tagName != 'INPUT') {
+            if (e.target.tagName != 'INPUT' && e.target.tagName != 'TEXTAREA') {
                 e.preventDefault();
                 e.stopPropagation();
                 var el = document.getElementById('search');
