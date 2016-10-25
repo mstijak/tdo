@@ -142,7 +142,6 @@ export default class extends Controller {
                 break;
 
             case KeyCode.insert:
-            case code('I'):
             case code('O'):
                 let nt = this.prepareTask(t.listId);
                 this.store.set('activeTaskId', nt.id);
