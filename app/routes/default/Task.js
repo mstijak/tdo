@@ -124,15 +124,15 @@ class TaskCmp extends VDOM.Component {
 
         switch (e.keyCode) {
             case 13:
-            case 69:
-            case 65:
+            case 73: // i (insert)
+            case 65: // a (append)
                 e.stopPropagation();
                 e.preventDefault()
                 this.toggleEditMode();
                 break;
 
-            case 32:
-            case 88:
+            case 32: 
+            case 88: // x
                 this.setCompleted(!data.task.completed);
                 break;
 

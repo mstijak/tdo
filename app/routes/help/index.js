@@ -28,7 +28,7 @@ export default <cx>
 
             `Right` or `l` Move cursor to the next list
 
-            `Enter` or `e` Edit task at cursor position
+            `Enter` or `i` Edit task at cursor position
 
             `Space` or `x` Mark task as completed
 
@@ -36,7 +36,7 @@ export default <cx>
 
             `o` Insert task below cursor position
 
-            `Insert` or `i` Insert task at cursor position
+            `Insert` or `Shift` + `O` Insert task at cursor position
 
             `Delete` or `Shift` + `D` Delete task
 
