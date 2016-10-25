@@ -49,7 +49,7 @@ stop = startAppLoop(document.getElementById('app'), store, Routes);
 document.body.addEventListener('keyup', e => {
     switch (e.key) {
         case '?':
-            if (e.target.tagName != 'INPUT') {
+            if (e.target.tagName != 'INPUT' && e.target.tagName != 'TEXTAREA') {
                 e.preventDefault();
                 e.stopPropagation();
                 window.location.hash = '#help';
