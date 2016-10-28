@@ -11,15 +11,18 @@ A flexible TODO list with the following features:
 - Ability to work with a large number of tasks
 
 ![Screenshot](/assets/screenshot.png)
+
 [Open tdo](https://github.com/mstijak/tdo)
 
 ## Install & Run
 
 Install:
-    yarn
+
+  yarn
     
 Run:
-    yarn start    
+
+  yarn start    
 
 ### Thanks
 
