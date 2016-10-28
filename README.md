@@ -12,7 +12,7 @@ A flexible TODO list with the following features:
 
 ![Screenshot](/assets/screenshot.png)
 
-[Open tdo](https://github.com/mstijak/tdo)
+[Open](https://mstijak.github.io/tdo/)
 
 ## Install & Run
 
