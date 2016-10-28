@@ -17,12 +17,15 @@ A flexible TODO list with the following features:
 ## Install & Run
 
 Install:
-
-  yarn
-    
+```
+yarn
+```    
 Run:
+````
+yarn start    
+```
 
-  yarn start    
+If you don't use yarn yet, npm will do too.
 
 ### Thanks
 
