@@ -28,7 +28,7 @@ module.exports = {
         }]
     },
     entry: {
-        vendor: ['cx-react'],
+        vendor2: ['cx-react'],
         app: paths.app + 'index.js'
     },
     output: {
@@ -37,7 +37,7 @@ module.exports = {
     },
     plugins: [
         new webpack.optimize.CommonsChunkPlugin({
-            names: ["vendor"],
+            names: ["vendor2"],
             minChunks: Infinity
         }),
         new HtmlWebpackPlugin({
