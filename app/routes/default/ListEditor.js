@@ -23,6 +23,7 @@ export default <cx>
                 options:bind="tdo.boards"
                 optionTextField="name"
                 style="width:100%;"
+                required
             />
         </div>
 

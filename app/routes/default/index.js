@@ -16,7 +16,7 @@ let searchTerms = null;
 let searchQuery = null;
 
 
-function filterItems(item, {search, list}) {
+function filterItems(item, {search, list, settings}) {
     if (item.deleted || item.listId != list.id)
         return false;
 
@@ -27,6 +27,14 @@ function filterItems(item, {search, list}) {
         }
         return item.name && searchTerms.every(ex=>item.name.match(ex));
     }
+
+    if (item.completed && item.completedDate) {
+        var now = new Date().getTime();
+        var cmp = Date.parse(item.completedDate);
+        if (cmp + settings.completedTasksRetentionDays * 24 * 60 * 60 * 1000 < now)
+            return false;
+    }
+
     return true;
 }
 
@@ -80,7 +88,8 @@ export default <cx>
                                       filter={filterItems}
                                       filterParams={{
                                           list: {bind: '$list'},
-                                          search: {bind: 'search'}
+                                          search: {bind: 'search'},
+                                          settings: {bind: 'tdo.settings'}
                                       }}>
                                 <Task
                                     bind="$task"

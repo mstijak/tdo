@@ -2,7 +2,7 @@ import {HtmlElement} from 'cx/ui/HtmlElement';
 import {Tab} from 'cx/ui/nav/Tab';
 import {TextField} from 'cx/ui/form/TextField';
 import {Route} from 'cx/ui/nav/Route';
-import {Menu} from 'cx/ui/nav/Menu';
+import {Menu, MenuItem} from 'cx/ui/nav/Menu';
 import {Sandbox} from 'cx/ui/Sandbox';
 import {Repeater} from 'cx/ui/Repeater';
 import {FirstVisibleChildLayout} from 'cx/ui/layout/FirstVisibleChildLayout';
@@ -25,28 +25,35 @@ export default <cx>
                         records:bind="tdo.boards"
                         filter={b=>!b.deleted}
                     >
-                        <a href:tpl="#{$record.id}"
-                           class={{
-                               active: {expr: '{hash}=="#" + {$record.id}'},
-                               "cxm-menu-pad": true
-                           }}
-                           className:bind="$record.headerClass"
-                           style:bind="$record.headerStyle"
-                           text:bind="$record.name"
-                        />
+                        <MenuItem
+                            mod={{
+                                active: {expr: '{hash}=="#" + {$record.id}'},
+                                test: true
+                            }}
+                        >
+                            <a href:tpl="#{$record.id}"
+                               class="cxm-menu-pad"
+                               className:bind="$record.headerClass"
+                               style:bind="$record.headerStyle"
+                               text:bind="$record.name"
+                            />
+                        </MenuItem>
                     </Repeater>
                     <a href="#" onClick="addBoard" class="cxm-menu-pad">Add Board</a>
 
                     <div class="spacer"/>
 
-                    <a href="#settings" class={{
-                        active: {expr: '{hash}=="#settings"'},
-                        "cxm-menu-pad": true
-                    }}>Settings</a>
-                    <a href="#help" class={{
-                        active: {expr: '{hash}=="#help"'},
-                        "cxm-menu-pad": true
-                    }}>Help <code>?</code></a>
+                    <MenuItem mod={{ active: {expr: '{hash}=="#settings"'}}}>
+                        <a href="#settings" class="cxm-menu-pad">
+                            Settings
+                        </a>
+                    </MenuItem>
+
+                    <MenuItem mod={{ active: {expr: '{hash}=="#help"'}}}>
+                        <a href="#help" class="cxm-menu-pad">
+                            Help <code>?</code>
+                        </a>
+                    </MenuItem>
 
                     <div class="spacer"/>
 
