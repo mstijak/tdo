@@ -2586,35 +2586,50 @@ body {
 
 .cxb-textfield.cxm-search {
   margin: 0 2em;
-  width: auto; }
+  width: 20rem;
+  transition: width 0.5s; }
+  @media screen and (max-width: 1200px) {
+    .cxb-textfield.cxm-search {
+      width: auto;
+      flex: 1; } }
+  .cxb-textfield.cxm-search:placeholder-shown {
+    width: 10rem; }
   .cxb-textfield.cxm-search .cxe-textfield-input {
     background: transparent;
     color: inherit;
     border: none;
-    height: auto;
-    width: 20rem;
-    transition: width 0.5s; }
-    .cxb-textfield.cxm-search .cxe-textfield-input:placeholder-shown {
-      width: 10rem; }
+    height: auto; }
 
 .cxe-taskboard-loading,
 .cxe-taskboard-error {
   padding: 3rem; }
 
 .cxe-taskboard-lists {
-  display: flex;
   flex-direction: row;
   flex-wrap: wrap; }
+  @media screen and (min-width: 700px) {
+    .cxe-taskboard-lists {
+      display: flex; } }
 
 .cxb-tasklist {
-  padding: 1rem 1.5rem;
-  width: 29rem; }
+  padding: 1rem 1.5rem; }
+  @media screen and (min-width: 700px) {
+    .cxb-tasklist {
+      width: 29rem; } }
 
 .cxe-tasklist-header {
-  margin: 0 0 1rem 0;
-  font-size: 1.1rem;
-  font-weight: bold;
-  font-style: normal; }
+  display: flex; }
+  .cxe-tasklist-header h2 {
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    font-weight: bold;
+    font-style: normal;
+    flex: 1; }
+  .cxe-tasklist-header a {
+    transform: scaleX(-1);
+    opacity: 0.5; }
+    .cxe-tasklist-header a:hover {
+      opacity: 1; }
 
 .cxe-tasklist-items {
   margin: 0 0 1rem 0; }
