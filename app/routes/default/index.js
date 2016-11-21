@@ -46,6 +46,11 @@ function filterLists(l, activeBoardId) {
     return l.boardId == activeBoardId && !l.deleted;
 }
 
+const editTaskboard = (e, {store}) => {
+    e.preventDefault();
+    store.toggle('$list.edit')
+};
+
 export default <cx>
     <div class="cxb-taskboard" controller={Controller} layout={FirstVisibleChildLayout}>
         <div class="cxe-taskboard-loading" visible:expr="{$page.status}=='loading'">
@@ -75,11 +80,19 @@ export default <cx>
                     <div
                         class:tpl="cxb-tasklist {$list.className}"
                         style:bind="$list.listStyle">
-                        <h2
-                            class:tpl="cxe-tasklist-header {$list.headerClass}"
-                            text:bind="$list.name"
-                            style:bind="$list.headerStyle"
-                            onDoubleClick={(e, {store}) => { store.set('$list.edit', true)}} />
+                        <header class="cxe-tasklist-header">
+                            <h2
+                                class:tpl="{$list.headerClass}"
+                                text:bind="$list.name"
+                                style:bind="$list.headerStyle"
+                                onDoubleClick={editTaskboard}
+                            />
+                            <a href="#"
+                               onClick={editTaskboard}
+                            >
+                                &#x270e;
+                            </a>
+                        </header>
                         <ListEditor visible:expr="!!{$list.edit}" />
                         <Menu class="cxe-tasklist-items" onKeyDown="onTaskListKeyDown">
                             <Repeater records:bind="tdo.tasks"

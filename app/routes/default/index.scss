@@ -4,21 +4,43 @@
 }
 
 .cxe-taskboard-lists {
-  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+
+  @media screen and (min-width: 700px) {
+    display: flex;
+  }
 }
 
 .cxb-tasklist {
   padding: 1rem 1.5rem;
-  width: 29rem;
+
+  @media screen and (min-width: 700px) {
+    width: 29rem;
+  }
 }
 
 .cxe-tasklist-header {
-  margin: 0 0 1rem 0;
-  font-size: 1.1rem;
-  font-weight: bold;
-  font-style: normal;
+  display: flex;
+
+  h2 {
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    font-weight: bold;
+    font-style: normal;
+    flex: 1;
+  }
+
+  a {
+    transform: scaleX(-1);
+    opacity: 0.5;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+
 }
 
 .cxe-tasklist-items {

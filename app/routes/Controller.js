@@ -7,9 +7,21 @@ export default class extends Controller {
     init() {
         super.init();
 
+        this.store.set('layout.mode', this.getLayoutMode())
+
         this.store.dispatch(
             loadData()
         );
+    }
+
+    getLayoutMode() {
+        if (window.innerWidth >= 1200)
+            return 'desktop';
+
+        if (window.innerWidth >= 760)
+            return 'tablet';
+
+        return 'phone';
     }
 
     addBoard(e) {

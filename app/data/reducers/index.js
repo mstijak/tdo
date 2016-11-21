@@ -7,7 +7,8 @@ export default combineReducers({
     tdo,
     hash: dummy('#'),
     search: dummy({}),
-    pages: dummy({})
+    pages: dummy({}),
+    layout: dummy({})
 });
 
 

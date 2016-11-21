@@ -18,19 +18,24 @@
 
 .cxb-textfield.cxm-search {
   margin: 0 2em;
-  width: auto;
+  width: 20rem;
+
+  @media screen and (max-width: 1200px) {
+    width: auto;
+    flex: 1;
+  }
+
+  transition: width 0.5s;
+
+  &:placeholder-shown {
+    width: 10rem;
+  }
 
   .cxe-textfield-input {
     background: transparent;
     color: inherit;
     border: none;
     height: auto;
-    width: 20rem;
-    transition: width 0.5s;
-
-    &:placeholder-shown {
-      width: 10rem;
-    }
   }
 }
 
