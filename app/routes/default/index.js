@@ -92,8 +92,8 @@ export default <cx>
                         </Menu>
                     </div>
                 </Repeater>
-                <div class="cxb-tasklist" onKeyDown="onTaskListKeyDown">
-                    <Menu class="cxe-tasklist-items">
+                <div class="cxb-tasklist">
+                    <Menu class="cxe-tasklist-items" onKeyDown="onTaskListKeyDown">
                         <a class="cxe-tasklist-add"
                            onClick="addList"
                            href="#"
