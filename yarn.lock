@@ -1428,9 +1428,9 @@ currently-unhandled@^0.4.1:
   dependencies:
     array-find-index "^1.0.1"
 
-cx-core@^16.10.8:
-  version "16.10.8"
-  resolved "https://registry.yarnpkg.com/cx-core/-/cx-core-16.10.8.tgz#4c06d72fd0cfb228f84716e1e0a17f4b63f97839"
+cx-core@16.11.2:
+  version "16.11.2"
+  resolved "https://registry.yarnpkg.com/cx-core/-/cx-core-16.11.2.tgz#2a3d91cd1c14858094ea88666f004f4e380e1b48"
   dependencies:
     intl-io "^0.2.0"
     route-parser "^0.0.5"
@@ -1442,9 +1442,9 @@ cx-react@^16.8.4:
     react "^15.3.2"
     react-dom "^15.3.2"
 
-cx-redux@^16.10.0:
-  version "16.10.0"
-  resolved "https://registry.yarnpkg.com/cx-redux/-/cx-redux-16.10.0.tgz#52b76dd62dfd56e700b6b5f37581305c52857ee1"
+cx-redux:
+  version "16.11.0"
+  resolved "https://registry.yarnpkg.com/cx-redux/-/cx-redux-16.11.0.tgz#159b06673df92fb6ec2961810d629c0d342e6c7f"
   dependencies:
     redux "*"
 
