@@ -92,16 +92,86 @@ export default class extends Controller {
         }
     }
 
+    moveTaskNextBoard(tdo, boardId, store, lists) {
+        var ind = tdo.boards.findIndex(a=>a.id == boardId);
+        if(ind != -1) {
+            // let it loop back to the start
+            var nextInd = (ind + 1) % tdo.boards.length;
+            boardId = tdo.boards[nextInd].id;
+            ind = lists.findIndex(a=>a.boardId == boardId);
+            store.set('$task.listId', lists[ind].id);
+            window.location = '#' + boardId;
+        }
+    }
+
+    moveTaskPrevBoard(tdo, boardId, store, lists) {
+        var ind = tdo.boards.findIndex(a=>a.id == boardId);
+        if(ind != -1) {
+            // let it loop back to the start
+            var prevInd = ind - 1;
+            if(prevInd < 0) prevInd = tdo.boards.length - 1;
+            boardId = tdo.boards[prevInd].id;
+            ind = lists.findIndex(a=>a.boardId == boardId);
+            store.set('$task.listId', lists[ind].id);
+            window.location = '#' + boardId;
+        }
+    }
+
+    moveTaskNextList($task, tdo, boardId, store, lists) {
+        var listIndex = lists.findIndex(a=>a.id == $task.listId);
+        var topHalf = lists.slice(listIndex + 1, lists.length);
+        var bottomHalf = lists.slice(0, listIndex);
+        var ind = topHalf.findIndex(a=>a.boardId == boardId);
+        if(ind != -1) {
+            store.set('$task.listId', topHalf[ind].id);
+        } else {
+            // Wasn't in the top half, move to the bottom half
+            // May loop back around
+            ind = bottomHalf.findIndex(a=>a.boardId == boardId);
+            if(ind != -1) {
+                store.set('$task.listId', bottomHalf[ind].id);
+            }
+        }
+    }
+
+    moveTaskPrevList($task, tdo, boardId, store, lists) {
+        var listIndex = lists.findIndex(a=>a.id == $task.listId);
+        var topHalf = lists.slice(listIndex + 1, lists.length).reverse();
+        var bottomHalf = lists.slice(0, listIndex).reverse();
+        var ind = bottomHalf.findIndex(a=>a.boardId == boardId);
+        if(ind != -1) {
+            store.set('$task.listId', bottomHalf[ind].id);
+        } else {
+            // Wasn't in the bottom half, move to the top half
+            ind = topHalf.findIndex(a=>a.boardId == boardId);
+            if(ind != -1) {
+                store.set('$task.listId', topHalf[ind].id);
+            }
+        }
+    }
+
+    getBoardId($task, lists) {
+        var listIndex = lists.findIndex(a=>a.id == $task.listId);
+        if(listIndex == -1) return null;
+        return lists[listIndex].boardId;
+    }
+
     moveTaskRight(e, {store}) {
         e.stopPropagation();
         e.preventDefault();
         let {tdo, $task} = store.getData();
         let {lists} = tdo;
-        var listIndex = lists.findIndex(a=>a.id == $task.listId);
-        if (listIndex != -1 && listIndex + 1 < lists.length) {
-            store.set('$task.listId', lists[listIndex + 1].id);
-            store.set('activeTaskId', $task.id);
+
+        var boardId = this.getBoardId($task, lists);
+        if (boardId == null) return;
+
+        if(e.shiftKey) {
+            this.moveTaskNextBoard(tdo, boardId, store, lists);
+        } else {
+            this.moveTaskNextList($task, tdo, boardId, store, lists);
         }
+
+        store.set('activeTaskId', $task.id);
     }
 
     moveTaskLeft(e, {store}) {
@@ -109,17 +179,24 @@ export default class extends Controller {
         e.preventDefault();
         let {tdo, $task} = store.getData();
         let {lists} = tdo;
-        var listIndex = lists.findIndex(a=>a.id == $task.listId);
-        if (listIndex > 0) {
-            store.set('$task.listId', lists[listIndex - 1].id);
-            store.set('activeTaskId', $task.id);
+
+        var boardId = this.getBoardId($task, lists);
+        if (boardId == null) return;
+
+        if(e.shiftKey) {
+            this.moveTaskPrevBoard(tdo, boardId, store, lists);
+        } else {
+            this.moveTaskPrevList($task, tdo, boardId, store, lists);
         }
+
+        store.set('activeTaskId', $task.id);
     }
 
     onTaskKeyDown(e, instance) {
         let t = instance.data.task;
         let {store} = instance;
         let tasks = this.store.get('tdo.tasks');
+        let {tdo, $task, $board} = store.getData();
 
         let code = (c) => c.charCodeAt(0);
         switch (e.keyCode) {
