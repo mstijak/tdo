@@ -88,6 +88,7 @@ export default <cx>
                                 onDoubleClick={editTaskboard}
                             />
                             <a href="#"
+                               tabIndex={-1}
                                onClick={editTaskboard}
                             >
                                 &#x270e;
