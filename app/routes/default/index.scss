@@ -54,6 +54,9 @@
 
 .cxb-task {
 
+  border: 1px solid transparent;
+  margin: -1px;
+
   &:focus {
     outline: none;
   }
@@ -70,7 +73,7 @@
   input[type="checkbox"] {
     position: absolute;
     left: 0.5rem;
-    top: 0.5rem;
+    top: 5px;
   }
 
   textarea {

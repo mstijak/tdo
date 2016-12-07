@@ -1,14 +1,5 @@
-import {HtmlElement} from 'cx/ui/HtmlElement';
-import {Repeater} from 'cx/ui/Repeater';
-import {List} from 'cx/ui/List';
-import {Menu} from 'cx/ui/nav/Menu';
-import {TextField} from 'cx/ui/form/TextField';
-import {Radio} from 'cx/ui/form/Radio';
-import {LabeledContainer} from 'cx/ui/form/LabeledContainer';
-import {Button} from 'cx/ui/Button';
-import {PureContainer} from 'cx/ui/PureContainer';
-import {LabelsLeftLayout} from 'cx/ui/layout/LabelsLeftLayout';
-import {UseParentLayout} from 'cx/ui/layout/UseParentLayout';
+import { HtmlElement, Repeater, List, Menu, TextField, Radio, LabeledContainer, Button, PureContainer } from 'cx/widgets';
+import { LabelsLeftLayout, UseParentLayout } from 'cx/ui';
 import {Md} from 'app/components/Md';
 
 export default <cx>

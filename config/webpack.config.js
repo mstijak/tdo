@@ -11,7 +11,7 @@ const webpack = require('webpack'),
 module.exports = {
     resolve: {
         alias: {
-            cx: paths.root + 'node_modules/cx-core/src/',
+            //cx: paths.root + 'node_modules/cx-core/src/',
             app: paths.app
             //uncomment the line below to alias cx-react to cx-preact or some other React replacement library
             //'cx-react': 'cx-preact',
@@ -22,14 +22,17 @@ module.exports = {
         loaders: [{
             test: /\.js$/,
             //add here any ES6 based library
-            include: /(app|intl-io|cx-core|cx|redux|redux-thunk|lodash)/,
+            include: /(app|cx-redux|cx-core|redux|redux-thunk|lodash)/,
             loader: 'babel',
             query: babelCfg
         }]
     },
     entry: {
-        //vendor: ['cx-react'],
         app: paths.app + 'index.js'
+    },
+    externals: {
+        "react": "React",
+        "react-dom": "ReactDOM"
     },
     output: {
         path: paths.dist,

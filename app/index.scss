@@ -1,14 +1,18 @@
-@import "~cx-core/src/ui/form/variables";
-
-$cx-input-default: map_merge($cx-input-default, (
-  color: rgba(255, 255, 255, 0.9),
-  background: rgba(255, 255, 255, 0.1),
-  border-color: rgba(128, 128, 128, 0.1)
-));
-
 $font-size: 12.5px;
+$cx-default-box-font-size: $font-size;
 
-$cx-input-font-size: $font-size;
+$cx-default-input-border-color: rgba(255, 255, 255, 0.1);
+$cx-default-input-background-color: rgba(255, 255, 255, 0.1);
+$cx-default-input-color: rgba(255, 255, 255, 0.9);
+
+///@import "~cx-core/src/ui/form/variables";
+
+//$cx-input-state-style-map: map-merge($cx-input-state-style-map, (
+//  color: rgba(255, 255, 255, 0.9),
+//  background: rgba(255, 255, 255, 0.1),
+//  border-color: rgba(128, 128, 128, 0.1)
+//));
+
 @import "~cx-core/src/index";
 
 

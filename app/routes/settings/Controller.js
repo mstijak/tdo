@@ -1,8 +1,8 @@
-import { Controller } from 'cx/ui/Controller';
-import { MsgBox } from 'cx/ui/overlay/MsgBox';
+import { Controller } from 'cx/ui';
+import { MsgBox } from 'cx/widgets';
+import { append } from 'cx/data';
 import { Gists } from '../../data/services/Gists';
 import { loadData, loadDefault } from '../../data/actions';
-import { append } from 'cx/data/ops/';
 
 export default class extends Controller {
     init() {

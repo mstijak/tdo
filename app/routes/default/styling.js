@@ -1,4 +1,4 @@
-import {parseStyle} from 'cx/util/parseStyle';
+import { parseStyle } from 'cx/util';
 
 var styles = -1, rules;
 

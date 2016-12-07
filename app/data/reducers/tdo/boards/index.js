@@ -1,5 +1,5 @@
+import { append, updateArray } from 'cx/data';
 import { ADD_BOARD, REMOVE_BOARD } from '../../../actions';
-import { append, updateArray } from 'cx/data/ops';
 
 export default function(state = [], action) {
     switch (action.type) {

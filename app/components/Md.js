@@ -1,6 +1,7 @@
+import { HtmlElement } from 'cx/widgets';
 import marked from 'marked';
 import {removeCommonIndent} from './removeCommonIndent';
-import {HtmlElement} from 'cx/ui/HtmlElement';
+
 
 export class Md extends HtmlElement {
 

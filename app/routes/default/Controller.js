@@ -1,9 +1,12 @@
-import {Controller} from 'cx/ui/Controller';
-import {append} from 'cx/data/ops/append';
-import {KeyCode} from 'cx/util/KeyCode';
-import {FocusManager} from 'cx/ui/FocusManager';
+import { Controller, FocusManager } from 'cx/ui';
+import { append } from 'cx/data';
+import { KeyCode, closest } from 'cx/util';
+
+
+
+
 import {removeBoard, gotoAnyBoard} from 'app/data/actions';
-import {closest} from 'cx/util/DOM';
+
 import uid from 'uid';
 
 export default class extends Controller {

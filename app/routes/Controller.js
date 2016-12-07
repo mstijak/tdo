@@ -1,5 +1,5 @@
-import {Controller} from 'cx/ui/Controller';
-import {append} from 'cx/data/ops/append';
+import { Controller } from 'cx/ui';
+import { append } from 'cx/data';
 import uid from 'uid';
 import { loadData, addBoard, gotoBoard } from '../data/actions';
 

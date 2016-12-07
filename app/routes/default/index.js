@@ -1,10 +1,6 @@
-import {HtmlElement} from 'cx/ui/HtmlElement';
-import {Repeater} from 'cx/ui/Repeater';
-import {List} from 'cx/ui/List';
-import {Menu} from 'cx/ui/nav/Menu';
-import {TextArea} from 'cx/ui/form/TextArea';
-import {Button} from 'cx/ui/Button';
-import {FirstVisibleChildLayout} from 'cx/ui/layout/FirstVisibleChildLayout';
+import { HtmlElement, Repeater, List, Menu, MenuItem, TextArea, Button } from 'cx/widgets';
+import { FirstVisibleChildLayout } from 'cx/ui';
+
 import {Md} from 'app/components/Md';
 import {Task} from './Task';
 
@@ -105,11 +101,13 @@ export default <cx>
                                           search: {bind: 'search'},
                                           settings: {bind: 'tdo.settings'}
                                       }}>
-                                <Task
-                                    bind="$task"
-                                    styles:bind="tdo.settings.taskStyles"
-                                    onKeyDown="onTaskKeyDown"
-                                />
+                                <MenuItem pad={false}>
+                                    <Task
+                                        bind="$task"
+                                        styles:bind="tdo.settings.taskStyles"
+                                        onKeyDown="onTaskKeyDown"
+                                    />
+                                </MenuItem>
                             </Repeater>
                             <a class="cxe-tasklist-add" onClick="addTask" href="#">Add Task</a>
                         </Menu>

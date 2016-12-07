@@ -1,10 +1,8 @@
-import {startAppLoop} from 'cx/app/startAppLoop';
+import { startAppLoop, Widget, FocusManager } from 'cx/ui';
+import { Debug } from 'cx/util';
 import {createStore, ReduxStoreView} from 'cx-redux';
 import { applyMiddleware } from 'redux';
 import Routes from './routes';
-import {Widget} from 'cx/ui/Widget';
-import {Debug} from 'cx/util/Debug';
-import {FocusManager} from 'cx/ui/FocusManager';
 import './index.scss';
 import reducer from './data//reducers';
 import middleware from './data/middleware';

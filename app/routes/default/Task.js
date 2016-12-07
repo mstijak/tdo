@@ -1,4 +1,5 @@
-import {VDOM, Widget} from 'cx/ui/Widget';
+import { VDOM, Widget } from 'cx/ui';
+
 import marked from 'marked';
 import {getStyles} from './styling';
 

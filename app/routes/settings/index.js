@@ -1,19 +1,5 @@
-import {HtmlElement} from 'cx/ui/HtmlElement';
-import {Repeater} from 'cx/ui/Repeater';
-import {List} from 'cx/ui/List';
-import {Text} from 'cx/ui/Text';
-import {Menu} from 'cx/ui/nav/Menu';
-import {TextField} from 'cx/ui/form/TextField';
-import {TextArea} from 'cx/ui/form/TextArea';
-import {NumberField} from 'cx/ui/form/NumberField';
-import {Radio} from 'cx/ui/form/Radio';
-import {Checkbox} from 'cx/ui/form/Checkbox';
-import {LabeledContainer} from 'cx/ui/form/LabeledContainer';
-import {Button} from 'cx/ui/Button';
-import {PureContainer} from 'cx/ui/PureContainer';
-import {LabelsLeftLayout} from 'cx/ui/layout/LabelsLeftLayout';
-import {LabelsTopLayout} from 'cx/ui/layout/LabelsTopLayout';
-import {UseParentLayout} from 'cx/ui/layout/UseParentLayout';
+import { HtmlElement, Repeater, List, Text, Menu, TextField, TextArea, NumberField, Radio, Checkbox, LabeledContainer, Button, PureContainer } from 'cx/widgets';
+import { LabelsLeftLayout, LabelsTopLayout, UseParentLayout } from 'cx/ui';
 import {Md} from 'app/components/Md';
 import Controller from './Controller';
 

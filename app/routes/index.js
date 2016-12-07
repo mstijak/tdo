@@ -1,13 +1,15 @@
-import {HtmlElement} from 'cx/ui/HtmlElement';
-import {Tab} from 'cx/ui/nav/Tab';
-import {TextField} from 'cx/ui/form/TextField';
-import {Route} from 'cx/ui/nav/Route';
-import {Menu, MenuItem} from 'cx/ui/nav/Menu';
-import {Submenu} from 'cx/ui/nav/Submenu';
-import {Sandbox} from 'cx/ui/Sandbox';
-import {Repeater} from 'cx/ui/Repeater';
-import {PureContainer} from 'cx/ui/PureContainer';
-import {FirstVisibleChildLayout} from 'cx/ui/layout/FirstVisibleChildLayout';
+import { HtmlElement, Tab, TextField, Route, Menu, MenuItem, Submenu, Sandbox, Repeater, PureContainer } from 'cx/widgets';
+import { FirstVisibleChildLayout } from 'cx/ui';
+
+
+
+
+
+
+
+
+
+
 
 import Default from './default';
 import Settings from './settings';

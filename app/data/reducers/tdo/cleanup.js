@@ -1,4 +1,4 @@
-import {dateDiff} from 'cx/util/date/dateDiff';
+import { dateDiff } from 'cx/util';
 
 function defaultValue(value, def) {
     if (typeof value == "number")

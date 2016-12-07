@@ -1,9 +1,11 @@
-import {HtmlElement} from 'cx/ui/HtmlElement';
-import {TextField} from 'cx/ui/form/TextField';
-import {TextArea} from 'cx/ui/form/TextArea';
-import {LookupField} from 'cx/ui/form/LookupField';
-import {Button} from 'cx/ui/Button';
-import {LabelsTopLayout} from 'cx/ui/layout/LabelsTopLayout';
+import { HtmlElement, TextField, TextArea, LookupField, Button } from 'cx/widgets';
+import { LabelsTopLayout } from 'cx/ui';
+
+
+
+
+
+
 
 export default <cx>
     <div class="cxb-listeditor">

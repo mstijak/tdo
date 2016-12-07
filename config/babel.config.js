@@ -1,10 +1,18 @@
 module.exports = {
     "cacheDirectory": true,
-    "cacheIdentifier": "v8",
-    "presets": ["es2015-loose", "stage-0"],
-    "plugins": [
-        ["babel-plugin-transform-react-jsx", {"pragma": "VDOM.createElement"}],
-        "babel-plugin-cx"
-    ]
+    "cacheIdentifier": "1",
+    "presets": [
+        [
+            "cx-env",
+            {
+                loose: true,
+                modules: false,
+                cx: {
+                    imports: true
+                }
+            }
+        ]
+    ],
+    "plugins": []
 };
 
