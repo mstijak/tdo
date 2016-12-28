@@ -190,15 +190,7 @@ aws4@^1.2.1:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.5.0.tgz#0a29ffb79c31c9e712eeb087e8e7a64b4a56d755"
 
-babel-code-frame@^6.11.0, babel-code-frame@^6.16.0:
-  version "6.16.0"
-  resolved "https://registry.yarnpkg.com/babel-code-frame/-/babel-code-frame-6.16.0.tgz#f90e60da0862909d3ce098733b5d3987c97cb8de"
-  dependencies:
-    chalk "^1.1.0"
-    esutils "^2.0.2"
-    js-tokens "^2.0.0"
-
-babel-code-frame@^6.20.0:
+babel-code-frame@^6.11.0, babel-code-frame@^6.20.0:
   version "6.20.0"
   resolved "https://registry.yarnpkg.com/babel-code-frame/-/babel-code-frame-6.20.0.tgz#b968f839090f9a8bc6d41938fb96cb84f7387b26"
   dependencies:
@@ -385,13 +377,9 @@ babel-plugin-syntax-function-bind@^6.8.0:
   version "6.13.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-syntax-function-bind/-/babel-plugin-syntax-function-bind-6.13.0.tgz#48c495f177bdf31a981e732f55adc0bdd2601f46"
 
-babel-plugin-syntax-jsx@^6.18.0:
+babel-plugin-syntax-jsx@^6.18.0, babel-plugin-syntax-jsx@^6.3.13, babel-plugin-syntax-jsx@^6.8.0:
   version "6.18.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-syntax-jsx/-/babel-plugin-syntax-jsx-6.18.0.tgz#0af32a9a6e13ca7a3fd5069e62d7b0f58d0d8946"
-
-babel-plugin-syntax-jsx@^6.3.13, babel-plugin-syntax-jsx@^6.8.0:
-  version "6.13.0"
-  resolved "https://registry.yarnpkg.com/babel-plugin-syntax-jsx/-/babel-plugin-syntax-jsx-6.13.0.tgz#e741ff3992c578310be45c571bcd90a2f9c5586e"
 
 babel-plugin-syntax-object-rest-spread@^6.8.0:
   version "6.13.0"
@@ -691,14 +679,7 @@ babel-register@^6.18.0:
     mkdirp "^0.5.1"
     source-map-support "^0.4.2"
 
-babel-runtime@^6.0.0, babel-runtime@^6.11.6, babel-runtime@^6.9.0, babel-runtime@^6.9.1:
-  version "6.11.6"
-  resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.11.6.tgz#6db707fef2d49c49bfa3cb64efdb436b518b8222"
-  dependencies:
-    core-js "^2.4.0"
-    regenerator-runtime "^0.9.5"
-
-babel-runtime@^6.20.0:
+babel-runtime@^6.0.0, babel-runtime@^6.11.6, babel-runtime@^6.20.0, babel-runtime@^6.9.0:
   version "6.20.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.20.0.tgz#87300bdcf4cd770f09bf0048c64204e17806d16f"
   dependencies:
@@ -715,21 +696,7 @@ babel-template@^6.14.0, babel-template@^6.15.0, babel-template@^6.16.0, babel-te
     babylon "^6.11.0"
     lodash "^4.2.0"
 
-babel-traverse@^6.16.0, babel-traverse@^6.18.0, babel-traverse@^6.8.0:
-  version "6.19.0"
-  resolved "https://registry.yarnpkg.com/babel-traverse/-/babel-traverse-6.19.0.tgz#68363fb821e26247d52a519a84b2ceab8df4f55a"
-  dependencies:
-    babel-code-frame "^6.16.0"
-    babel-messages "^6.8.0"
-    babel-runtime "^6.9.0"
-    babel-types "^6.19.0"
-    babylon "^6.11.0"
-    debug "^2.2.0"
-    globals "^9.0.0"
-    invariant "^2.2.0"
-    lodash "^4.2.0"
-
-babel-traverse@^6.21.0:
+babel-traverse@^6.16.0, babel-traverse@^6.18.0, babel-traverse@^6.21.0, babel-traverse@^6.8.0:
   version "6.21.0"
   resolved "https://registry.yarnpkg.com/babel-traverse/-/babel-traverse-6.21.0.tgz#69c6365804f1a4f69eb1213f85b00a818b8c21ad"
   dependencies:
@@ -743,29 +710,11 @@ babel-traverse@^6.21.0:
     invariant "^2.2.0"
     lodash "^4.2.0"
 
-babel-types@^6.15.0, babel-types@^6.16.0, babel-types@^6.18.0, babel-types@^6.19.0, babel-types@^6.8.0:
-  version "6.19.0"
-  resolved "https://registry.yarnpkg.com/babel-types/-/babel-types-6.19.0.tgz#8db2972dbed01f1192a8b602ba1e1e4c516240b9"
-  dependencies:
-    babel-runtime "^6.9.1"
-    esutils "^2.0.2"
-    lodash "^4.2.0"
-    to-fast-properties "^1.0.1"
-
-babel-types@^6.21.0:
+babel-types@^6.15.0, babel-types@^6.16.0, babel-types@^6.18.0, babel-types@^6.21.0, babel-types@^6.8.0, babel-types@^6.9.0:
   version "6.21.0"
   resolved "https://registry.yarnpkg.com/babel-types/-/babel-types-6.21.0.tgz#314b92168891ef6d3806b7f7a917fdf87c11a4b2"
   dependencies:
     babel-runtime "^6.20.0"
-    esutils "^2.0.2"
-    lodash "^4.2.0"
-    to-fast-properties "^1.0.1"
-
-babel-types@^6.9.0:
-  version "6.16.0"
-  resolved "https://registry.yarnpkg.com/babel-types/-/babel-types-6.16.0.tgz#71cca1dbe5337766225c5c193071e8ebcbcffcfe"
-  dependencies:
-    babel-runtime "^6.9.1"
     esutils "^2.0.2"
     lodash "^4.2.0"
     to-fast-properties "^1.0.1"
@@ -1354,23 +1303,23 @@ currently-unhandled@^0.4.1:
   dependencies:
     array-find-index "^1.0.1"
 
-cx-core@^16.12.12:
-  version "16.12.12"
-  resolved "https://registry.yarnpkg.com/cx-core/-/cx-core-16.12.12.tgz#c28f2e0603b60dd6423aea7f7260d8ba32614e5b"
+cx-core@^16.12.13:
+  version "16.12.13"
+  resolved "https://registry.yarnpkg.com/cx-core/-/cx-core-16.12.13.tgz#dfcb09611bb0564e03fff328b2d368ad80bdd0cb"
   dependencies:
     intl-io "^0.2.0"
     route-parser "^0.0.5"
 
-cx-react@^16.8.4:
-  version "16.8.4"
-  resolved "https://registry.yarnpkg.com/cx-react/-/cx-react-16.8.4.tgz#1de4da92542139b95b2ac9996a6e2a37fa0ae4d5"
+cx-react@^16.12.0:
+  version "16.12.0"
+  resolved "https://registry.yarnpkg.com/cx-react/-/cx-react-16.12.0.tgz#2994392949da2e37d64da677b9fbb483d79cb6c4"
   dependencies:
-    react "^15.3.2"
-    react-dom "^15.3.2"
+    react "^15.4.1"
+    react-dom "^15.4.1"
 
-cx-redux:
-  version "16.11.0"
-  resolved "https://registry.yarnpkg.com/cx-redux/-/cx-redux-16.11.0.tgz#159b06673df92fb6ec2961810d629c0d342e6c7f"
+cx-redux@^16.12.0:
+  version "16.12.0"
+  resolved "https://registry.yarnpkg.com/cx-redux/-/cx-redux-16.12.0.tgz#dee32c5829f0e07ded91cfa7dcd1e77f492171a9"
   dependencies:
     redux "*"
 
@@ -1690,7 +1639,7 @@ faye-websocket@~0.11.0:
   dependencies:
     websocket-driver ">=0.5.1"
 
-fbjs@^0.8.4:
+fbjs@^0.8.1, fbjs@^0.8.4:
   version "0.8.5"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.5.tgz#f69ba8a876096cb1b9bffe4d7c1e71c19d39d008"
   dependencies:
@@ -3341,13 +3290,17 @@ rc@~1.1.0:
     minimist "^1.2.0"
     strip-json-comments "~1.0.4"
 
-react-dom@^15.3.2:
-  version "15.3.2"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.3.2.tgz#c46b0aa5380d7b838e7a59c4a7beff2ed315531f"
+react-dom@^15.4.1:
+  version "15.4.1"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.4.1.tgz#d54c913261aaedb17adc20410d029dcc18a1344a"
+  dependencies:
+    fbjs "^0.8.1"
+    loose-envify "^1.1.0"
+    object-assign "^4.1.0"
 
-react@^15.3.2:
-  version "15.3.2"
-  resolved "https://registry.yarnpkg.com/react/-/react-15.3.2.tgz#a7bccd2fee8af126b0317e222c28d1d54528d09e"
+react@^15.4.1:
+  version "15.4.1"
+  resolved "https://registry.yarnpkg.com/react/-/react-15.4.1.tgz#498e918602677a3983cd0fd206dfe700389a0dd6"
   dependencies:
     fbjs "^0.8.4"
     loose-envify "^1.1.0"
@@ -3450,10 +3403,6 @@ regenerate@^1.2.1:
 regenerator-runtime@^0.10.0:
   version "0.10.1"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.10.1.tgz#257f41961ce44558b18f7814af48c17559f9faeb"
-
-regenerator-runtime@^0.9.5:
-  version "0.9.5"
-  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.9.5.tgz#403d6d40a4bdff9c330dd9392dcbb2d9a8bba1fc"
 
 regex-cache@^0.4.2:
   version "0.4.3"
