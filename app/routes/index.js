@@ -27,16 +27,19 @@ const BoardItems = <cx>
                     active: {expr: '{hash}=="#" + {$record.id}'},
                     test: true
                 }}
+                pad
             >
                 <a href:tpl="#{$record.id}"
-                   class="cxm-menu-pad"
                    className:bind="$record.headerClass"
                    style:bind="$record.headerStyle"
                    text:bind="$record.name"
                 />
             </MenuItem>
         </Repeater>
-        <a href="#" onClick="addBoard" class="cxm-menu-pad">Add Board</a>
+
+        <MenuItem pad>
+            <a href="#" onClick="addBoard">Add Board</a>
+        </MenuItem>
 
         <div class="spacer" visible:expr="{layout.mode}=='desktop'"/>
         <hr visible:expr="{layout.mode}=='phone'"/>
@@ -45,14 +48,14 @@ const BoardItems = <cx>
 
 const MenuItems = <cx>
     <PureContainer>
-        <MenuItem mod={{active: {expr: '{hash}=="#settings"'}}}>
-            <a href="#settings" class="cxm-menu-pad">
+        <MenuItem mod={{active: {expr: '{hash}=="#settings"'}}} pad>
+            <a href="#settings">
                 Settings
             </a>
         </MenuItem>
 
-        <MenuItem mod={{active: {expr: '{hash}=="#help"'}}}>
-            <a href="#help" class="cxm-menu-pad">
+        <MenuItem mod={{active: {expr: '{hash}=="#help"'}}} pad>
+            <a href="#help">
                 Help <code>?</code>
             </a>
         </MenuItem>
@@ -60,10 +63,14 @@ const MenuItems = <cx>
         <div class="spacer" visible:expr="{layout.mode}=='desktop'"/>
         <hr visible:expr="{layout.mode}!='desktop'"/>
 
-        <a href="https://github.com/mstijak/tdo" class="cxm-menu-pad" target="_blank">Report/Suggest</a>
-        <a href={`http://twitter.com/home?status=${encodeURIComponent("tdo - hackable todo list #todo https://goo.gl/rhkuYP")}`}
-           class="cxm-menu-pad"
-           target="_blank">Tweet</a>
+        <MenuItem pad>
+            <a href="https://github.com/mstijak/tdo" target="_blank">Report/Suggest</a>
+        </MenuItem>
+
+        <MenuItem pad>
+            <a href={`http://twitter.com/home?status=${encodeURIComponent("tdo - hackable todo list #todo https://goo.gl/rhkuYP")}`}
+               target="_blank">Tweet</a>
+        </MenuItem>
     </PureContainer>
 </cx>;
 
@@ -79,7 +86,7 @@ export default <cx>
                     <BoardItems visible:expr="{layout.mode}=='desktop' || {layout.mode}=='tablet'" />
                     <MenuItems visible:expr="{layout.mode}=='desktop'" />
                     <MenuItem visible:expr="{layout.mode}!='desktop'">
-                        <Submenu style="padding: 5px 10px;">
+                        <Submenu>
                             &#9776;
                             <Menu putInto="dropdown">
                                 <BoardItems visible:expr="{layout.mode}=='phone'" />

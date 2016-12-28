@@ -8,7 +8,9 @@ module.exports = {
                 loose: true,
                 modules: false,
                 cx: {
-                    imports: true
+                    imports: {
+                        useSrc: true
+                    }
                 }
             }
         ]
