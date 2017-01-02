@@ -6,10 +6,10 @@ var specific = {
     module: {
         loaders: [{
             test: /\.scss$/,
-            loaders: ["style", "css", "sass"]
+            loaders: ["style-loader", "css-loader", "sass-loader"]
         }, {
             test: /\.css$/,
-            loader: ["style", "css"]
+            loaders: ["style-loader", "css-loader"]
         }]
     },
     plugins: [
