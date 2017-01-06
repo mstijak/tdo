@@ -161,7 +161,8 @@
   margin: 0;
   padding: 0;
   overflow: auto;
-  border: 0 solid #bfbfbf; }
+  border: 0 solid #bfbfbf;
+  -webkit-overflow-scrolling: touch; }
   .cxb-list.cxs-focused {
     outline: none; }
   .cxb-list.cxm-bordered {
@@ -1982,20 +1983,20 @@
 .cxe-slider-axis {
   position: absolute;
   background-color: rgba(128, 128, 128, 0.2);
-  border-radius: 4px;
+  border-radius: 9px;
   box-sizing: border-box; }
   .cxb-slider.cxs-horizontal .cxe-slider-axis {
-    left: 8px;
-    right: 8px;
-    top: calc(50% - 3px);
-    height: 6px;
-    padding: 0 3px; }
+    left: 9px;
+    right: 9px;
+    top: calc(50% - 4px);
+    height: 8px;
+    padding: 0 4px; }
   .cxb-slider.cxs-vertical .cxe-slider-axis {
-    top: 8px;
-    bottom: 8px;
-    width: 6px;
-    left: calc(50% - 3px);
-    padding: 3px 0; }
+    top: 9px;
+    bottom: 9px;
+    width: 8px;
+    left: calc(50% - 4px);
+    padding: 4px 0; }
 
 .cxe-slider-space {
   position: relative;
@@ -2005,7 +2006,7 @@
 .cxe-slider-range {
   position: absolute;
   background-color: #98d4ff;
-  border-radius: 3px; }
+  border-radius: 4px; }
   .cxb-slider.cxs-horizontal .cxe-slider-range {
     height: 100%; }
   .cxb-slider.cxs-vertical .cxe-slider-range {
@@ -2014,10 +2015,10 @@
 .cxe-slider-handle {
   position: absolute;
   box-sizing: border-box;
-  margin: -8px 0 0 -8px;
-  padding: 0;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
+  margin-left: -9px;
+  margin-top: -9px;
   background: #ebebeb;
   border: 1px solid #cccccc;
   border-radius: 50%;
@@ -2117,7 +2118,8 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  list-style: none; }
+  list-style: none;
+  -webkit-overflow-scrolling: touch; }
   .cxb-menu.cxs-horizontal {
     white-space: nowrap; }
     .cxb-menu.cxs-horizontal > .cxe-menu-item {
@@ -2476,7 +2478,8 @@
   margin: 0;
   padding: 0;
   line-height: 16px;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch; }
   .cxb-pagination:focus {
     outline: none; }
 
@@ -2645,7 +2648,8 @@
     border-style: solid;
     position: relative;
     background-color: #eee;
-    border-color: #bfbfbf; }
+    border-color: #bfbfbf;
+    background-clip: padding-box; }
   .cxe-grid-col-header.cxs-sortable {
     cursor: pointer; }
     .cxe-grid-col-header.cxs-sortable.cxs-sorted-asc, .cxe-grid-col-header.cxs-sortable.cxs-sorted-desc {
@@ -2656,27 +2660,26 @@
       background-color: #e9e9e9; }
     .cxe-grid-fixed-header .cxe-grid-col-header.cxs-sortable.cxs-sorted-asc:hover, .cxe-grid-fixed-header .cxe-grid-col-header.cxs-sortable.cxs-sorted-desc:hover {
       background-color: #e1e1e1; }
-  .cxe-grid-col-header.cxs-sortable::before {
-    content: '\2193';
-    position: absolute;
-    visibility: hidden;
-    top: 3px; }
-  .cxe-grid-col-header.cxs-sorted-asc::before {
-    content: '\2193';
-    visibility: visible; }
-  .cxe-grid-col-header.cxs-sorted-desc::before {
-    content: '\2191';
-    visibility: visible; }
   .cxe-grid-col-header.cxs-sortable:not(.cxs-aligned-right) {
-    padding-right: 15px; }
-    .cxe-grid-col-header.cxs-sortable:not(.cxs-aligned-right)::before {
-      right: 5px; }
+    padding-right: 21px; }
+    .cxe-grid-col-header.cxs-sortable:not(.cxs-aligned-right) .cxe-grid-column-sort-icon {
+      right: 2px; }
   .cxe-grid-col-header.cxs-sortable.cxs-aligned-center {
-    padding-left: 15px; }
+    padding-left: 21px; }
   .cxe-grid-col-header.cxs-sortable.cxs-aligned-right {
-    padding-left: 15px; }
-    .cxe-grid-col-header.cxs-sortable.cxs-aligned-right::before {
-      left: 5px; }
+    padding-left: 21px; }
+    .cxe-grid-col-header.cxs-sortable.cxs-aligned-right .cxe-grid-column-sort-icon {
+      left: 2px; }
+
+.cxe-grid-column-sort-icon {
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  margin-top: -8px;
+  position: absolute;
+  transition: transform 0.1s linear; }
+  .cxs-sorted-desc > .cxe-grid-column-sort-icon {
+    transform: rotate(180deg); }
 
 .cxe-grid-data td {
   padding: 0;
@@ -2755,8 +2758,10 @@
   top: 0;
   right: 0; }
 
-.cxb-grid.cxs-selectable .cxe-grid-scroll-area:focus {
-  outline: none; }
+.cxb-grid.cxs-selectable .cxe-grid-scroll-area {
+  -webkit-overflow-scrolling: touch; }
+  .cxb-grid.cxs-selectable .cxe-grid-scroll-area:focus {
+    outline: none; }
 
 .cxb-grid.cxs-selectable .cxe-grid-data {
   cursor: pointer; }
