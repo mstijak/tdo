@@ -1,4 +1,5 @@
 import { VDOM, Widget } from 'cx/ui';
+import { isFocused } from 'cx/util';
 
 import marked from 'marked';
 import {getStyles} from './styling';
@@ -55,6 +56,7 @@ class TaskCmp extends VDOM.Component {
                     }}
                     tabIndex={0}
                     onClick={::this.onClick}
+                    onTouchStart={::this.onTouchStart}
                     onDoubleClick={e=>{this.toggleEditMode()}}>
             { !this.state.edit && this.renderContent() }
             { this.state.edit && this.renderEditor() }
@@ -197,8 +199,14 @@ class TaskCmp extends VDOM.Component {
     onClick(e) {
         e.preventDefault();
         e.stopPropagation();
+    }
 
-        //this.toggleEditMode();
+    onTouchStart(e) {
+        if (!this.state.edit && isFocused(this.dom.el)) {
+            this.toggleEditMode();
+            e.stopPropagation();
+            e.preventDefault();
+        }
     }
 
     toggleEditMode() {
