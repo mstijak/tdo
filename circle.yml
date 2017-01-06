@@ -1,12 +1,12 @@
 dependencies:
   cache_directories:
-    - "~/.yarn-cache"
+    - ~/.yarn-cache
 
   pre:
-    - npm install yarn -g
+    - curl -o- -L https://yarnpkg.com/install.sh | bash
 
   override:
-    - yarn
+    - yarn install
 
 general:
   branches:
@@ -17,5 +17,5 @@ deployment:
   staging:
     branch: master
     commands:
-      - npm run build
+      - yarn run build
       - sh ./config/deploy-ghpages.sh dist
