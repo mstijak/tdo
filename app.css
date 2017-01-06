@@ -72,7 +72,7 @@
   border-style: solid;
   user-select: none;
   font-family: inherit;
-  font-size: 13px;
+  font-size: 12.5px;
   line-height: 16px;
   border-width: 1px;
   border-radius: 0;
@@ -429,7 +429,7 @@
 .cxb-label {
   display: inline-block;
   padding: 5px 0;
-  font-size: 13px;
+  font-size: 12.5px;
   font-family: inherit;
   line-height: 16px;
   border-style: solid;
@@ -459,13 +459,13 @@
   line-height: 28px;
   padding: 0 5px 0 5px;
   border-width: 1px;
-  font-size: 13px;
+  font-size: 12.5px;
   font-family: inherit;
-  border-color: #bfbfbf;
+  border-color: rgba(255, 255, 255, 0.1);
   border-style: solid;
   border-radius: 0;
-  background-color: white;
-  color: black;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
   outline-offset: 0;
   box-shadow: none;
   -ms-appearance: none;
@@ -544,13 +544,13 @@
   line-height: 28px;
   padding: 0 5px 0 5px;
   border-width: 1px;
-  font-size: 13px;
+  font-size: 12.5px;
   font-family: inherit;
-  border-color: #bfbfbf;
+  border-color: rgba(255, 255, 255, 0.1);
   border-style: solid;
   border-radius: 0;
-  background-color: white;
-  color: black;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
   outline-offset: 0;
   box-shadow: none;
   -ms-appearance: none;
@@ -614,13 +614,13 @@
   line-height: 16px;
   padding: 5px;
   border-width: 1px;
-  font-size: 13px;
+  font-size: 12.5px;
   font-family: inherit;
-  border-color: #bfbfbf;
+  border-color: rgba(255, 255, 255, 0.1);
   border-style: solid;
   border-radius: 0;
-  background-color: white;
-  color: black;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
   outline-offset: 0;
   box-shadow: none;
   -ms-appearance: none;
@@ -696,13 +696,13 @@
   line-height: 28px;
   padding: 0 25px 0 5px;
   border-width: 1px;
-  font-size: 13px;
+  font-size: 12.5px;
   font-family: inherit;
-  border-color: #bfbfbf;
+  border-color: rgba(255, 255, 255, 0.1);
   border-style: solid;
   border-radius: 0;
-  background-color: white;
-  color: black;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
   outline-offset: 0;
   box-shadow: none;
   -ms-appearance: none;
@@ -795,13 +795,13 @@
   line-height: 16px;
   padding: 5px 28px 5px 5px;
   border-width: 1px;
-  font-size: 13px;
+  font-size: 12.5px;
   font-family: inherit;
-  border-color: #bfbfbf;
+  border-color: rgba(255, 255, 255, 0.1);
   border-style: solid;
   border-radius: 0;
-  background-color: white;
-  color: black;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
   outline-offset: 0;
   box-shadow: none;
   -ms-appearance: none;
@@ -889,13 +889,13 @@
   line-height: 28px;
   padding: 0 5px 0 5px;
   border-width: 1px;
-  font-size: 13px;
+  font-size: 12.5px;
   font-family: inherit;
-  border-color: #bfbfbf;
+  border-color: rgba(255, 255, 255, 0.1);
   border-style: solid;
   border-radius: 0;
-  background-color: white;
-  color: black;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
   outline-offset: 0;
   box-shadow: none;
   -ms-appearance: none;
@@ -1113,13 +1113,13 @@
   line-height: 28px;
   padding: 0 5px 0 5px;
   border-width: 1px;
-  font-size: 13px;
+  font-size: 12.5px;
   font-family: inherit;
-  border-color: #bfbfbf;
+  border-color: rgba(255, 255, 255, 0.1);
   border-style: solid;
   border-radius: 0;
-  background-color: white;
-  color: black;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
   outline-offset: 0;
   box-shadow: none;
   -ms-appearance: none;
@@ -1157,7 +1157,7 @@
     padding: 0; }
   .cxe-select-select option {
     background-color: white;
-    color: black; }
+    color: rgba(255, 255, 255, 0.9); }
 
 .cxe-select-clear {
   display: block;
@@ -1224,13 +1224,13 @@
   line-height: 16px;
   padding: 5px;
   border-width: 1px;
-  font-size: 13px;
+  font-size: 12.5px;
   font-family: inherit;
-  border-color: #bfbfbf;
+  border-color: rgba(255, 255, 255, 0.1);
   border-style: solid;
   border-radius: 0;
-  background-color: white;
-  color: black;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
   outline-offset: 0;
   box-shadow: none;
   -ms-appearance: none;
@@ -1288,7 +1288,7 @@
   border-width: 1px 0 1px 0;
   border-style: solid;
   border-color: transparent;
-  font-size: 13px;
+  font-size: 12.5px;
   min-width: 14px; }
   .cxb-checkbox.cxs-view-mode {
     line-height: 16px;
@@ -1327,13 +1327,13 @@
   line-height: 16px;
   padding: 0;
   border-width: 1px;
-  font-size: 13px;
+  font-size: 12.5px;
   font-family: inherit;
-  border-color: #bfbfbf;
+  border-color: rgba(255, 255, 255, 0.1);
   border-style: solid;
   border-radius: 0;
-  background-color: white;
-  color: black;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
   outline-offset: 0;
   box-shadow: none;
   -ms-appearance: none;
@@ -1381,7 +1381,7 @@
   border-width: 1px 0 1px 0;
   border-style: solid;
   border-color: transparent;
-  font-size: 13px;
+  font-size: 12.5px;
   min-width: 14px; }
   .cxb-radio.cxs-view-mode {
     line-height: 16px;
@@ -1418,13 +1418,13 @@
   line-height: 16px;
   padding: 0;
   border-width: 1px;
-  font-size: 13px;
+  font-size: 12.5px;
   font-family: inherit;
-  border-color: #bfbfbf;
+  border-color: rgba(255, 255, 255, 0.1);
   border-style: solid;
   border-radius: 0;
-  background-color: white;
-  color: black;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
   outline-offset: 0;
   box-shadow: none;
   -ms-appearance: none;
@@ -1471,11 +1471,11 @@
   border-width: 1px;
   font-size: 11px;
   font-family: "Consolas", monospace;
-  border-color: #bfbfbf;
+  border-color: rgba(255, 255, 255, 0.1);
   border-style: solid;
   border-radius: 0;
-  background-color: white;
-  color: black;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
   outline-offset: 0;
   box-shadow: none;
   -ms-appearance: none;
@@ -1504,11 +1504,11 @@
     border-width: 1px;
     font-size: 11px;
     font-family: "Consolas", monospace;
-    border-color: #bfbfbf;
+    border-color: rgba(255, 255, 255, 0.1);
     border-style: solid;
     border-radius: 0;
-    background-color: white;
-    color: black;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
     outline-offset: 0;
     box-shadow: none;
     -ms-appearance: none;
@@ -1634,11 +1634,11 @@
   border-width: 1px;
   font-size: 11px;
   font-family: "Consolas", monospace;
-  border-color: #bfbfbf;
+  border-color: rgba(255, 255, 255, 0.1);
   border-style: solid;
   border-radius: 0;
-  background-color: white;
-  color: black;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
   outline-offset: 0;
   box-shadow: none;
   -ms-appearance: none;
@@ -1696,13 +1696,13 @@
   line-height: 16px;
   padding: 5px;
   border-width: 1px;
-  font-size: 13px;
+  font-size: 12.5px;
   font-family: inherit;
-  border-color: #bfbfbf;
+  border-color: rgba(255, 255, 255, 0.1);
   border-style: solid;
   border-radius: 0;
-  background-color: white;
-  color: black;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
   outline-offset: 0;
   box-shadow: none;
   -ms-appearance: none;
@@ -1730,9 +1730,9 @@
     width: 100%;
     font-size: 0.9em; }
   .cxb-monthpicker th, .cxb-monthpicker td {
-    border-top: 1px solid rgba(191, 191, 191, 0.5); }
+    border-top: 1px solid rgba(255, 255, 255, 0); }
   .cxb-monthpicker tbody:not(:first-child) tr:first-child th, .cxb-monthpicker tbody:not(:first-child) tr:first-child td {
-    border-top: 1px solid #bfbfbf; }
+    border-top: 1px solid rgba(255, 255, 255, 0.1); }
   .cxb-monthpicker th, .cxb-monthpicker td {
     text-align: center;
     font-size: smaller;
@@ -1795,13 +1795,13 @@
   line-height: 28px;
   padding: 0 5px 0 5px;
   border-width: 1px;
-  font-size: 13px;
+  font-size: 12.5px;
   font-family: inherit;
-  border-color: #bfbfbf;
+  border-color: rgba(255, 255, 255, 0.1);
   border-style: solid;
   border-radius: 0;
-  background-color: white;
-  color: black;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
   outline-offset: 0;
   box-shadow: none;
   -ms-appearance: none;
@@ -1887,7 +1887,7 @@
   border-style: solid;
   user-select: none;
   font-family: inherit;
-  font-size: 13px;
+  font-size: 12.5px;
   line-height: 16px;
   border-width: 1px;
   border-radius: 0;
@@ -1963,7 +1963,7 @@
   border-width: 1px;
   border-style: solid;
   border-color: transparent;
-  font-size: 13px;
+  font-size: 12.5px;
   width: 180px;
   user-select: none; }
   .cxb-slider.cxs-view-mode {
@@ -2594,7 +2594,7 @@
 .cxb-grid {
   box-sizing: border-box;
   position: relative;
-  font-size: 13px; }
+  font-size: 12.5px; }
   .cxb-grid table {
     border-spacing: 0;
     border-collapse: collapse;
@@ -3286,6 +3286,7 @@ html {
 body {
   margin: 0;
   height: 100%;
+  font-size: 100%;
   font-family: 'Consolas', monospace; }
 
 #app {
