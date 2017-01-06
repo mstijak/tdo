@@ -7,7 +7,7 @@
     "test": "mocha",
     "start": "webpack-dev-server --config config/webpack.dev.js --open",
     "build": "webpack --config config/webpack.prod.js",
-    "build_extension": "webpack --config config/webpack.prod.extension.js"
+    "build:extension": "webpack --config config/webpack.extension.js"
   },
   "repository": {
     "type": "git",
@@ -47,6 +47,7 @@
     "style-loader": "^0.13.1",
     "webpack": "^2.1.0-beta.25",
     "webpack-dev-server": "^2.1.0-beta.8",
-    "webpack-merge": "^2.0.0"
+    "webpack-merge": "^2.0.0",
+    "zip-webpack-plugin": "^0.3.0"
   }
 }

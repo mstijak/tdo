@@ -14,6 +14,8 @@ A flexible TODO list with the following features:
 
 [Open](https://mstijak.github.io/tdo/)
 
+Also available as a [Chrome extension](https://chrome.google.com/webstore/detail/tdo/aaaabkbhklmpmlnjnbicdahijpkgnkfk).
+
 ## Install & Run
 
 Install:

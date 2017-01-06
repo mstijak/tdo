@@ -2,13 +2,16 @@ var webpack = require('webpack'),
     ExtractTextPlugin = require("extract-text-webpack-plugin"),
     CopyWebpackPlugin = require("copy-webpack-plugin"),
     CrxWebpackPlugin = require('crx-webpack-plugin'),
+    ZipPlugin = require('zip-webpack-plugin'),
     merge = require('webpack-merge'),
     common = require('./webpack.config'),
     path = require('path');
 
 var extensionResourcePath = path.join(__dirname, '../extension'),
-    extensionContentPath = path.join(__dirname, '../dist_extension/chrome'),
-    extensionOutputPath = path.join(__dirname, '../dist_extension');
+    extensionContentPath = path.join(__dirname, '../extension/dist/chrome'),
+    extensionOutputPath = path.join(__dirname, '../extension/dist'),
+	extensionSecretsPath = path.join(__dirname, '../extension'),
+    appPath = path.join(__dirname, '../app');
 
 var sass = new ExtractTextPlugin({
     filename: "app.css",
@@ -25,12 +28,12 @@ var specific = {
             loaders: sass.extract(['css'])
         }]
     },
-
     plugins: [
         new CopyWebpackPlugin([
-            { from: path.join(__dirname, '../assets'), to: path.join(extensionContentPath, '/assets') },
-            { from: path.join(__dirname, '../extension/assets'), to: path.join(extensionContentPath, '/assets') },
-            { from: path.join(__dirname, '../extension/manifest_chrome.json'), to: path.join(extensionContentPath, '/manifest.json') }
+            { from: path.join(__dirname, '../assets'), to: path.join(extensionContentPath, '/assets'), ignore: '*.db' },
+            { from: path.join(__dirname, '../extension/assets'), to: path.join(extensionContentPath, '/assets'), ignore: '*.db' },
+            { from: path.join(__dirname, '../extension/manifest_chrome.json'), to: path.join(extensionContentPath, '/manifest.json') },
+			{ from: path.join(extensionSecretsPath, '/chrome.pem'), to: path.join(extensionContentPath, '/key.pem') }
         ]),
         new webpack.optimize.UglifyJsPlugin(),
         new webpack.DefinePlugin({
@@ -40,12 +43,22 @@ var specific = {
         new CrxWebpackPlugin({
             // updateUrl: 'http://localhost:8000/',
             // updateFilename: 'updates.xml',
-            keyFile: path.join(extensionResourcePath, '/.cert/secret_for_crx.pem'),
+            keyFile: path.join(extensionSecretsPath, '/chrome.pem'),
             contentPath: extensionContentPath,
             outputPath: extensionOutputPath,
             name: 'tdo'
+        }),
+        new ZipPlugin({
+            path: extensionOutputPath,
+            filename: 'chrome.zip'
         })
     ],
+
+    entry: {
+        app: [
+            path.join(appPath, 'extension.js')
+        ]
+    },
 
     output: {
         path: extensionContentPath,

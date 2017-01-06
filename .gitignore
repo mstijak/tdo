@@ -6,4 +6,6 @@ node_modules
 .vs
 .idea
 *.user
+*.db
+*.pem
 packages
