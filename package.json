@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha",
     "start": "webpack-dev-server --config config/webpack.dev.js --open",
-    "build": "webpack --config config/webpack.prod.js"
+    "build": "webpack --config config/webpack.prod.js",
+    "build_extension": "webpack --config config/webpack.prod.extension.js"
   },
   "repository": {
     "type": "git",
@@ -37,6 +38,7 @@
     "babel-core": "^6.21.0",
     "babel-loader": "^6.2.10",
     "babel-preset-cx-env": "^16.12.6",
+    "crx-webpack-plugin": "^0.1.5",
     "css-loader": "^0.26.1",
     "extract-text-webpack-plugin": "^2.0.0-beta.4",
     "html-webpack-plugin": "^2.24.1",
