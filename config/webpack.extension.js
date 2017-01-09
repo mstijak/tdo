@@ -33,6 +33,7 @@ var specific = {
             { from: path.join(__dirname, '../assets'), to: path.join(extensionContentPath, '/assets'), ignore: '*.db' },
             { from: path.join(__dirname, '../extension/assets'), to: path.join(extensionContentPath, '/assets'), ignore: '*.db' },
             { from: path.join(__dirname, '../extension/manifest_chrome.json'), to: path.join(extensionContentPath, '/manifest.json') },
+            { from: path.join(__dirname, '../extension/background.js'), to: extensionContentPath },
 			{ from: path.join(extensionSecretsPath, '/chrome.pem'), to: path.join(extensionContentPath, '/key.pem') }
         ]),
         new webpack.optimize.UglifyJsPlugin(),

@@ -14,7 +14,8 @@
 	},
 	
 	"permissions": [
-		"storage"
+		"storage",
+		"contextMenus"
 	],
 	
 	"content_security_policy": "script-src 'self' 'unsafe-eval' https://cdn.polyfill.io https://unpkg.com; object-src 'self'",
@@ -24,13 +25,16 @@
 		"default_title": "tdo",
 		"default_popup": "index.html"
 	},
-
+	"background": {
+		"persistent": true,
+		"scripts": ["background.js"]
+	},
+	
 	"commands": {
 		"_execute_browser_action": {
 			"description": "Open tdo.",
-			"global": true,
 			"suggested_key": {
-				"default": "Ctrl+Shift+0"
+				"default": "Ctrl+Shift+9"
 			}
 		}
 	}
