@@ -1,8 +1,11 @@
 bin
 obj
 dist
+dist_extension
 node_modules
 .vs
 .idea
 *.user
+*.db
+*.pem
 packages

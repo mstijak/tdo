@@ -1,0 +1,41 @@
+{
+	"manifest_version": 2,
+	
+	"name": "tdo",
+	"version": "1.0.5",
+	"description": "Keyboard driven, hackable TODO list",
+	"author": "Marko Stijak",
+	"homepage_url": "https://github.com/mstijak/tdo",
+	
+	"icons": {
+		"16": "assets/icon_16.png",
+		"48": "assets/icon_48.png",
+		"128": "assets/icon_128.png"
+	},
+	
+	"permissions": [
+		"storage",
+		"contextMenus"
+	],
+	
+	"content_security_policy": "script-src 'self' 'unsafe-eval' https://cdn.polyfill.io https://unpkg.com; object-src 'self'",
+	
+	"browser_action": {
+		"default_icon": "assets/icon_16.png",
+		"default_title": "tdo",
+		"default_popup": "index.html"
+	},
+	"background": {
+		"persistent": true,
+		"scripts": ["background.js"]
+	},
+	
+	"commands": {
+		"_execute_browser_action": {
+			"description": "Open tdo.",
+			"suggested_key": {
+				"default": "Ctrl+Shift+9"
+			}
+		}
+	}
+}

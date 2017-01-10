@@ -23,7 +23,7 @@ module.exports = {
             test: /\.js$/,
             //add here any ES6 based library
             include: /(app|cx-redux|cx-core|redux|redux-thunk|lodash)/,
-            loader: 'babel',
+            loader: 'babel-loader',
             query: babelCfg
         }]
     },

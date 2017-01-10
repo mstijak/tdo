@@ -14,10 +14,10 @@ var specific = {
     module: {
         loaders: [{
             test: /\.scss$/,
-            loaders: sass.extract(['css', 'sass'])
+            loaders: sass.extract(['css-loader', 'sass-loader'])
         }, {
             test: /\.css$/,
-            loaders: sass.extract(['css'])
+            loaders: sass.extract(['css-loader'])
         }]
     },
 
