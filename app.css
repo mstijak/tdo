@@ -3482,3 +3482,19 @@ code {
 
 .cxb-dropdown {
   background: #444444; }
+
+::-webkit-scrollbar-track {
+  background-color: transparent; }
+
+::-webkit-scrollbar {
+  background-color: transparent; }
+
+::-webkit-scrollbar:horizontal {
+  height: 6px; }
+
+::-webkit-scrollbar:vertical {
+  width: 6px; }
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 3px; }
