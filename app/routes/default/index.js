@@ -91,7 +91,7 @@ export default <cx>
                             </a>
                         </header>
                         <ListEditor visible:expr="!!{$list.edit}" />
-                        <Menu class="cxe-tasklist-items" onKeyDown="onTaskListKeyDown">
+                        <Menu class="cxe-tasklist-items" onKeyDown="onTaskListKeyDown" itemPadding="small">
                             <Repeater records:bind="tdo.tasks"
                                       recordName="$task"
                                       keyField="id"
@@ -114,7 +114,7 @@ export default <cx>
                     </div>
                 </Repeater>
                 <div class="cxb-tasklist">
-                    <Menu class="cxe-tasklist-items" onKeyDown="onTaskListKeyDown">
+                    <Menu class="cxe-tasklist-items" onKeyDown="onTaskListKeyDown" itemPadding="small">
                         <a class="cxe-tasklist-add"
                            onClick="addList"
                            href="#"
