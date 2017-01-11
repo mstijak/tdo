@@ -136,6 +136,8 @@ class TaskCmp extends VDOM.Component {
 
             case 32: 
             case 88: // x
+                e.stopPropagation();
+                e.preventDefault();
                 this.setCompleted(!data.task.completed);
                 break;
 
