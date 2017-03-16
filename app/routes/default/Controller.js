@@ -163,7 +163,7 @@ export default class extends Controller {
         e.stopPropagation();
         e.preventDefault();
         let {tdo, $task} = store.getData();
-        let {lists} = tdo;
+        let lists = tdo.lists.filter(a => !a.deleted);
 
         var boardId = this.getBoardId($task, lists);
         if (boardId == null) return;
@@ -181,7 +181,7 @@ export default class extends Controller {
         e.stopPropagation();
         e.preventDefault();
         let {tdo, $task} = store.getData();
-        let {lists} = tdo;
+        let lists = tdo.lists.filter(a => !a.deleted);
 
         var boardId = this.getBoardId($task, lists);
         if (boardId == null) return;
