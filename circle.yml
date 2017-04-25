@@ -15,6 +15,7 @@ dependencies:
     - ~/.cache/yarn
 
   override:
+    - node -v
     - yarn install
 
 general:
@@ -26,6 +27,5 @@ deployment:
   staging:
     branch: master
     commands:
-      - node -v
       - yarn run build
       - sh ./config/deploy-ghpages.sh dist
