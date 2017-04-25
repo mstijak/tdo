@@ -5,7 +5,7 @@ $cx-default-input-border-color: rgba(255, 255, 255, 0.1);
 $cx-default-input-background-color: rgba(255, 255, 255, 0.1);
 $cx-default-input-color: rgba(255, 255, 255, 0.9);
 
-@import "~cx-core/src/variables";
+@import "~cx/src/variables";
 
 ///@import "~cx-core/src/ui/form/variables";
 
@@ -15,7 +15,7 @@ $cx-default-input-color: rgba(255, 255, 255, 0.9);
 //  border-color: rgba(128, 128, 128, 0.1)
 //));
 
-@import "~cx-core/src/index";
+@import "~cx/src/index";
 
 
 html {
