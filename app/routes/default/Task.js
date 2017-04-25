@@ -21,7 +21,7 @@ export class Task extends Widget {
     }
 
     render(context, instance, key) {
-        return <TaskCmp key={key} instance={instance}/>
+        return <TaskCmp key={key} instance={instance} data={instance.data} />
     }
 }
 
@@ -40,8 +40,8 @@ class TaskCmp extends VDOM.Component {
     }
 
     render() {
-        let {instance} = this.props;
-        let {widget, data} = instance;
+        let {instance, data} = this.props;
+        let {widget} = instance;
         let {CSS} = widget;
 
         let className = CSS.block("task", {}, {
@@ -64,7 +64,8 @@ class TaskCmp extends VDOM.Component {
     }
 
     renderContent() {
-        var {data, widget} = this.props.instance;
+        var {data, instance} = this.props;
+        var {widget} = this.props.instance;
         var html = data.task.name ? marked(data.task.name) : '<p>&nbsp;</p>';
 
         var styles = getStyles(data.task.name, data.styles);
@@ -86,7 +87,7 @@ class TaskCmp extends VDOM.Component {
     }
 
     renderEditor() {
-        var {data} = this.props.instance;
+        var {data} = this.props;
         var style = {};
         if (this.state.scrollHeight) {
             style.height = `${this.state.scrollHeight}px`;
@@ -111,8 +112,7 @@ class TaskCmp extends VDOM.Component {
     }
 
     setCompleted(completed = true) {
-        let {instance} = this.props;
-        let {data} = instance;
+        let {instance, data} = this.props;
 
         instance.set('task', {
             ...data.task,
@@ -122,8 +122,8 @@ class TaskCmp extends VDOM.Component {
     }
 
     onKeyDown(e) {
-        let {instance} = this.props;
-        let {data, widget} = instance;
+        let {instance, data} = this.props;
+        let {widget} = instance;
 
         switch (e.keyCode) {
             case 13:
@@ -165,7 +165,6 @@ class TaskCmp extends VDOM.Component {
 
     onEditorKeyDown(e) {
         let {instance} = this.props;
-        let {data} = instance;
 
         switch (e.keyCode) {
             case 13:
@@ -229,8 +228,8 @@ class TaskCmp extends VDOM.Component {
 
     componentDidMount() {
         this.props.instance.parent.toggleEditMode = ::this.toggleEditMode;
-        let {instance} = this.props;
-        let {store, data} = instance;
+        let {instance, data} = this.props;
+        let {store} = instance;
 
         if (this.dom.el.parentNode.parentNode.parentNode.contains(document.activeElement))
             this.toggleEditMode();

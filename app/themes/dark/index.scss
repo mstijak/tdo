@@ -84,23 +84,23 @@ code {
   background: #444444;
 }
 
-&::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   background-color: transparent;
 }
 
-&::-webkit-scrollbar {
+::-webkit-scrollbar {
   background-color: transparent;
 }
 
-&::-webkit-scrollbar:horizontal {
+::-webkit-scrollbar:horizontal {
   height: 6px;
 }
 
-&::-webkit-scrollbar:vertical {
+::-webkit-scrollbar:vertical {
   width: 6px;
 }
 
-&::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: 3px;
 }
