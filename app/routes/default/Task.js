@@ -71,7 +71,8 @@ class TaskCmp extends VDOM.Component {
         var styles = getStyles(data.task.name, data.styles);
 
         return [
-            <input key="check" type="checkbox"
+            <input key={"check"+data.task.completed}
+                   type="checkbox"
                    checked={!!data.task.completed}
                    onChange={::this.onCheck}
                    tabIndex={-1}
