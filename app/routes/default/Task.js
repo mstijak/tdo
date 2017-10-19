@@ -69,17 +69,18 @@ class TaskCmp extends VDOM.Component {
         var html = data.task.name ? marked(data.task.name) : '<p>&nbsp;</p>';
 
         var styles = getStyles(data.task.name, data.styles);
+        var className = widget.CSS.element('checkbox', "input", {
+            checked: !!data.task.completed,
+        });
 
         return [
-            <input key={"check"+data.task.completed}
-                   type="checkbox"
-                   checked={!!data.task.completed}
-                   onChange={::this.onCheck}
-                   tabIndex={-1}
-                   onClick={e=> {
-                       e.preventDefault();
-                       e.stopPropagation();
-                   }}/>,
+            <div className={className} onClick={() => {
+                this.setCompleted(!data.task.completed);
+            }}>
+                <svg className="cxe-checkbox-input-check" viewBox="0 0 64 64">
+                    <path d="M7.136 42.94l20.16 14.784 29.568-40.32-9.72-7.128-22.598 30.816-10.44-7.656z" fill="currentColor"></path>
+                </svg>
+            </div>,
             <div key="content"
                  className={widget.CSS.expand("cxe-task-content", styles.className)}
                  style={styles.style}
