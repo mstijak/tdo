@@ -145,7 +145,7 @@ class TaskCmp extends VDOM.Component {
 
             default:
                 if (widget.onKeyDown)
-                    widget.onKeyDown(e, instance);
+                    instance.invoke("onKeyDown", e, instance);
                 break;
         }
     }
