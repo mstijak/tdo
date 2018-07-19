@@ -4,7 +4,7 @@ var webpack = require('webpack'),
 
 var specific = {
     module: {
-        loaders: [{
+        rules: [{
             test: /\.scss$/,
             loaders: ["style-loader", "css-loader", "sass-loader"]
         }, {

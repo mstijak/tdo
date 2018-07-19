@@ -1,33 +1,37 @@
 var webpack = require('webpack'),
-    ExtractTextPlugin = require("extract-text-webpack-plugin"),
+    MiniCssExtractPlugin = require("mini-css-extract-plugin"),
     CopyWebpackPlugin = require("copy-webpack-plugin"),
     merge = require('webpack-merge'),
     common = require('./webpack.config'),
     path = require('path');
 
-var sass = new ExtractTextPlugin({
-    filename: "app.css",
-    allChunks: true
-});
 
 var specific = {
+
+    mode: 'production',
+
     module: {
-        loaders: [{
-            test: /\.scss$/,
-            loaders: sass.extract(['css-loader', 'sass-loader'])
-        }, {
-            test: /\.css$/,
-            loaders: sass.extract(['css-loader'])
-        }]
+        rules: [
+            {
+                test: /\.scss$/,
+                loaders: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"]
+            },
+            {
+                test: /\.css$/,
+                loaders: [MiniCssExtractPlugin.loader, "css-loader"]
+            }
+        ]
     },
 
     plugins: [
         new CopyWebpackPlugin([{ from: path.join(__dirname, '../assets'), to: path.join(__dirname, '../dist/assets') }]),
-        new webpack.optimize.UglifyJsPlugin(),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production')
         }),
-        sass
+        new MiniCssExtractPlugin({
+            filename: "[name].css",
+            chunkFilename: "[name].css"
+        }),
     ],
 
     output: {

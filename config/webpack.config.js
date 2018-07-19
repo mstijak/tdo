@@ -19,7 +19,7 @@ module.exports = {
     },
 
     module: {
-        loaders: [{
+        rules: [{
             test: /\.js$/,
             //add here any ES6 based library
             include: /[\\\/](app|cx-redux|cx|redux|redux-thunk|lodash)[\\\/]/,
@@ -44,8 +44,7 @@ module.exports = {
         //     minChunks: Infinity
         // }),
         new HtmlWebpackPlugin({
-            template: paths.app + 'index.html',
-            hash: true
+            template: paths.app + 'index.html'
         })
     ]
 };
