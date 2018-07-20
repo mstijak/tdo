@@ -1,4 +1,4 @@
-import { startAppLoop, Widget, FocusManager } from 'cx/ui';
+import { startHotAppLoop, Widget, FocusManager } from 'cx/ui';
 import { Debug } from 'cx/util';
 import {createStore, ReduxStoreView} from 'cx-redux';
 import { applyMiddleware } from 'redux';
@@ -14,23 +14,6 @@ const reduxStore = createStore(
 
 const store = new ReduxStoreView(reduxStore);
 
-var stop;
-if (module.hot) {
-    // accept itself
-    module.hot.accept();
-
-    // remember data on dispose
-    module.hot.dispose(function (data) {
-        data.state = store.getData();
-        if (stop)
-            stop();
-    });
-
-    // apply data on hot replace
-    if (module.hot.data)
-        store.load(module.hot.data.state);
-}
-
 function updateHash() {
     store.set('hash', window.location.hash || '#')
 }
@@ -38,10 +21,9 @@ function updateHash() {
 updateHash();
 setInterval(updateHash, 100);
 
-Widget.resetCounter(); //preserve React keys
 Debug.enable('app-data');
 
-stop = startAppLoop(document.getElementById('app'), store, Routes);
+startHotAppLoop(module, document.getElementById('app'), store, Routes);
 
 // is there a better way to do this
 document.body.addEventListener('keyup', e => {

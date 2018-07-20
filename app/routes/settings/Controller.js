@@ -12,8 +12,8 @@ export default class extends Controller {
     }
 
     load() {
-        var gh = this.store.get('$page.gh');
-        var gists = new Gists(gh);
+        let gh = this.store.get('$page.gh');
+        let gists = new Gists(gh);
         gists.get()
             .then(()=> {
                 this.persist();
@@ -28,8 +28,8 @@ export default class extends Controller {
     }
 
     create() {
-        var gh = this.store.get('$page.gh');
-        var gists = new Gists(gh);
+        let gh = this.store.get('$page.gh');
+        let gists = new Gists(gh);
         gists
             .create(this.store.get('tdo'))
             .then(x=> {
@@ -65,7 +65,7 @@ export default class extends Controller {
 
     removeTaskStyle(e, {store}) {
         e.preventDefault();
-        var style = store.get('$record');
+        let style = store.get('$record');
         this.store.update('tdo.settings.taskStyles', styles => styles.filter(x=>x != style));
     }
 }

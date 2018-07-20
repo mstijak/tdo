@@ -1,6 +1,6 @@
 import { parseStyle } from 'cx/util';
 
-var styles = -1, rules;
+let styles = -1, rules;
 
 export function getStyles(text, taskStyles) {
     if (styles !== taskStyles) {
@@ -9,7 +9,7 @@ export function getStyles(text, taskStyles) {
             taskStyles.forEach(s=> {
                 try {
                     if (s.regex && (s.style || s.className)) {
-                        var rule = {
+                        let rule = {
                             regex: new RegExp(s.regex),
                             style: parseStyle(s.style),
                             className: s.className
@@ -23,13 +23,13 @@ export function getStyles(text, taskStyles) {
         }
     }
 
-    var result = {
+    let result = {
         style: {},
         className: []
     };
 
     if (text) {
-        for (var i = 0; i < rules.length; i++) {
+        for (let i = 0; i < rules.length; i++) {
             if (text.match(rules[i].regex)) {
                 Object.assign(result.style, rules[i].style);
                 if (rules[i].className)

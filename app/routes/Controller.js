@@ -27,7 +27,7 @@ export default class extends Controller {
     addBoard(e) {
         e.preventDefault();
 
-        var id = uid();
+        let id = uid();
 
         this.store.dispatch(
             addBoard({

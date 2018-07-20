@@ -3,6 +3,7 @@ var webpack = require('webpack'),
     common = require('./webpack.config');
 
 var specific = {
+    mode: 'development',
     module: {
         rules: [{
             test: /\.scss$/,

@@ -15,7 +15,7 @@ export default class extends Controller {
         if (e)
             e.preventDefault();
 
-        var boardId = store.get('$board.id') || store.get('tdo.boards')[0].id;
+        let boardId = store.get('$board.id') || store.get('tdo.boards')[0].id;
 
         this.store.update('tdo.lists', append, {
             id: uid(),
@@ -44,7 +44,7 @@ export default class extends Controller {
     }
 
     addTask(e, {store}) {
-        var listId = store.get('$list.id');
+        let listId = store.get('$list.id');
         this.store.update('tdo.tasks', append, this.prepareTask(listId));
         e.preventDefault();
     }
@@ -56,7 +56,7 @@ export default class extends Controller {
         let {tasks} = tdo;
         let index = tasks.indexOf($task);
         let insertPos = -1;
-        for (var i = index - 1; i >= 0; i--)
+        for (let i = index - 1; i >= 0; i--)
             if (tasks[i].listId == $task.listId) {
                 insertPos = i;
                 break;
@@ -79,7 +79,7 @@ export default class extends Controller {
         let index = tasks.indexOf($task);
         let insertPos = -1;
 
-        for (var i = index + 1; i < tasks.length; i++)
+        for (let i = index + 1; i < tasks.length; i++)
             if (tasks[i].listId == $task.listId) {
                 insertPos = i;
                 break;
@@ -96,10 +96,10 @@ export default class extends Controller {
     }
 
     moveTaskNextBoard(tdo, boardId, store, lists) {
-        var ind = tdo.boards.findIndex(a=>a.id == boardId);
+        let ind = tdo.boards.findIndex(a=>a.id == boardId);
         if(ind != -1) {
             // let it loop back to the start
-            var nextInd = (ind + 1) % tdo.boards.length;
+            let nextInd = (ind + 1) % tdo.boards.length;
             boardId = tdo.boards[nextInd].id;
             ind = lists.findIndex(a=>a.boardId == boardId);
             store.set('$task.listId', lists[ind].id);
@@ -108,10 +108,10 @@ export default class extends Controller {
     }
 
     moveTaskPrevBoard(tdo, boardId, store, lists) {
-        var ind = tdo.boards.findIndex(a=>a.id == boardId);
+        let ind = tdo.boards.findIndex(a=>a.id == boardId);
         if(ind != -1) {
             // let it loop back to the start
-            var prevInd = ind - 1;
+            let prevInd = ind - 1;
             if(prevInd < 0) prevInd = tdo.boards.length - 1;
             boardId = tdo.boards[prevInd].id;
             ind = lists.findIndex(a=>a.boardId == boardId);
@@ -121,10 +121,10 @@ export default class extends Controller {
     }
 
     moveTaskNextList($task, tdo, boardId, store, lists) {
-        var listIndex = lists.findIndex(a=>a.id == $task.listId);
-        var topHalf = lists.slice(listIndex + 1, lists.length);
-        var bottomHalf = lists.slice(0, listIndex);
-        var ind = topHalf.findIndex(a=>a.boardId == boardId);
+        let listIndex = lists.findIndex(a=>a.id == $task.listId);
+        let topHalf = lists.slice(listIndex + 1, lists.length);
+        let bottomHalf = lists.slice(0, listIndex);
+        let ind = topHalf.findIndex(a=>a.boardId == boardId);
         if(ind != -1) {
             store.set('$task.listId', topHalf[ind].id);
         } else {
@@ -138,10 +138,10 @@ export default class extends Controller {
     }
 
     moveTaskPrevList($task, tdo, boardId, store, lists) {
-        var listIndex = lists.findIndex(a=>a.id == $task.listId);
-        var topHalf = lists.slice(listIndex + 1, lists.length).reverse();
-        var bottomHalf = lists.slice(0, listIndex).reverse();
-        var ind = bottomHalf.findIndex(a=>a.boardId == boardId);
+        let listIndex = lists.findIndex(a=>a.id == $task.listId);
+        let topHalf = lists.slice(listIndex + 1, lists.length).reverse();
+        let bottomHalf = lists.slice(0, listIndex).reverse();
+        let ind = bottomHalf.findIndex(a=>a.boardId == boardId);
         if(ind != -1) {
             store.set('$task.listId', bottomHalf[ind].id);
         } else {
@@ -154,7 +154,7 @@ export default class extends Controller {
     }
 
     getBoardId($task, lists) {
-        var listIndex = lists.findIndex(a=>a.id == $task.listId);
+        let listIndex = lists.findIndex(a=>a.id == $task.listId);
         if(listIndex == -1) return null;
         return lists[listIndex].boardId;
     }
@@ -165,7 +165,7 @@ export default class extends Controller {
         let {tdo, $task} = store.getData();
         let lists = tdo.lists.filter(a => !a.deleted);
 
-        var boardId = this.getBoardId($task, lists);
+        let boardId = this.getBoardId($task, lists);
         if (boardId == null) return;
 
         if(e.shiftKey) {
@@ -183,7 +183,7 @@ export default class extends Controller {
         let {tdo, $task} = store.getData();
         let lists = tdo.lists.filter(a => !a.deleted);
 
-        var boardId = this.getBoardId($task, lists);
+        let boardId = this.getBoardId($task, lists);
         if (boardId == null) return;
 
         if(e.shiftKey) {
@@ -214,8 +214,8 @@ export default class extends Controller {
                     deletedDate: new Date().toISOString()
                 }));
 
-                var item = closest(e.target, (el) => el.classList.contains('cxe-menu-item'));
-                var elementReceivingFocus = item.nextSibling || item.previousSibling;
+                let item = closest(e.target, (el) => el.classList.contains('cxe-menu-item'));
+                let elementReceivingFocus = item.nextSibling || item.previousSibling;
                 if (elementReceivingFocus)
                     FocusManager.focusFirst(elementReceivingFocus);
 
@@ -282,9 +282,9 @@ export default class extends Controller {
     }
 
     listMoveLeft(e, {store}) {
-        var {tdo, $list} = store.getData();
-        var {lists} = tdo;
-        var index = lists.indexOf($list);
+        let {tdo, $list} = store.getData();
+        let {lists} = tdo;
+        let index = lists.indexOf($list);
         if (index > 0) {
             store.set('tdo.lists', [
                 ...lists.slice(0, index - 1),
@@ -296,9 +296,9 @@ export default class extends Controller {
     }
 
     listMoveRight(e, {store}) {
-        var {tdo, $list} = store.getData();
-        var {lists} = tdo;
-        var index = lists.indexOf($list);
+        let {tdo, $list} = store.getData();
+        let {lists} = tdo;
+        let index = lists.indexOf($list);
         if (index + 1 < lists.length) {
             store.set('tdo.lists', [
                 ...lists.slice(0, index),
@@ -310,9 +310,9 @@ export default class extends Controller {
     }
 
     boardMoveLeft(e, {store}) {
-        var {tdo, $board} = store.getData();
-        var {boards} = tdo;
-        var index = boards.indexOf($board);
+        let {tdo, $board} = store.getData();
+        let {boards} = tdo;
+        let index = boards.indexOf($board);
         if (index > 0) {
             store.set('tdo.boards', [
                 ...boards.slice(0, index - 1),
@@ -324,9 +324,9 @@ export default class extends Controller {
     }
 
     boardMoveRight(e, {store}) {
-        var {tdo, $board} = store.getData();
-        var {boards} = tdo;
-        var index = boards.indexOf($board);
+        let {tdo, $board} = store.getData();
+        let {boards} = tdo;
+        let index = boards.indexOf($board);
         if (index + 1 < boards.length) {
             store.set('tdo.boards', [
                 ...boards.slice(0, index),
@@ -338,7 +338,7 @@ export default class extends Controller {
     }
 
     deleteBoard(e, {store}) {
-        var id = store.get('$board.id');
+        let id = store.get('$board.id');
         store.dispatch(removeBoard(id));
         store.dispatch(gotoAnyBoard(true));
     }

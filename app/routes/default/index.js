@@ -25,8 +25,8 @@ function filterItems(item, {search, list, settings}) {
     }
 
     if (item.completed && item.completedDate) {
-        var now = new Date().getTime();
-        var cmp = Date.parse(item.completedDate);
+        let now = new Date().getTime();
+        let cmp = Date.parse(item.completedDate);
         if (cmp + settings.completedTasksRetentionDays * 24 * 60 * 60 * 1000 < now)
             return false;
     }

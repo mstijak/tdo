@@ -1,16 +1,6 @@
 import { HtmlElement, Tab, TextField, Route, Menu, MenuItem, Submenu, Sandbox, Repeater, PureContainer } from 'cx/widgets';
 import { FirstVisibleChildLayout } from 'cx/ui';
 
-
-
-
-
-
-
-
-
-
-
 import Default from './default';
 import Settings from './settings';
 import Help from './help';

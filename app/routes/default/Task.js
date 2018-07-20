@@ -64,12 +64,12 @@ class TaskCmp extends VDOM.Component {
     }
 
     renderContent() {
-        var {data, instance} = this.props;
-        var {widget} = this.props.instance;
-        var html = data.task.name ? marked(data.task.name) : '<p>&nbsp;</p>';
+        let {data, instance} = this.props;
+        let {widget} = this.props.instance;
+        let html = data.task.name ? marked(data.task.name) : '<p>&nbsp;</p>';
 
-        var styles = getStyles(data.task.name, data.styles);
-        var className = widget.CSS.element('checkbox', "input", {
+        let styles = getStyles(data.task.name, data.styles);
+        let className = widget.CSS.element('checkbox', "input", {
             checked: !!data.task.completed,
         });
 
@@ -89,8 +89,8 @@ class TaskCmp extends VDOM.Component {
     }
 
     renderEditor() {
-        var {data} = this.props;
-        var style = {};
+        let {data} = this.props;
+        let style = {};
         if (this.state.scrollHeight) {
             style.height = `${this.state.scrollHeight}px`;
         }
@@ -154,7 +154,7 @@ class TaskCmp extends VDOM.Component {
         let {instance} = this.props;
         let {data} = instance;
 
-        var task = {
+        let task = {
             ...data.task,
             name: e.target.value,
             lastChange: new Date().toISOString()
@@ -213,7 +213,7 @@ class TaskCmp extends VDOM.Component {
     }
 
     toggleEditMode() {
-        var change = {
+        let change = {
             edit: !this.state.edit
         };
 
