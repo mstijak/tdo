@@ -70,7 +70,13 @@ export default <cx>
         <Sandbox key:bind="hash" storage:bind="pages" immutable>
             <header class="cxe-layout-header">
                 <h1>tdo</h1>
-                <TextField value:bind="search.query" placeholder="Search..." mod="search" id="search" autoFocus/>
+                <TextField
+                    value:bind="search.query"
+                    placeholder="Search..."
+                    mod="search"
+                    id="search"
+                    autoFocus inputAttrs={{ autocomplete: "off" }}
+                />
 
                 <Menu horizontal>
                     <BoardItems visible:expr="{layout.mode}=='desktop' || {layout.mode}=='tablet'" />
