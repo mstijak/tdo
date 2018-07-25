@@ -1,4 +1,4 @@
-import { HtmlElement, Tab, TextField, Route, Menu, MenuItem, Submenu, Sandbox, Repeater, PureContainer } from 'cx/widgets';
+import { HtmlElement, Tab, TextField, Route, Menu, MenuItem, Submenu, Sandbox, Repeater, PureContainer, Link } from 'cx/widgets';
 import { FirstVisibleChildLayout } from 'cx/ui';
 
 import Default from './default';
@@ -14,12 +14,12 @@ const BoardItems = <cx>
         >
             <MenuItem
                 mod={{
-                    active: {expr: '{hash}=="#" + {$record.id}'},
+                    active: {expr: '{url}=="~/b/" + {$record.id}'},
                     test: true
                 }}
                 pad
             >
-                <a href:tpl="#{$record.id}"
+                <Link href:tpl="~/b/{$record.id}"
                    className:bind="$record.headerClass"
                    style:bind="$record.headerStyle"
                    text:bind="$record.name"
@@ -38,16 +38,16 @@ const BoardItems = <cx>
 
 const MenuItems = <cx>
     <PureContainer>
-        <MenuItem mod={{active: {expr: '{hash}=="#settings"'}}} pad>
-            <a href="#settings">
+        <MenuItem mod={{active: {expr: '{url}=="~/settings"'}}} pad>
+            <Link href="~/settings">
                 Settings
-            </a>
+            </Link>
         </MenuItem>
 
-        <MenuItem mod={{active: {expr: '{hash}=="#help"'}}} pad>
-            <a href="#help">
+        <MenuItem mod={{active: {expr: '{url}=="~/help"'}}} pad>
+            <Link href="~/help">
                 Help <code>?</code>
-            </a>
+            </Link>
         </MenuItem>
 
         <div class="spacer" visible:expr="{layout.mode}=='desktop'"/>
@@ -87,13 +87,13 @@ export default <cx>
                 </Menu>
             </header>
             <main class="cxe-layout-main" layout={FirstVisibleChildLayout}>
-                <Route url:bind="hash" route="#settings">
+                <Route url:bind="url" route="~/settings">
                     <Settings />
                 </Route>
-                <Route url:bind="hash" route="#help">
+                <Route url:bind="url" route="~/help">
                     <Help />
                 </Route>
-                <Route url:bind="hash" route="#(:boardId)">
+                <Route url:bind="url" route="~/b/:boardId">
                     <Default />
                 </Route>
             </main>

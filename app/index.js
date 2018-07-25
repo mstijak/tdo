@@ -1,10 +1,10 @@
-import { startHotAppLoop, Widget, FocusManager } from 'cx/ui';
+import { startHotAppLoop, History, FocusManager } from 'cx/ui';
 import { Debug } from 'cx/util';
 import {createStore, ReduxStoreView} from 'cx-redux';
 import { applyMiddleware } from 'redux';
 import Routes from './routes';
 import './index.scss';
-import reducer from './data//reducers';
+import reducer from './data/reducers';
 import middleware from './data/middleware';
 
 const reduxStore = createStore(
@@ -14,12 +14,7 @@ const reduxStore = createStore(
 
 const store = new ReduxStoreView(reduxStore);
 
-function updateHash() {
-    store.set('hash', window.location.hash || '#')
-}
-
-updateHash();
-setInterval(updateHash, 100);
+History.connect(store, "url");
 
 Debug.enable('app-data');
 
