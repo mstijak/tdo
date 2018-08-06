@@ -1,7 +1,7 @@
 import { HtmlElement, Tab, TextField, Route, Menu, MenuItem, Submenu, Sandbox, Repeater, PureContainer, Link } from 'cx/widgets';
 import { FirstVisibleChildLayout } from 'cx/ui';
 
-import Default from './default';
+import Board from './board';
 import Settings from './settings';
 import Help from './help';
 import Controller from './Controller';
@@ -9,7 +9,7 @@ import Controller from './Controller';
 const BoardItems = <cx>
     <PureContainer>
         <Repeater
-            records:bind="tdo.boards"
+            records:bind="boards"
             filter={b => !b.deleted}
         >
             <MenuItem
@@ -67,7 +67,7 @@ const MenuItems = <cx>
 export default <cx>
     <div class="cxb-layout" controller={Controller}>
         <style innerHtml:bind="tdo.settings.css"/>
-        <Sandbox key:bind="hash" storage:bind="pages" immutable>
+        <Sandbox key:bind="url" storage:bind="pages">
             <header class="cxe-layout-header">
                 <h1>tdo</h1>
                 <TextField
@@ -100,7 +100,7 @@ export default <cx>
                     <Help />
                 </Route>
                 <Route url:bind="url" route="~/b/:boardId">
-                    <Default />
+                    <Board />
                 </Route>
             </main>
         </Sandbox>

@@ -8,7 +8,8 @@ export default combineReducers({
     url: dummy(''),
     search: dummy({}),
     pages: dummy({}),
-    layout: dummy({})
+    layout: dummy({}),
+    user: dummy({}),
 });
 
 

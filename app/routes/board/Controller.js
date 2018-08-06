@@ -2,36 +2,77 @@ import { Controller, FocusManager } from 'cx/ui';
 import { append } from 'cx/data';
 import { KeyCode, closest } from 'cx/util';
 
-
-
-
 import {removeBoard, gotoAnyBoard} from 'app/data/actions';
 
 import uid from 'uid';
+import {firestore} from "../../data/db/firestore";
+
+const mergeFirestoreSnapshot = (prevList, snapshot) => {
+    //TODO: Impement a more efficient data merge strategy
+    let result = [];
+    snapshot.forEach(doc => {
+        result.push(doc.data())
+    });
+    return result;
+};
 
 export default class extends Controller {
+
+    onInit() {
+        let boardId = this.store.get('$route.boardId');
+
+        this.boardDoc = firestore
+            .collection("boards")
+            .doc(boardId);
+
+        this.unsubscribeLists = this.boardDoc
+            .collection("lists")
+            .onSnapshot(snapshot => {
+                this.store.update('$page.lists', lists => mergeFirestoreSnapshot(lists, snapshot))
+            });
+
+        this.unsubscribeTasks = this.boardDoc
+            .collection("tasks")
+            .onSnapshot(snapshot => {
+                this.store.update('$page.tasks', tasks => mergeFirestoreSnapshot(tasks, snapshot))
+            });
+    }
+
+    onDestroy() {
+        this.unsubscribeLists && this.unsubscribeLists();
+        this.unsubscribeTasks && this.unsubscribeTasks();
+    }
 
     addList(e, {store}) {
         if (e)
             e.preventDefault();
 
-        let boardId = store.get('$board.id') || store.get('tdo.boards')[0].id;
+        let boardId = store.get('$route.boardId'),
+            id = uid();
 
-        this.store.update('tdo.lists', append, {
-            id: uid(),
-            name: 'New List',
-            edit: true,
-            createdDate: new Date().toISOString(),
-            boardId: boardId
-        });
+        this.boardDoc
+            .collection('lists')
+            .doc(id)
+            .set({
+                id: uid(),
+                name: 'New List',
+                edit: true,
+                createdDate: new Date().toISOString(),
+                boardId: boardId
+            });
     }
 
     deleteList(e, {store}) {
-        store.update('$list', list => ({
-            ...list,
-            deleted: true,
-            deletedDate: new Date().toISOString(),
-        }));
+
+        let id = this.store.get('$list.id');
+
+        this.boardDoc
+            .collection('lists')
+            .doc(id)
+            .update({
+                deleted: true,
+                deletedDate: new Date().toISOString(),
+            });
     }
 
     prepareTask(listId) {
@@ -44,9 +85,13 @@ export default class extends Controller {
     }
 
     addTask(e, {store}) {
-        let listId = store.get('$list.id');
-        this.store.update('tdo.tasks', append, this.prepareTask(listId));
         e.preventDefault();
+        let listId = store.get('$list.id');
+        let task = this.prepareTask(listId);
+        this.boardDoc
+            .collection('tasks')
+            .doc(task.id)
+            .set(task);
     }
 
     moveTaskUp(e, {store}) {
@@ -103,7 +148,7 @@ export default class extends Controller {
             boardId = tdo.boards[nextInd].id;
             ind = lists.findIndex(a=>a.boardId == boardId);
             store.set('$task.listId', lists[ind].id);
-            window.location = '#' + boardId;
+            History.replaceState({}, null, "~/b/" + boardId);
         }
     }
 
@@ -116,7 +161,7 @@ export default class extends Controller {
             boardId = tdo.boards[prevInd].id;
             ind = lists.findIndex(a=>a.boardId == boardId);
             store.set('$task.listId', lists[ind].id);
-            window.location = '#' + boardId;
+            History.replaceState({}, null, "~/b/" + boardId);
         }
     }
 

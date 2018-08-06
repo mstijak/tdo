@@ -38,6 +38,7 @@
     "uid": "0.0.2"
   },
   "devDependencies": {
+    "@firebase/app-types": "^0.3.2",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
     "babel-preset-cx-env": "^18.5.0",

@@ -1,7 +1,6 @@
-import { HtmlElement, Repeater, List, Menu, MenuItem, TextArea, Button } from 'cx/widgets';
+import { Repeater, Menu, MenuItem, Button } from 'cx/widgets';
 import { FirstVisibleChildLayout } from 'cx/ui';
 
-import {Md} from 'app/components/Md';
 import {Task} from './Task';
 
 import Controller from './Controller';
@@ -56,7 +55,7 @@ export default <cx>
             Error occurred while fetching data from GitHub. <Button onClick="load">Retry</Button>
         </div>
         <Repeater
-            records:bind="tdo.boards"
+            records:bind="boards"
             recordName="$board"
             keyField="id"
             filter={filterBoards}
@@ -67,11 +66,9 @@ export default <cx>
                 style:bind="$board.style"
             >
                 <Repeater
-                    records:bind="tdo.lists"
+                    records:bind="$page.lists"
                     recordName="$list"
                     keyField="id"
-                    filter={filterLists}
-                    filterParams:bind="$board.id"
                 >
                     <div
                         class:tpl="cxb-tasklist {$list.className}"
@@ -92,7 +89,7 @@ export default <cx>
                         </header>
                         <ListEditor visible:expr="!!{$list.edit}" />
                         <Menu class="cxe-tasklist-items" onKeyDown="onTaskListKeyDown" itemPadding="small">
-                            <Repeater records:bind="tdo.tasks"
+                            <Repeater records:bind="$page.tasks"
                                       recordName="$task"
                                       keyField="id"
                                       filter={filterItems}

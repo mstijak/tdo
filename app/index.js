@@ -6,13 +6,16 @@ import Routes from './routes';
 import './index.scss';
 import reducer from './data/reducers';
 import middleware from './data/middleware';
+import {Store} from "cx/data";
 
 const reduxStore = createStore(
     reducer,
     applyMiddleware(...middleware)
 );
 
-const store = new ReduxStoreView(reduxStore);
+const store = new Store();
+
+store.init('user.id', 'anonymous');
 
 History.connect(store, "url");
 

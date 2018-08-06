@@ -1,17 +1,41 @@
-import { Controller } from 'cx/ui';
-import { append } from 'cx/data';
+import { Controller, History } from 'cx/ui';
 import uid from 'uid';
-import { loadData, addBoard, gotoBoard } from '../data/actions';
+import { firestore } from "../data/db/firestore";
+import {isNonEmptyArray} from "cx/util";
+
+//TODO: For anonymous users save to local storage
 
 export default class extends Controller {
-    init() {
-        super.init();
+    onInit() {
+        this.store.set('layout.mode', this.getLayoutMode());
 
-        this.store.set('layout.mode', this.getLayoutMode())
+        this.addTrigger('boardLoader', ['user.id'], userId => {
+           if (this.unsubscribeBoards)
+               this.unsubscribeBoards();
 
-        this.store.dispatch(
-            loadData()
-        );
+           this.unsubscribeBoards = firestore
+               .collection('users')
+               .doc(userId)
+               .collection('boards')
+               .onSnapshot(snapshot => {
+                   let boards = [];
+
+                   snapshot.forEach(doc => {
+                       boards.push(doc.data());
+                   });
+
+                   if (!isNonEmptyArray(boards)) {
+                        //TODO: Ask the user to create the Welcome board
+                   }
+
+                   this.store.set('boards', boards);
+               });
+        }, true);
+    }
+
+    onDestroy() {
+        if (this.unsubscribeBoards)
+            this.unsubscribeBoards();
     }
 
     getLayoutMode() {
@@ -24,21 +48,35 @@ export default class extends Controller {
         return 'phone';
     }
 
-    addBoard(e) {
+    async addBoard(e) {
         e.preventDefault();
 
         let id = uid();
 
-        this.store.dispatch(
-            addBoard({
+        let p1 = firestore
+            .collection('boards')
+            .doc('id')
+            .set({
                 id: id,
                 name: 'New Board',
                 edit: true
-            })
-        );
+            });
 
-        this.store.dispatch(
-            gotoBoard(id)
-        );
+        let userId = this.store.get('user.id');
+
+        let p2 = firestore
+            .collection('users')
+            .doc(userId)
+            .collection('boards')
+                .doc(id)
+                .set({
+                    id,
+                    name: 'New Board',
+                    edit: true
+                });
+
+        await Promise.all([p1, p2]);
+
+        History.pushState({}, null, "~/b/" + id);
     }
 }
