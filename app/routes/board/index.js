@@ -92,6 +92,8 @@ export default <cx>
                             <Repeater records:bind="$page.tasks"
                                       recordName="$task"
                                       keyField="id"
+                                      sortField="order"
+                                      sortDirection="ASC"
                                       filter={filterItems}
                                       filterParams={{
                                           list: {bind: '$list'},

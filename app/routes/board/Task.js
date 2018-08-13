@@ -32,7 +32,7 @@ class TaskCmp extends VDOM.Component {
         super(props);
 
         this.state = {
-            edit: false,
+            edit: props.data.isNew,
             scrollHeight: null
         };
 

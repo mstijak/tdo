@@ -80,6 +80,7 @@ export default class extends Controller {
             id: uid(),
             listId,
             createdDate: new Date().toISOString(),
+            order: Date.now(),
             isNew: true
         }
     }
