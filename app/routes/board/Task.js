@@ -1,5 +1,5 @@
-import { VDOM, Widget } from 'cx/ui';
-import { isFocused } from 'cx/util';
+import {VDOM, Widget} from 'cx/ui';
+import {isFocused} from 'cx/util';
 
 import marked from 'marked';
 import {getStyles} from './styling';
@@ -16,12 +16,13 @@ export class Task extends Widget {
     declareData() {
         super.declareData(...arguments, {
             task: undefined,
-            styles: undefined
+            styles: undefined,
+            autoFocus: undefined
         })
     }
 
     render(context, instance, key) {
-        return <TaskCmp key={key} instance={instance} data={instance.data} />
+        return <TaskCmp key={key} instance={instance} data={instance.data}/>
     }
 }
 
@@ -32,7 +33,7 @@ class TaskCmp extends VDOM.Component {
         super(props);
 
         this.state = {
-            edit: props.data.isNew,
+            edit: props.data.task.isNew,
             scrollHeight: null
         };
 
@@ -49,17 +50,21 @@ class TaskCmp extends VDOM.Component {
             completed: !!data.task.completed
         });
 
-        return <div className={className}
-                    onKeyDown={::this.onKeyDown}
-                    ref={el=> {
-                        this.dom.el = el
-                    }}
-                    tabIndex={0}
-                    onClick={::this.onClick}
-                    onTouchStart={::this.onTouchStart}
-                    onDoubleClick={e=>{this.toggleEditMode()}}>
-            { !this.state.edit && this.renderContent() }
-            { this.state.edit && this.renderEditor() }
+        return <div
+            className={className}
+            onKeyDown={::this.onKeyDown}
+            ref={el => {
+                this.dom.el = el
+            }}
+            tabIndex={0}
+            onClick={::this.onClick}
+            onTouchStart={::this.onTouchStart}
+            onDoubleClick={e => {
+                this.toggleEditMode()
+            }}
+        >
+            {!this.state.edit && this.renderContent()}
+            {this.state.edit && this.renderEditor()}
         </div>
     }
 
@@ -78,7 +83,10 @@ class TaskCmp extends VDOM.Component {
                 this.setCompleted(!data.task.completed);
             }}>
                 <svg className="cxe-checkbox-input-check" viewBox="0 0 64 64">
-                    <path d="M7.136 42.94l20.16 14.784 29.568-40.32-9.72-7.128-22.598 30.816-10.44-7.656z" fill="currentColor"></path>
+                    <path
+                        d="M7.136 42.94l20.16 14.784 29.568-40.32-9.72-7.128-22.598 30.816-10.44-7.656z"
+                        fill="currentColor"
+                    />
                 </svg>
             </div>,
             <div key="content"
@@ -94,16 +102,19 @@ class TaskCmp extends VDOM.Component {
         if (this.state.scrollHeight) {
             style.height = `${this.state.scrollHeight}px`;
         }
-        return <textarea defaultValue={data.task.name}
-                         onMouseDown={e=>{e.stopPropagation();}}
-                         onKeyDown={::this.onEditorKeyDown}
-                         ref={c=> {
-                             this.dom.editor = c;
-                         }}
-                         style={style}
-                         rows={1}
-                         onBlur={::this.onEditorBlur}
-                         onChange={::this.onChange}
+        return <textarea
+            defaultValue={data.task.name}
+            onMouseDown={e => {
+                e.stopPropagation();
+            }}
+            onKeyDown={::this.onEditorKeyDown}
+            ref={c => {
+                this.dom.editor = c;
+            }}
+            style={style}
+            rows={1}
+            onBlur={::this.onEditorBlur}
+            onChange={::this.onChange}
         />
     }
 
@@ -116,11 +127,14 @@ class TaskCmp extends VDOM.Component {
     setCompleted(completed = true) {
         let {instance, data} = this.props;
 
-        instance.set('task', {
+        let task = {
             ...data.task,
             completed: completed,
             completedDate: new Date().toISOString()
-        });
+        };
+
+        instance.set('task', task);
+        instance.invoke("onSave", task, instance);
     }
 
     onKeyDown(e) {
@@ -136,7 +150,7 @@ class TaskCmp extends VDOM.Component {
                 this.toggleEditMode();
                 break;
 
-            case 32: 
+            case 32:
             case 88: // x
                 e.stopPropagation();
                 e.preventDefault();
@@ -163,6 +177,7 @@ class TaskCmp extends VDOM.Component {
         delete task.isNew;
 
         instance.set('task', task);
+        instance.invoke("onSave", task, instance);
     }
 
     onEditorKeyDown(e) {
@@ -236,9 +251,12 @@ class TaskCmp extends VDOM.Component {
         if (this.dom.el.parentNode.parentNode.parentNode.contains(document.activeElement))
             this.toggleEditMode();
 
-        if (data.task.id == store.get('activeTaskId'))
-            setTimeout(()=> {
-                this.dom.el.focus();
+        if (data.autoFocus || this.state.edit)
+            setTimeout(() => {
+                if (this.state.edit)
+                    this.dom.editor.focus();
+                else
+                    this.dom.el.focus();
             }, 10);
     }
 

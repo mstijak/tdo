@@ -1,18 +1,19 @@
-import { Controller, FocusManager } from 'cx/ui';
-import { append } from 'cx/data';
-import { KeyCode, closest } from 'cx/util';
+import {Controller, FocusManager} from 'cx/ui';
+import {append, updateArray} from 'cx/data';
+import {KeyCode, closest, isNonEmptyArray} from 'cx/util';
 
 import {removeBoard, gotoAnyBoard} from 'app/data/actions';
 
 import uid from 'uid';
 import {firestore} from "../../data/db/firestore";
 
-const mergeFirestoreSnapshot = (prevList, snapshot) => {
+const mergeFirestoreSnapshot = (prevList, snapshot, name) => {
     //TODO: Impement a more efficient data merge strategy
     let result = [];
     snapshot.forEach(doc => {
         result.push(doc.data())
     });
+    console.log(name, result);
     return result;
 };
 
@@ -26,16 +27,16 @@ export default class extends Controller {
             .doc(boardId);
 
         this.unsubscribeLists = this.boardDoc
-            .collection("lists")
-            .onSnapshot(snapshot => {
-                this.store.update('$page.lists', lists => mergeFirestoreSnapshot(lists, snapshot))
-            });
+                                    .collection("lists")
+                                    .onSnapshot(snapshot => {
+                                        this.store.update('$page.lists', lists => mergeFirestoreSnapshot(lists, snapshot, "LISTS"))
+                                    });
 
         this.unsubscribeTasks = this.boardDoc
-            .collection("tasks")
-            .onSnapshot(snapshot => {
-                this.store.update('$page.tasks', tasks => mergeFirestoreSnapshot(tasks, snapshot))
-            });
+                                    .collection("tasks")
+                                    .onSnapshot(snapshot => {
+                                        this.store.update('$page.tasks', tasks => mergeFirestoreSnapshot(tasks, snapshot, "TASKS"))
+                                    });
     }
 
     onDestroy() {
@@ -54,11 +55,24 @@ export default class extends Controller {
             .collection('lists')
             .doc(id)
             .set({
-                id: uid(),
+                id: id,
                 name: 'New List',
                 edit: true,
                 createdDate: new Date().toISOString(),
                 boardId: boardId
+            });
+    }
+
+    onSaveList(e, {store}) {
+        //store.delete('$list.edit')
+        let list = store.get('$list');
+        console.log("SAVE LIST", list);
+        this.boardDoc
+            .collection('lists')
+            .doc(list.id)
+            .set({
+                ...list,
+                edit: false
             });
     }
 
@@ -76,13 +90,39 @@ export default class extends Controller {
     }
 
     prepareTask(listId) {
+        let order = this.getSortedTaskOrderList(listId);
+        let maxOrder = order[order.length - 1] || 0;
         return {
             id: uid(),
             listId,
             createdDate: new Date().toISOString(),
-            order: Date.now(),
+            order: maxOrder + 1,
             isNew: true
         }
+    }
+
+    onSaveTask(task) {
+
+        this.store.update(
+            '$page.tasks',
+            updateArray,
+            _ => task,
+            t => t.id == task.id
+        );
+
+        this.boardDoc
+            .collection('tasks')
+            .doc(task.id)
+            .set(task);
+    }
+
+    getSortedTaskOrderList(listId) {
+        let tasks = this.store.get('$page.tasks');
+        let order = tasks
+            .filter(t => !t.deleted && t.listId == listId)
+            .map(t => t.order);
+        order.sort();
+        return order;
     }
 
     addTask(e, {store}) {
@@ -98,110 +138,69 @@ export default class extends Controller {
     moveTaskUp(e, {store}) {
         e.stopPropagation();
         e.preventDefault();
-        let {tdo, $task} = store.getData();
-        let {tasks} = tdo;
-        let index = tasks.indexOf($task);
-        let insertPos = -1;
-        for (let i = index - 1; i >= 0; i--)
-            if (tasks[i].listId == $task.listId) {
-                insertPos = i;
-                break;
-            }
-        if (insertPos != -1) {
-            this.store.set('tdo.tasks', [
-                ...tasks.slice(0, insertPos),
-                $task,
-                ...tasks.slice(insertPos, index),
-                ...tasks.slice(index + 1)
-            ]);
-        }
+        let {$task} = store.getData();
+        let order = this.getSortedTaskOrderList($task.listId);
+        let index = order.findIndex(o => o === $task.order);
+        if (index < 1)
+            return;
+        let newOrder = index >= 2 ? (order[index - 2] + order[index - 1]) / 2 : order[0] - 1;
+        this.onSaveTask({
+            ...$task,
+            order: newOrder
+        });
     }
 
     moveTaskDown(e, {store}) {
         e.stopPropagation();
         e.preventDefault();
-        let {tdo, $task} = store.getData();
-        let {tasks} = tdo;
-        let index = tasks.indexOf($task);
-        let insertPos = -1;
-
-        for (let i = index + 1; i < tasks.length; i++)
-            if (tasks[i].listId == $task.listId) {
-                insertPos = i;
-                break;
-            }
-
-        if (insertPos != -1) {
-            this.store.set('tdo.tasks', [
-                ...tasks.slice(0, index),
-                ...tasks.slice(index + 1, insertPos + 1),
-                $task,
-                ...tasks.slice(insertPos + 1)
-            ]);
-        }
-    }
-
-    moveTaskNextBoard(tdo, boardId, store, lists) {
-        let ind = tdo.boards.findIndex(a=>a.id == boardId);
-        if(ind != -1) {
-            // let it loop back to the start
-            let nextInd = (ind + 1) % tdo.boards.length;
-            boardId = tdo.boards[nextInd].id;
-            ind = lists.findIndex(a=>a.boardId == boardId);
-            store.set('$task.listId', lists[ind].id);
-            History.replaceState({}, null, "~/b/" + boardId);
-        }
-    }
-
-    moveTaskPrevBoard(tdo, boardId, store, lists) {
-        let ind = tdo.boards.findIndex(a=>a.id == boardId);
-        if(ind != -1) {
-            // let it loop back to the start
-            let prevInd = ind - 1;
-            if(prevInd < 0) prevInd = tdo.boards.length - 1;
-            boardId = tdo.boards[prevInd].id;
-            ind = lists.findIndex(a=>a.boardId == boardId);
-            store.set('$task.listId', lists[ind].id);
-            History.replaceState({}, null, "~/b/" + boardId);
-        }
+        let {$task} = store.getData();
+        let order = this.getSortedTaskOrderList($task.listId);
+        let index = order.findIndex(o => o === $task.order);
+        if (index == -1 || index >= order.length - 1)
+            return;
+        let newOrder = index + 2 < order.length ? (order[index + 2] + order[index + 1]) / 2 : order[index + 1] + 1;
+        this.onSaveTask({
+            ...$task,
+            order: newOrder
+        });
     }
 
     moveTaskNextList($task, tdo, boardId, store, lists) {
-        let listIndex = lists.findIndex(a=>a.id == $task.listId);
+        let listIndex = lists.findIndex(a => a.id == $task.listId);
         let topHalf = lists.slice(listIndex + 1, lists.length);
         let bottomHalf = lists.slice(0, listIndex);
-        let ind = topHalf.findIndex(a=>a.boardId == boardId);
-        if(ind != -1) {
+        let ind = topHalf.findIndex(a => a.boardId == boardId);
+        if (ind != -1) {
             store.set('$task.listId', topHalf[ind].id);
         } else {
             // Wasn't in the top half, move to the bottom half
             // May loop back around
-            ind = bottomHalf.findIndex(a=>a.boardId == boardId);
-            if(ind != -1) {
+            ind = bottomHalf.findIndex(a => a.boardId == boardId);
+            if (ind != -1) {
                 store.set('$task.listId', bottomHalf[ind].id);
             }
         }
     }
 
     moveTaskPrevList($task, tdo, boardId, store, lists) {
-        let listIndex = lists.findIndex(a=>a.id == $task.listId);
+        let listIndex = lists.findIndex(a => a.id == $task.listId);
         let topHalf = lists.slice(listIndex + 1, lists.length).reverse();
         let bottomHalf = lists.slice(0, listIndex).reverse();
-        let ind = bottomHalf.findIndex(a=>a.boardId == boardId);
-        if(ind != -1) {
+        let ind = bottomHalf.findIndex(a => a.boardId == boardId);
+        if (ind != -1) {
             store.set('$task.listId', bottomHalf[ind].id);
         } else {
             // Wasn't in the bottom half, move to the top half
-            ind = topHalf.findIndex(a=>a.boardId == boardId);
-            if(ind != -1) {
+            ind = topHalf.findIndex(a => a.boardId == boardId);
+            if (ind != -1) {
                 store.set('$task.listId', topHalf[ind].id);
             }
         }
     }
 
     getBoardId($task, lists) {
-        let listIndex = lists.findIndex(a=>a.id == $task.listId);
-        if(listIndex == -1) return null;
+        let listIndex = lists.findIndex(a => a.id == $task.listId);
+        if (listIndex == -1) return null;
         return lists[listIndex].boardId;
     }
 
@@ -214,7 +213,7 @@ export default class extends Controller {
         let boardId = this.getBoardId($task, lists);
         if (boardId == null) return;
 
-        if(e.shiftKey) {
+        if (e.shiftKey) {
             this.moveTaskNextBoard(tdo, boardId, store, lists);
         } else {
             this.moveTaskNextList($task, tdo, boardId, store, lists);
@@ -232,7 +231,7 @@ export default class extends Controller {
         let boardId = this.getBoardId($task, lists);
         if (boardId == null) return;
 
-        if(e.shiftKey) {
+        if (e.shiftKey) {
             this.moveTaskPrevBoard(tdo, boardId, store, lists);
         } else {
             this.moveTaskPrevList($task, tdo, boardId, store, lists);
@@ -259,6 +258,8 @@ export default class extends Controller {
                     deleted: true,
                     deletedDate: new Date().toISOString()
                 }));
+
+                this.onSaveTask(store.get('$task'));
 
                 let item = closest(e.target, (el) => el.classList.contains('cxe-menu-item'));
                 let elementReceivingFocus = item.nextSibling || item.previousSibling;
@@ -384,8 +385,24 @@ export default class extends Controller {
     }
 
     deleteBoard(e, {store}) {
-        let id = store.get('$board.id');
-        store.dispatch(removeBoard(id));
-        store.dispatch(gotoAnyBoard(true));
+        this.boardDoc.update({
+            deleted: true,
+            deletedDate: new Date().toISOString()
+        });
+    }
+
+    saveBoard(e, {store}) {
+        let board = store.get('$board');
+        let userId = store.get('user.id');
+
+        firestore
+            .collection('users')
+            .doc(userId)
+            .collection('boards')
+            .doc(board.id)
+            .set({
+                ...board,
+                edit: false
+            })
     }
 }

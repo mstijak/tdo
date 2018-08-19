@@ -1,5 +1,5 @@
-import { Repeater, Menu, MenuItem, Button } from 'cx/widgets';
-import { FirstVisibleChildLayout } from 'cx/ui';
+import {Repeater, Menu, MenuItem, Button} from 'cx/widgets';
+import {FirstVisibleChildLayout} from 'cx/ui';
 
 import {Task} from './Task';
 
@@ -15,12 +15,15 @@ function filterItems(item, {search, list, settings}) {
     if (item.deleted || item.listId != list.id)
         return false;
 
+    if (!settings)
+        settings = {};
+
     if (!item.isNew && search && search.query) {
         if (searchQuery != search.query) {
-            searchTerms = search.query.split(' ').map(w=>new RegExp(w, 'gi'));
+            searchTerms = search.query.split(' ').map(w => new RegExp(w, 'gi'));
             searchQuery = search.query;
         }
-        return item.name && searchTerms.every(ex=>item.name.match(ex));
+        return item.name && searchTerms.every(ex => item.name.match(ex));
     }
 
     if (item.completed && item.completedDate) {
@@ -69,6 +72,8 @@ export default <cx>
                     records:bind="$page.lists"
                     recordName="$list"
                     keyField="id"
+                    sortField="order"
+                    sortDirection="ASC"
                 >
                     <div
                         class:tpl="cxb-tasklist {$list.className}"
@@ -87,24 +92,28 @@ export default <cx>
                                 &#x270e;
                             </a>
                         </header>
-                        <ListEditor visible:expr="!!{$list.edit}" />
+                        <ListEditor visible:expr="!!{$list.edit}"/>
                         <Menu class="cxe-tasklist-items" onKeyDown="onTaskListKeyDown" itemPadding="small">
-                            <Repeater records:bind="$page.tasks"
-                                      recordName="$task"
-                                      keyField="id"
-                                      sortField="order"
-                                      sortDirection="ASC"
-                                      filter={filterItems}
-                                      filterParams={{
-                                          list: {bind: '$list'},
-                                          search: {bind: 'search'},
-                                          settings: {bind: 'tdo.settings'}
-                                      }}>
+                            <Repeater
+                                records:bind="$page.tasks"
+                                recordName="$task"
+                                keyField="id"
+                                sortField="order"
+                                sortDirection="ASC"
+                                filter={filterItems}
+                                filterParams={{
+                                    list: {bind: '$list'},
+                                    search: {bind: 'search'},
+                                    settings: {bind: 'tdo.settings'}
+                                }}
+                            >
                                 <MenuItem pad={false}>
                                     <Task
                                         bind="$task"
                                         styles:bind="tdo.settings.taskStyles"
+                                        autoFocus:expr="{activeTaskId}=={$task.id}"
                                         onKeyDown="onTaskKeyDown"
+                                        onSave="onSaveTask"
                                     />
                                 </MenuItem>
                             </Repeater>
@@ -122,13 +131,16 @@ export default <cx>
                         </a>
 
                         <a class="cxe-tasklist-add"
-                           onClick={(e, {store}) => { e.preventDefault(); store.set('$board.edit', true)}}
+                           onClick={(e, {store}) => {
+                               e.preventDefault();
+                               store.set('$board.edit', true)
+                           }}
                            href="#"
                         >
                             Edit Board
                         </a>
                     </Menu>
-                    <BoardEditor visible:expr="!!{$board.edit}" />
+                    <BoardEditor visible:expr="!!{$board.edit}"/>
                 </div>
             </div>
         </Repeater>

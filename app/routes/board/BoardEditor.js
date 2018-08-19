@@ -60,7 +60,7 @@ export default <cx>
         <br/>
 
         <div>
-            <Button onClick={(e, {store}) => { store.delete('$board.edit')}}>Save</Button>
+            <Button onClick="saveBoard">Save</Button>
             <Button mod="danger" confirm="All lists and tasks from this board will be deleted. Are you sure?" onClick="deleteBoard" style="float:right">Delete</Button>
         </div>
         <br/>
