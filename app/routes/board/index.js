@@ -104,13 +104,13 @@ export default <cx>
                                 filterParams={{
                                     list: {bind: '$list'},
                                     search: {bind: 'search'},
-                                    settings: {bind: 'tdo.settings'}
+                                    settings: {bind: 'settings'}
                                 }}
                             >
                                 <MenuItem pad={false}>
                                     <Task
                                         bind="$task"
-                                        styles:bind="tdo.settings.taskStyles"
+                                        styles:bind="settings.taskStyles"
                                         autoFocus:expr="{activeTaskId}=={$task.id}"
                                         onKeyDown="onTaskKeyDown"
                                         onSave="onSaveTask"

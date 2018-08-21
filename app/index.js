@@ -15,8 +15,6 @@ const reduxStore = createStore(
 
 const store = new Store();
 
-store.init('user.id', 'anonymous');
-
 History.connect(store, "url");
 
 Debug.enable('app-data');

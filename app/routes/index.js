@@ -66,7 +66,7 @@ const MenuItems = <cx>
 
 export default <cx>
     <div class="cxb-layout" controller={Controller}>
-        <style innerHtml:bind="tdo.settings.css"/>
+        <style innerHtml:bind="settings.css"/>
         <Sandbox key:bind="url" storage:bind="pages">
             <header class="cxe-layout-header">
                 <h1>tdo</h1>

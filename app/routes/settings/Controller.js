@@ -1,71 +1,69 @@
 import { Controller } from 'cx/ui';
-import { MsgBox } from 'cx/widgets';
 import { append } from 'cx/data';
-import { Gists } from '../../data/services/Gists';
-import { loadData, loadDefault } from '../../data/actions';
+import {firestore} from "../../data/db/firestore";
+import {auth} from "../../data/db/auth";
+import {firebase} from "../../data/db/firebase";
+import {showErrorToast, toast} from "../../components/toasts";
 
 export default class extends Controller {
-    init() {
-        super.init();
-
-        this.store.set('$page.gh', JSON.parse(localStorage.gh || '{}'));
-    }
-
-    load() {
-        let gh = this.store.get('$page.gh');
-        let gists = new Gists(gh);
-        gists.get()
-            .then(()=> {
-                this.persist();
-                this.store.dispatch(
-                    loadData(gh)
-                );
-            })
-            .catch(e=> {
-                MsgBox.alert('Error occurred: ' + e);
-                console.log(e);
-            })
-    }
-
-    create() {
-        let gh = this.store.get('$page.gh');
-        let gists = new Gists(gh);
-        gists
-            .create(this.store.get('tdo'))
-            .then(x=> {
-                this.store.set('$page.gh.gistId', x.id);
-                this.persist();
-            });
-    }
-
-    persist() {
-        this.store.set('$page.gh.verified', true);
-        let gh = this.store.get('$page.gh');
-        localStorage.gh = JSON.stringify(gh);
-    }
-
-    unlink(e) {
-        e.preventDefault();
-        this.store.set('$page.gh', null);
-        localStorage.gh = null;
-        this.store.dispatch(
-            loadDefault()
-        )
-    }
-
-    changeGist(e) {
-        e.preventDefault();
-        this.store.set('$page.gh.verified', false);
+    onInit() {
+        this.addTrigger('saveSettings', ['settings'], settings => {
+            if (!this.store.get('settingsLoaded'))
+                return;
+            let userId = this.store.get('user.id')
+            firestore
+                .collection('users')
+                .doc(userId)
+                .set(settings)
+                .catch(showErrorToast);
+        })
     }
 
     addTaskStyle(e) {
         e.preventDefault();
-        this.store.update('tdo.settings.taskStyles', append, {});
+        this.store.update('settings.taskStyles', append, {});
     }
 
     removeTaskStyle(e, {store}) {
         e.preventDefault();
         let style = store.get('$record');
-        this.store.update('tdo.settings.taskStyles', styles => styles.filter(x=>x != style));
+        this.store.update('settings.taskStyles', styles => styles.filter(x => x != style));
+    }
+
+    signInWithGoogle(e) {
+        e.preventDefault();
+        let provider = new firebase.auth.GoogleAuthProvider();
+        this.signInWithProvider(provider);
+    }
+
+    signInWithTwitter(e) {
+        e.preventDefault();
+        let provider = new firebase.auth.TwitterAuthProvider();
+        this.signInWithProvider(provider);
+    }
+
+    signInWithGitHub(e) {
+        e.preventDefault();
+        let provider = new firebase.auth.GithubAuthProvider();
+        this.signInWithProvider(provider);
+    }
+
+    signInWithProvider(provider) {
+        auth
+            .signInWithPopup(provider)
+            .catch(error => {
+                toast({
+                    message: `Login failed with error code ${error.code}. ${error.message}`,
+                    timeout: 15000,
+                    mod: "error"
+                });
+            });
+    }
+
+    signOut(e) {
+        e.preventDefault();
+        auth.signOut().then(() => {
+            window.location.reload();
+        });
     }
 }
