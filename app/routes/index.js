@@ -11,6 +11,9 @@ const BoardItems = <cx>
         <Repeater
             records:bind="boards"
             filter={b => !b.deleted}
+            sortField="order"
+            sortDirection="ASC"
+            keyField="id"
         >
             <MenuItem
                 mod={{
@@ -54,7 +57,7 @@ const MenuItems = <cx>
         <hr visible:expr="{layout.mode}!='desktop'"/>
 
         <MenuItem pad>
-            <a href="https://github.com/mstijak/tdo" target="_blank">Report/Suggest</a>
+            <a href="https://github.com/codaxy/tdo" target="_blank">Report/Suggest</a>
         </MenuItem>
 
         <MenuItem pad>

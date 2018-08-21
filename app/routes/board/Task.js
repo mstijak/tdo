@@ -257,7 +257,7 @@ class TaskCmp extends VDOM.Component {
                     this.dom.editor.focus();
                 else
                     this.dom.el.focus();
-            }, 10);
+            }, 20);
     }
 
     componentDidUpdate() {

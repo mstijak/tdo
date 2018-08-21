@@ -72,7 +72,8 @@ export default class extends Controller {
             .doc(list.id)
             .set({
                 ...list,
-                edit: false
+                edit: false,
+                lastChangeDate: new Date().toISOString(),
             });
     }
 
@@ -116,6 +117,34 @@ export default class extends Controller {
             .set(task);
     }
 
+    updateTask(task) {
+        this.store.update(
+            '$page.tasks',
+            updateArray,
+            t => ({...t, ...task}),
+            t => t.id === task.id
+        );
+
+        this.boardDoc
+            .collection('tasks')
+            .doc(task.id)
+            .update(task);
+    }
+
+    updateList(list) {
+        this.store.update(
+            '$page.lists',
+            updateArray,
+            t => ({...t, ...list}),
+            t => t.id === list.id
+        );
+
+        this.boardDoc
+            .collection('lists')
+            .doc(list.id)
+            .update(list);
+    }
+
     getSortedTaskOrderList(listId) {
         let tasks = this.store.get('$page.tasks');
         let order = tasks
@@ -140,10 +169,7 @@ export default class extends Controller {
         e.preventDefault();
         let {$task} = store.getData();
         let order = this.getSortedTaskOrderList($task.listId);
-        let index = order.findIndex(o => o === $task.order);
-        if (index < 1)
-            return;
-        let newOrder = index >= 2 ? (order[index - 2] + order[index - 1]) / 2 : order[0] - 1;
+        let newOrder = getPrevOrder($task.order, order);
         this.onSaveTask({
             ...$task,
             order: newOrder
@@ -155,96 +181,50 @@ export default class extends Controller {
         e.preventDefault();
         let {$task} = store.getData();
         let order = this.getSortedTaskOrderList($task.listId);
-        let index = order.findIndex(o => o === $task.order);
-        if (index == -1 || index >= order.length - 1)
-            return;
-        let newOrder = index + 2 < order.length ? (order[index + 2] + order[index + 1]) / 2 : order[index + 1] + 1;
+        let newOrder = getNextOrder($task.order, order);
         this.onSaveTask({
             ...$task,
             order: newOrder
         });
     }
 
-    moveTaskNextList($task, tdo, boardId, store, lists) {
-        let listIndex = lists.findIndex(a => a.id == $task.listId);
-        let topHalf = lists.slice(listIndex + 1, lists.length);
-        let bottomHalf = lists.slice(0, listIndex);
-        let ind = topHalf.findIndex(a => a.boardId == boardId);
-        if (ind != -1) {
-            store.set('$task.listId', topHalf[ind].id);
-        } else {
-            // Wasn't in the top half, move to the bottom half
-            // May loop back around
-            ind = bottomHalf.findIndex(a => a.boardId == boardId);
-            if (ind != -1) {
-                store.set('$task.listId', bottomHalf[ind].id);
-            }
-        }
-    }
-
-    moveTaskPrevList($task, tdo, boardId, store, lists) {
-        let listIndex = lists.findIndex(a => a.id == $task.listId);
-        let topHalf = lists.slice(listIndex + 1, lists.length).reverse();
-        let bottomHalf = lists.slice(0, listIndex).reverse();
-        let ind = bottomHalf.findIndex(a => a.boardId == boardId);
-        if (ind != -1) {
-            store.set('$task.listId', bottomHalf[ind].id);
-        } else {
-            // Wasn't in the bottom half, move to the top half
-            ind = topHalf.findIndex(a => a.boardId == boardId);
-            if (ind != -1) {
-                store.set('$task.listId', topHalf[ind].id);
-            }
-        }
-    }
-
-    getBoardId($task, lists) {
-        let listIndex = lists.findIndex(a => a.id == $task.listId);
-        if (listIndex == -1) return null;
-        return lists[listIndex].boardId;
+    moveTaskToList(taskId, listId) {
+        let order = this.getSortedTaskOrderList(listId);
+        let taskOrder = (order[order.length - 1] || 0) + 1;
+        this.store.set('activeTaskId', taskId);
+        return this.updateTask({
+            id: taskId,
+            listId,
+            order: taskOrder,
+        });
     }
 
     moveTaskRight(e, {store}) {
         e.stopPropagation();
         e.preventDefault();
-        let {tdo, $task} = store.getData();
-        let lists = tdo.lists.filter(a => !a.deleted);
-
-        let boardId = this.getBoardId($task, lists);
-        if (boardId == null) return;
-
-        if (e.shiftKey) {
-            this.moveTaskNextBoard(tdo, boardId, store, lists);
-        } else {
-            this.moveTaskNextList($task, tdo, boardId, store, lists);
-        }
-
-        store.set('activeTaskId', $task.id);
+        let {$page, $task} = store.getData();
+        let lists = $page.lists.filter(a => !a.deleted);
+        lists.sort((a, b) => a.order - b.order);
+        let listIndex = lists.findIndex(a => a.id == $task.listId);
+        if (listIndex + 1 < lists.length)
+            this.moveTaskToList($task.id, lists[listIndex + 1].id);
     }
 
     moveTaskLeft(e, {store}) {
         e.stopPropagation();
         e.preventDefault();
-        let {tdo, $task} = store.getData();
-        let lists = tdo.lists.filter(a => !a.deleted);
-
-        let boardId = this.getBoardId($task, lists);
-        if (boardId == null) return;
-
-        if (e.shiftKey) {
-            this.moveTaskPrevBoard(tdo, boardId, store, lists);
-        } else {
-            this.moveTaskPrevList($task, tdo, boardId, store, lists);
-        }
-
-        store.set('activeTaskId', $task.id);
+        let {$page, $task} = store.getData();
+        let lists = $page.lists.filter(a => !a.deleted);
+        lists.sort((a, b) => a.order - b.order);
+        let listIndex = lists.findIndex(a => a.id == $task.listId);
+        if (listIndex > 0)
+            this.moveTaskToList($task.id, lists[listIndex - 1].id);
     }
 
     onTaskKeyDown(e, instance) {
         let t = instance.data.task;
         let {store} = instance;
-        let tasks = this.store.get('tdo.tasks');
-        let {tdo, $task, $board} = store.getData();
+        let {$task} = store.getData();
 
         let code = (c) => c.charCodeAt(0);
         switch (e.keyCode) {
@@ -253,13 +233,11 @@ export default class extends Controller {
                 if (e.keyCode === code('D') && !e.shiftKey)
                     return;
 
-                store.update('$task', task => ({
-                    ...task,
+                this.updateTask({
+                    id: $task.id,
                     deleted: true,
                     deletedDate: new Date().toISOString()
-                }));
-
-                this.onSaveTask(store.get('$task'));
+                });
 
                 let item = closest(e.target, (el) => el.classList.contains('cxe-menu-item'));
                 let elementReceivingFocus = item.nextSibling || item.previousSibling;
@@ -271,12 +249,15 @@ export default class extends Controller {
             case KeyCode.insert:
             case code('O'):
                 let nt = this.prepareTask(t.listId);
-                this.store.set('activeTaskId', nt.id);
-                let index = tasks.indexOf(t)
-                if (index < tasks.length - 1 && e.keyCode === code('O') && !e.shiftKey)
-                    index++; // Create task below
+                let order = this.getSortedTaskOrderList(t.listId);
+                let index = order.indexOf($task.order);
 
-                this.store.set('tdo.tasks', [...tasks.slice(0, index), nt, ...tasks.slice(index)]);
+                //TODO: Fix insertion point
+                let below = index < order.length - 1 && e.keyCode === code('O') && !e.shiftKey;
+                nt.order = below ? getNextOrder($task.order, order) : getPrevOrder($task.order, order);
+
+                this.store.set('activeTaskId', nt.id);
+                this.onSaveTask(nt);
                 break;
 
             case KeyCode.up:
@@ -329,59 +310,57 @@ export default class extends Controller {
     }
 
     listMoveLeft(e, {store}) {
-        let {tdo, $list} = store.getData();
-        let {lists} = tdo;
-        let index = lists.indexOf($list);
-        if (index > 0) {
-            store.set('tdo.lists', [
-                ...lists.slice(0, index - 1),
-                $list,
-                lists[index - 1],
-                ...lists.slice(index + 1)
-            ]);
-        }
+        let {$page, $list} = store.getData();
+        let listOrder = $page.lists.filter(a => !a.deleted).map(l => l.order);
+        let newOrder = getPrevOrder($list.order, listOrder);
+        this.updateList({
+            id: $list.id,
+            order: newOrder || 0
+        });
     }
 
     listMoveRight(e, {store}) {
-        let {tdo, $list} = store.getData();
-        let {lists} = tdo;
-        let index = lists.indexOf($list);
-        if (index + 1 < lists.length) {
-            store.set('tdo.lists', [
-                ...lists.slice(0, index),
-                lists[index + 1],
-                $list,
-                ...lists.slice(index + 2)
-            ]);
-        }
+        let {$page, $list} = store.getData();
+        let listOrder = $page.lists.filter(a => !a.deleted).map(l => l.order);
+        let newOrder = getNextOrder($list.order, listOrder);
+        this.updateList({
+            id: $list.id,
+            order: newOrder || 0
+        });
     }
 
     boardMoveLeft(e, {store}) {
-        let {tdo, $board} = store.getData();
-        let {boards} = tdo;
-        let index = boards.indexOf($board);
-        if (index > 0) {
-            store.set('tdo.boards', [
-                ...boards.slice(0, index - 1),
-                $board,
-                boards[index - 1],
-                ...boards.slice(index + 1)
-            ]);
-        }
+        let {boards, $board} = store.getData();
+        let boardOrder = boards.filter(a => !a.deleted).map(l => l.order);
+        let newOrder = getPrevOrder($board.order, boardOrder);
+        let userId = store.get('user.id');
+
+        firestore
+            .collection('users')
+            .doc(userId)
+            .collection('boards')
+            .doc($board.id)
+            .update({
+                id: $board.id,
+                order: newOrder || 0
+            })
     }
 
     boardMoveRight(e, {store}) {
-        let {tdo, $board} = store.getData();
-        let {boards} = tdo;
-        let index = boards.indexOf($board);
-        if (index + 1 < boards.length) {
-            store.set('tdo.boards', [
-                ...boards.slice(0, index),
-                boards[index + 1],
-                $board,
-                ...boards.slice(index + 2)
-            ]);
-        }
+        let {boards, $board} = store.getData();
+        let boardOrder = boards.filter(a => !a.deleted).map(l => l.order);
+        let newOrder = getNextOrder($board.order, boardOrder);
+        let userId = store.get('user.id');
+
+        firestore
+            .collection('users')
+            .doc(userId)
+            .collection('boards')
+            .doc($board.id)
+            .update({
+                id: $board.id,
+                order: newOrder || 0
+            })
     }
 
     deleteBoard(e, {store}) {
@@ -402,7 +381,32 @@ export default class extends Controller {
             .doc(board.id)
             .set({
                 ...board,
-                edit: false
+                edit: false,
+                lastChangeDate: new Date().toISOString()
             })
     }
+}
+
+function getPrevOrder(currentOrder, orderList) {
+    orderList.sort();
+    let index = orderList.indexOf(currentOrder);
+    if (index == -1)
+        return 0;
+    if (index == 0)
+        return orderList[0];
+    if (index == 1)
+        return orderList[0] - 1;
+    return (orderList[index - 2] + orderList[index - 1]) / 2;
+}
+
+function getNextOrder(currentOrder, orderList) {
+    orderList.sort();
+    let index = orderList.indexOf(currentOrder);
+    if (index == -1)
+        return 0;
+    if (index + 1 == orderList.length)
+        return orderList[orderList.length - 1];
+    if (index + 2 == orderList.length)
+        return orderList[orderList.length - 1] + 1;
+    return (orderList[index + 1] + orderList[index + 2]) / 2;
 }
