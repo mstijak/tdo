@@ -70,11 +70,13 @@ export default class extends Controller {
                        boards.push(doc.data());
                    });
 
-                   if (!isNonEmptyArray(boards)) {
-                        //TODO: Ask the user to create the Welcome board
-                   }
-
                    this.store.set('boards', boards);
+
+                   if (!isNonEmptyArray(boards)) {
+                       //TODO: Ask the user to create the Welcome board
+                   }
+                   else if (this.store.get('url') == "~/")
+                       History.pushState({}, null, "~/b/" + boards[0].id);
                });
 
             this.unsubscribeSettings = firestore
