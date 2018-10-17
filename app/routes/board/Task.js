@@ -245,19 +245,17 @@ class TaskCmp extends VDOM.Component {
 
     componentDidMount() {
         this.props.instance.parent.toggleEditMode = ::this.toggleEditMode;
-        let {instance, data} = this.props;
-        let {store} = instance;
+        let {data} = this.props;
 
         if (this.dom.el.parentNode.parentNode.parentNode.contains(document.activeElement))
             this.toggleEditMode();
 
-        if (data.autoFocus || this.state.edit)
-            setTimeout(() => {
-                if (this.state.edit)
-                    this.dom.editor.focus();
-                else
-                    this.dom.el.focus();
-            }, 20);
+        if (data.autoFocus || this.state.edit) {
+            if (this.state.edit)
+                this.dom.editor.focus();
+            else
+                this.dom.el.focus();
+        }
     }
 
     componentDidUpdate() {

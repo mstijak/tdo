@@ -1,4 +1,4 @@
-import { Controller, FocusManager } from "cx/ui";
+import { Controller, FocusManager, batchUpdatesAndNotify } from "cx/ui";
 import { append, updateArray } from "cx/data";
 import { KeyCode, closest, isNonEmptyArray } from "cx/util";
 
@@ -116,17 +116,17 @@ export default class extends Controller {
   }
 
   updateTask(task) {
-    this.store.update(
-      "$page.tasks",
-      updateArray,
-      t => ({ ...t, ...task }),
-      t => t.id === task.id
-    );
+      this.boardDoc
+          .collection("tasks")
+          .doc(task.id)
+          .update(task);
 
-    this.boardDoc
-      .collection("tasks")
-      .doc(task.id)
-      .update(task);
+      this.store.update(
+          "$page.tasks",
+          updateArray,
+          t => ({...t, ...task}),
+          t => t.id === task.id
+      );
   }
 
   updateList(list) {
@@ -230,18 +230,21 @@ export default class extends Controller {
       case code("D"):
         if (e.keyCode === code("D") && !e.shiftKey) return;
 
-        this.updateTask({
-          id: $task.id,
-          deleted: true,
-          deletedDate: new Date().toISOString()
-        });
+          let item = closest(e.target, el =>
+              el.classList.contains("cxe-menu-item")
+          );
+          let elementReceivingFocus = item.nextSibling || item.previousSibling;
 
-        let item = closest(e.target, el =>
-          el.classList.contains("cxe-menu-item")
-        );
-        let elementReceivingFocus = item.nextSibling || item.previousSibling;
-        if (elementReceivingFocus)
-          FocusManager.focusFirst(elementReceivingFocus);
+          batchUpdatesAndNotify(() => {
+              this.updateTask({
+                  id: $task.id,
+                  deleted: true,
+                  deletedDate: new Date().toISOString()
+              });
+          }, () => {
+              if (elementReceivingFocus)
+                  FocusManager.focusFirst(elementReceivingFocus);
+          });
 
         break;
 
