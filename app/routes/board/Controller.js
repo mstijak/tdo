@@ -15,6 +15,8 @@ const mergeFirestoreSnapshot = (prevList, snapshot, name) => {
     return result;
 };
 
+const OneDayMs = 24 * 60 * 60 * 1000;
+
 export default ({ref, get, set}) => {
 
     const lists = ref("$page.lists").as(ArrayRef);
@@ -87,8 +89,27 @@ export default ({ref, get, set}) => {
         });
     };
 
+    const hardDeleteTask = (task) => {
+        boardDoc
+            .collection("tasks")
+            .doc(task.id)
+            .delete();
+    }
+
     return {
-        onInit() {},
+        onInit() {
+            this.addTrigger('maintenance', [tasks, 'settings'], (tasks, settings) => {
+                if (!settings)
+                    return;
+
+                for (let task of tasks) {
+                    if (task.deleted && Date.now() - task.deletedDate > settings.purgeDeletedObjectsAfterDays * OneDayMs)
+                        hardDeleteTask(task);
+                    else if (settings.deleteCompletedTasks && task.completed && Date.now() - task.completedDate > settings.deleteCompletedTasksAfterDays * OneDayMs)
+                        hardDeleteTask(task);
+                }
+            });
+        },
 
         onDestroy() {
             unsubscribeLists && unsubscribeLists();
@@ -207,7 +228,7 @@ export default ({ref, get, set}) => {
                     let item = closest(e.target, el =>
                         el.classList.contains("cxe-menu-item")
                     );
-                    let elementReceivingFocus = item.nextSibling || item.previousSibling;
+                    let elementReceivingFocus = item.nextElementSibling || item.previousElementSibling;
 
                     batchUpdatesAndNotify(() => {
                         updateTask({
