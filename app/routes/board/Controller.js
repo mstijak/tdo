@@ -99,7 +99,7 @@ export default ({ref, get, set}) => {
     return {
         onInit() {
             this.addTrigger('maintenance', [tasks, 'settings'], (tasks, settings) => {
-                if (!settings)
+                if (!settings || !tasks)
                     return;
 
                 for (let task of tasks) {
