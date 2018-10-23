@@ -22,7 +22,7 @@ export default <cx>
             <LookupField
                 value:bind="$list.boardId"
                 label="Board"
-                options:bind="tdo.boards"
+                options:bind="activeBoards"
                 optionTextField="name"
                 style="width:100%;"
                 required
