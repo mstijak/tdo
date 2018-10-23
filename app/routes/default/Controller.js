@@ -11,6 +11,15 @@ import uid from 'uid';
 
 export default class extends Controller {
 
+    init() {
+        super.init();
+
+        this.store.set(
+            'activeBoards',
+            this.store.get('tdo.boards').filter(i => !i.deleted)
+        );
+    }
+
     addList(e, {store}) {
         if (e)
             e.preventDefault();
