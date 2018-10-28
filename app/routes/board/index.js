@@ -110,8 +110,9 @@ export default <cx>
                                 <MenuItem pad={false}>
                                     <Task
                                         bind="$task"
-                                        styles:bind="settings.taskStyles"
+                                        styleRules:bind="settings.taskStyles"
                                         autoFocus:expr="{activeTaskId}=={$task.id}"
+                                        isNew:expr="{newTaskId}=={$task.id}"
                                         onKeyDown="onTaskKeyDown"
                                         onSave="onSaveTask"
                                     />

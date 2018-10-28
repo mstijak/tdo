@@ -65,13 +65,15 @@ export default ({ref, get, set}) => {
     const prepareTask = (listId) => {
         let order = getSortedTaskOrderList(listId);
         let maxOrder = order[order.length - 1] || 0;
+        let id = uid();
+        set("newTaskId", id);
         return {
-            id: uid(),
+            id,
             listId,
             createdDate: new Date().toISOString(),
-            order: maxOrder + 1,
-            isNew: true
+            order: maxOrder + 1
         };
+
     };
 
     const getSortedTaskOrderList = (listId) => {

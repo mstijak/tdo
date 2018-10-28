@@ -16,8 +16,9 @@ export class Task extends Widget {
     declareData() {
         super.declareData(...arguments, {
             task: undefined,
-            styles: undefined,
-            autoFocus: undefined
+            styleRules: undefined,
+            autoFocus: undefined,
+            isNew: undefined
         })
     }
 
@@ -33,7 +34,7 @@ class TaskCmp extends VDOM.Component {
         super(props);
 
         this.state = {
-            edit: props.data.task.isNew,
+            edit: props.data.isNew,
             scrollHeight: null
         };
 
@@ -73,7 +74,7 @@ class TaskCmp extends VDOM.Component {
         let {widget} = this.props.instance;
         let html = data.task.name ? marked(data.task.name) : '<p>&nbsp;</p>';
 
-        let styles = getStyles(data.task.name, data.styles);
+        let styles = getStyles(data.task.name, data.styleRules);
         let className = widget.CSS.element('checkbox', "input", {
             checked: !!data.task.completed,
         });
