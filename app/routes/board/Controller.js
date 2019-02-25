@@ -207,23 +207,16 @@ export default ({ ref, get, set }) => {
         },
 
         moveTask(e, { store }) {
-            // let targetIndex = store.get("$index");
             let sourceIndex = e.source.store.get("$index");
-
             let task1 = this.store.get("$page.tasks")[sourceIndex];
-            console.log(task1);
             let targetIndex = store.get("$index");
             let task2 = this.store.get("$page.tasks")[targetIndex];
-            console.log(task2);
-
-
-
-
             updateTask({
                 id: task1.id,
                 listId: task2.listId,
                 order: task2.order
-            }); updateTask({
+            });
+            updateTask({
                 id: task2.id,
                 listId: task1.listId,
                 order: task1.order
