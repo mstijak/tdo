@@ -9,7 +9,7 @@ import Controller from './Controller';
 const BoardItems = <cx>
     <PureContainer>
         <Repeater
-            records:bind="boards"
+            records-bind="boards"
             filter={b => !b.deleted}
             sortField="order"
             sortDirection="ASC"
@@ -17,15 +17,15 @@ const BoardItems = <cx>
         >
             <MenuItem
                 mod={{
-                    active: {expr: '{url}=="~/b/" + {$record.id}'},
+                    active: { expr: '{url}=="~/b/" + {$record.id}' },
                     test: true
                 }}
                 pad
             >
-                <Link href:tpl="~/b/{$record.id}"
-                   className:bind="$record.headerClass"
-                   style:bind="$record.headerStyle"
-                   text:bind="$record.name"
+                <Link href-tpl="~/b/{$record.id}"
+                    className-bind="$record.headerClass"
+                    style-bind="$record.headerStyle"
+                    text-bind="$record.name"
                 />
             </MenuItem>
         </Repeater>
@@ -34,27 +34,27 @@ const BoardItems = <cx>
             <a href="#" onClick="addBoard">Add Board</a>
         </MenuItem>
 
-        <div class="spacer" visible:expr="{layout.mode}=='desktop'"/>
-        <hr visible:expr="{layout.mode}=='phone'"/>
+        <div class="spacer" visible-expr="{layout.mode}=='desktop'" />
+        <hr visible-expr="{layout.mode}=='phone'" />
     </PureContainer>
 </cx>;
 
 const MenuItems = <cx>
     <PureContainer>
-        <MenuItem mod={{active: {expr: '{url}=="~/settings"'}}} pad>
+        <MenuItem mod={{ active: { expr: '{url}=="~/settings"' } }} pad>
             <Link href="~/settings">
                 Settings
             </Link>
         </MenuItem>
 
-        <MenuItem mod={{active: {expr: '{url}=="~/help"'}}} pad>
+        <MenuItem mod={{ active: { expr: '{url}=="~/help"' } }} pad>
             <Link href="~/help">
                 Help <code>?</code>
             </Link>
         </MenuItem>
 
-        <div class="spacer" visible:expr="{layout.mode}=='desktop'"/>
-        <hr visible:expr="{layout.mode}!='desktop'"/>
+        <div class="spacer" visible-expr="{layout.mode}=='desktop'" />
+        <hr visible-expr="{layout.mode}!='desktop'" />
 
         <MenuItem pad>
             <a href="https://github.com/codaxy/tdo" target="_blank">Report/Suggest</a>
@@ -62,19 +62,19 @@ const MenuItems = <cx>
 
         <MenuItem pad>
             <a href={`http://twitter.com/home?status=${encodeURIComponent("tdo - hackable todo list #todo https://goo.gl/rhkuYP")}`}
-               target="_blank">Tweet</a>
+                target="_blank">Tweet</a>
         </MenuItem>
     </PureContainer>
 </cx>;
 
 export default <cx>
     <div class="cxb-layout" controller={Controller}>
-        <style innerHtml:bind="settings.css"/>
-        <Sandbox key:bind="url" storage:bind="pages">
+        <style innerHtml-bind="settings.css" />
+        <Sandbox key-bind="url" storage-bind="pages">
             <header class="cxe-layout-header">
                 <h1>tdo</h1>
                 <TextField
-                    value:bind="search.query"
+                    value-bind="search.query"
                     placeholder="Search..."
                     mod="search"
                     id="search"
@@ -82,13 +82,13 @@ export default <cx>
                 />
 
                 <Menu horizontal>
-                    <BoardItems visible:expr="{layout.mode}=='desktop' || {layout.mode}=='tablet'" />
-                    <MenuItems visible:expr="{layout.mode}=='desktop'" />
-                    <MenuItem visible:expr="{layout.mode}!='desktop'">
+                    <BoardItems visible-expr="{layout.mode}=='desktop' || {layout.mode}=='tablet'" />
+                    <MenuItems visible-expr="{layout.mode}=='desktop'" />
+                    <MenuItem visible-expr="{layout.mode}!='desktop'">
                         <Submenu>
                             &#9776;
                             <Menu putInto="dropdown">
-                                <BoardItems visible:expr="{layout.mode}=='phone'" />
+                                <BoardItems visible-expr="{layout.mode}=='phone'" />
                                 <MenuItems />
                             </Menu>
                         </Submenu>
@@ -96,13 +96,13 @@ export default <cx>
                 </Menu>
             </header>
             <main class="cxe-layout-main" layout={FirstVisibleChildLayout}>
-                <Route url:bind="url" route="~/settings">
+                <Route url-bind="url" route="~/settings">
                     <Settings />
                 </Route>
-                <Route url:bind="url" route="~/help">
+                <Route url-bind="url" route="~/help">
                     <Help />
                 </Route>
-                <Route url:bind="url" route="~/b/:boardId">
+                <Route url-bind="url" route="~/b/:boardId">
                     <Board />
                 </Route>
             </main>

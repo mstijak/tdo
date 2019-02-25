@@ -5,14 +5,14 @@ export default <cx>
     <div class="cxb-listeditor">
         <div layout={{ type: LabelsTopLayout, mod: 'stretch' }}>
             <TextField
-                value:bind="$board.name"
+                value-bind="$board.name"
                 label="Name"
                 autoFocus
                 style="width:100%;"
             />
         </div>
 
-        <br/>
+        <br />
 
         <div>
             <Button onClick="boardMoveLeft">Move Left</Button>
@@ -21,7 +21,7 @@ export default <cx>
 
         <div layout={{ type: LabelsTopLayout, mod: 'stretch' }}>
             <TextField
-                value:bind="$board.headerClass"
+                value-bind="$board.headerClass"
                 label="Header Class"
                 placeholder="CSS class"
                 style="width:100%;"
@@ -30,7 +30,7 @@ export default <cx>
 
         <div layout={{ type: LabelsTopLayout, mod: 'stretch' }}>
             <TextArea
-                value:bind="$board.headerStyle"
+                value-bind="$board.headerStyle"
                 label="Header Style"
                 placeholder="color, font-size, ..."
                 reactOn="input"
@@ -40,7 +40,7 @@ export default <cx>
 
         <div layout={{ type: LabelsTopLayout, mod: 'stretch' }}>
             <TextField
-                value:bind="$board.className"
+                value-bind="$board.className"
                 label="Board Class"
                 placeholder="CSS class"
                 style="width:100%;"
@@ -49,7 +49,7 @@ export default <cx>
 
         <div layout={{ type: LabelsTopLayout, mod: 'stretch' }}>
             <TextArea
-                value:bind="$board.style"
+                value-bind="$board.style"
                 label="Board Style"
                 placeholder="background, color, ..."
                 reactOn="input"
@@ -57,12 +57,12 @@ export default <cx>
             />
         </div>
 
-        <br/>
+        <br />
 
         <div>
             <Button onClick="saveBoard">Save</Button>
             <Button mod="danger" confirm="All lists and tasks from this board will be deleted. Are you sure?" onClick="deleteBoard" style="float:right">Delete</Button>
         </div>
-        <br/>
+        <br />
     </div>
 </cx>

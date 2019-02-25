@@ -1,9 +1,9 @@
-import {FocusManager, batchUpdatesAndNotify} from "cx/ui";
-import {ArrayRef, updateArray} from "cx/data";
-import {KeyCode, closest} from "cx/util";
+import { FocusManager, batchUpdatesAndNotify } from "cx/ui";
+import { ArrayRef, updateArray } from "cx/data";
+import { KeyCode, closest } from "cx/util";
 
 import uid from "uid";
-import {firestore} from "../../data/db/firestore";
+import { firestore } from "../../data/db/firestore";
 
 const mergeFirestoreSnapshot = (prevList, snapshot, name) => {
     //TODO: Impement a more efficient data merge strategy
@@ -17,7 +17,7 @@ const mergeFirestoreSnapshot = (prevList, snapshot, name) => {
 
 const OneDayMs = 24 * 60 * 60 * 1000;
 
-export default ({ref, get, set}) => {
+export default ({ ref, get, set }) => {
 
     const lists = ref("$page.lists").as(ArrayRef);
     const tasks = ref("$page.tasks").as(ArrayRef);
@@ -39,7 +39,7 @@ export default ({ref, get, set}) => {
     const updateTask = (task) => {
         tasks.update(
             updateArray,
-            t => ({...t, ...task}),
+            t => ({ ...t, ...task }),
             t => t.id === task.id
         );
 
@@ -52,7 +52,7 @@ export default ({ref, get, set}) => {
     const updateList = (list) => {
         lists.update(
             updateArray,
-            t => ({...t, ...list}),
+            t => ({ ...t, ...list }),
             t => t.id === list.id
         );
 
@@ -134,7 +134,7 @@ export default ({ref, get, set}) => {
                 });
         },
 
-        onSaveList(e, {store}) {
+        onSaveList(e, { store }) {
             let list = store.get("$list");
             boardDoc
                 .collection("lists")
@@ -146,7 +146,7 @@ export default ({ref, get, set}) => {
                 });
         },
 
-        deleteList(e, {store}) {
+        deleteList(e, { store }) {
             let id = store.get("$list.id");
 
             updateList({
@@ -160,7 +160,7 @@ export default ({ref, get, set}) => {
             updateTask(task);
         },
 
-        addTask(e, {store}) {
+        addTask(e, { store }) {
             e.preventDefault();
             let listId = store.get("$list.id");
             let task = prepareTask(listId);
@@ -171,10 +171,10 @@ export default ({ref, get, set}) => {
                 .set(task);
         },
 
-        moveTaskUp(e, {store}) {
+        moveTaskUp(e, { store }) {
             e.stopPropagation();
             e.preventDefault();
-            let {$task} = store.getData();
+            let { $task } = store.getData();
             let order = getSortedTaskOrderList($task.listId);
             let newOrder = getPrevOrder($task.order, order);
             updateTask({
@@ -183,10 +183,10 @@ export default ({ref, get, set}) => {
             });
         },
 
-        moveTaskDown(e, {store}) {
+        moveTaskDown(e, { store }) {
             e.stopPropagation();
             e.preventDefault();
-            let {$task} = store.getData();
+            let { $task } = store.getData();
             let order = getSortedTaskOrderList($task.listId);
             let newOrder = getNextOrder($task.order, order);
             updateTask({
@@ -195,10 +195,10 @@ export default ({ref, get, set}) => {
             });
         },
 
-        moveTaskRight(e, {store}) {
+        moveTaskRight(e, { store }) {
             e.stopPropagation();
             e.preventDefault();
-            let {$page, $task} = store.getData();
+            let { $page, $task } = store.getData();
             let lists = $page.lists.filter(a => !a.deleted);
             lists.sort((a, b) => a.order - b.order);
             let listIndex = lists.findIndex(a => a.id == $task.listId);
@@ -206,10 +206,34 @@ export default ({ref, get, set}) => {
                 moveTaskToList($task.id, lists[listIndex + 1].id);
         },
 
-        moveTaskLeft(e, {store}) {
+        moveTask(e, { store }) {
+            // let targetIndex = store.get("$index");
+            let sourceIndex = e.source.store.get("$index");
+
+            let task1 = this.store.get("$page.tasks")[sourceIndex];
+            console.log(task1);
+            let targetIndex = store.get("$index");
+            let task2 = this.store.get("$page.tasks")[targetIndex];
+            console.log(task2);
+
+
+
+
+            updateTask({
+                id: task1.id,
+                listId: task2.listId,
+                order: task2.order
+            }); updateTask({
+                id: task2.id,
+                listId: task1.listId,
+                order: task1.order
+            });
+        },
+
+        moveTaskLeft(e, { store }) {
             e.stopPropagation();
             e.preventDefault();
-            let {$page, $task} = store.getData();
+            let { $page, $task } = store.getData();
             let lists = $page.lists.filter(a => !a.deleted);
             lists.sort((a, b) => a.order - b.order);
             let listIndex = lists.findIndex(a => a.id == $task.listId);
@@ -217,9 +241,9 @@ export default ({ref, get, set}) => {
         },
 
         onTaskKeyDown(e, instance) {
-            let {store, data} = instance;
+            let { store, data } = instance;
             let t = data.task;
-            let {$task} = store.getData();
+            let { $task } = store.getData();
             let code = c => c.charCodeAt(0);
 
             switch (e.keyCode) {
@@ -257,7 +281,6 @@ export default ({ref, get, set}) => {
                     nt.order = below
                         ? getNextOrder($task.order, order)
                         : getPrevOrder($task.order, order);
-
                     set("activeTaskId", nt.id);
                     updateTask(nt);
                     break;
@@ -309,8 +332,8 @@ export default ({ref, get, set}) => {
             }
         },
 
-        listMoveLeft(e, {store}) {
-            let {$list} = store.getData();
+        listMoveLeft(e, { store }) {
+            let { $list } = store.getData();
             let listOrder = getOrderList(lists.get());
             let newOrder = getPrevOrder($list.order, listOrder);
             updateList({
@@ -319,8 +342,8 @@ export default ({ref, get, set}) => {
             });
         },
 
-        listMoveRight(e, {store}) {
-            let {$list} = store.getData();
+        listMoveRight(e, { store }) {
+            let { $list } = store.getData();
             let listOrder = getOrderList(lists.get());
             let newOrder = getNextOrder($list.order, listOrder);
             updateList({
@@ -329,8 +352,8 @@ export default ({ref, get, set}) => {
             });
         },
 
-        boardMoveLeft(e, {store}) {
-            let {boards, $board} = store.getData();
+        boardMoveLeft(e, { store }) {
+            let { boards, $board } = store.getData();
             let boardOrder = getOrderList(boards);
             let newOrder = getPrevOrder($board.order, boardOrder);
             let userId = store.get("user.id");
@@ -346,8 +369,8 @@ export default ({ref, get, set}) => {
                 });
         },
 
-        boardMoveRight(e, {store}) {
-            let {boards, $board} = store.getData();
+        boardMoveRight(e, { store }) {
+            let { boards, $board } = store.getData();
             let boardOrder = getOrderList(boards);
             let newOrder = getNextOrder($board.order, boardOrder);
             let userId = store.get("user.id");
@@ -363,14 +386,14 @@ export default ({ref, get, set}) => {
                 });
         },
 
-        deleteBoard(e, {store}) {
+        deleteBoard(e, { store }) {
             boardDoc.update({
                 deleted: true,
                 deletedDate: new Date().toISOString()
             });
         },
 
-        saveBoard(e, {store}) {
+        saveBoard(e, { store }) {
             let board = store.get("$board");
             let userId = store.get("user.id");
 
@@ -391,7 +414,7 @@ export default ({ref, get, set}) => {
 function getPrevOrder(currentOrder, orderList) {
     orderList.sort();
     let index = orderList.indexOf(currentOrder);
-    if (index == -1) return 0;
+    if (index < -1) return 0;
     if (index == 0) return orderList[0];
     if (index == 1) return orderList[0] - 1;
     return (orderList[index - 2] + orderList[index - 1]) / 2;
@@ -400,7 +423,7 @@ function getPrevOrder(currentOrder, orderList) {
 function getNextOrder(currentOrder, orderList) {
     orderList.sort();
     let index = orderList.indexOf(currentOrder);
-    if (index == -1) return 0;
+    if (index < -1) return 0;
     if (index + 1 == orderList.length) return orderList[orderList.length - 1];
     if (index + 2 == orderList.length) return orderList[orderList.length - 1] + 1;
     return (orderList[index + 1] + orderList[index + 2]) / 2;
