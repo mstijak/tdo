@@ -1,14 +1,14 @@
-import {VDOM, Widget} from 'cx/ui';
-import {isFocused} from 'cx/util';
+import { VDOM, Widget } from 'cx/ui';
+import { isFocused } from 'cx/util';
 
 import marked from 'marked';
-import {getStyles} from './styling';
+import { getStyles } from './styling';
 
 export class Task extends Widget {
 
     init() {
         if (this.bind)
-            this.task = {bind: this.bind};
+            this.task = { bind: this.bind };
 
         super.init();
     }
@@ -23,7 +23,7 @@ export class Task extends Widget {
     }
 
     render(context, instance, key) {
-        return <TaskCmp key={key} instance={instance} data={instance.data}/>
+        return <TaskCmp key={key} instance={instance} data={instance.data} />
     }
 }
 
@@ -42,9 +42,9 @@ class TaskCmp extends VDOM.Component {
     }
 
     render() {
-        let {instance, data} = this.props;
-        let {widget} = instance;
-        let {CSS} = widget;
+        let { instance, data } = this.props;
+        let { widget } = instance;
+        let { CSS } = widget;
 
         let className = CSS.block("task", {}, {
             edit: this.state.edit,
@@ -53,25 +53,25 @@ class TaskCmp extends VDOM.Component {
 
         return <div
             className={className}
-            onKeyDown={::this.onKeyDown}
+            onKeyDown={this.onKeyDown.bind(this)}
             ref={el => {
                 this.dom.el = el
             }}
             tabIndex={0}
-            onClick={::this.onClick}
-            onTouchStart={::this.onTouchStart}
+            onClick={this.onClick.bind(this)}
+            onTouchStart={this.onTouchStart.bind(this)}
             onDoubleClick={e => {
                 this.toggleEditMode()
             }}
         >
             {!this.state.edit && this.renderContent()}
             {this.state.edit && this.renderEditor()}
-        </div>
+        </div >
     }
 
     renderContent() {
-        let {data, instance} = this.props;
-        let {widget} = this.props.instance;
+        let { data, instance } = this.props;
+        let { widget } = this.props.instance;
         let html = data.task.name ? marked(data.task.name) : '<p>&nbsp;</p>';
 
         let styles = getStyles(data.task.name, data.styleRules);
@@ -91,14 +91,14 @@ class TaskCmp extends VDOM.Component {
                 </svg>
             </div>,
             <div key="content"
-                 className={widget.CSS.expand("cxe-task-content", styles.className)}
-                 style={styles.style}
-                 dangerouslySetInnerHTML={{__html: html}}
+                className={widget.CSS.expand("cxe-task-content", styles.className)}
+                style={styles.style}
+                dangerouslySetInnerHTML={{ __html: html }}
             />]
     }
 
     renderEditor() {
-        let {data} = this.props;
+        let { data } = this.props;
         let style = {};
         if (this.state.scrollHeight) {
             style.height = `${this.state.scrollHeight}px`;
@@ -108,14 +108,14 @@ class TaskCmp extends VDOM.Component {
             onMouseDown={e => {
                 e.stopPropagation();
             }}
-            onKeyDown={::this.onEditorKeyDown}
+            onKeyDown={this.onEditorKeyDown.bind(this)}
             ref={c => {
                 this.dom.editor = c;
             }}
             style={style}
             rows={1}
-            onBlur={::this.onEditorBlur}
-            onChange={::this.onChange}
+            onBlur={this.onEditorBlur.bind(this)}
+            onChange={this.onChange.bind(this)}
         />
     }
 
@@ -126,7 +126,7 @@ class TaskCmp extends VDOM.Component {
     }
 
     setCompleted(completed = true) {
-        let {instance, data} = this.props;
+        let { instance, data } = this.props;
 
         let task = {
             ...data.task,
@@ -139,8 +139,8 @@ class TaskCmp extends VDOM.Component {
     }
 
     onKeyDown(e) {
-        let {instance, data} = this.props;
-        let {widget} = instance;
+        let { instance, data } = this.props;
+        let { widget } = instance;
 
         switch (e.keyCode) {
             case 13:
@@ -166,8 +166,8 @@ class TaskCmp extends VDOM.Component {
     }
 
     save(e) {
-        let {instance} = this.props;
-        let {data} = instance;
+        let { instance } = this.props;
+        let { data } = instance;
 
         let task = {
             ...data.task,
@@ -182,7 +182,7 @@ class TaskCmp extends VDOM.Component {
     }
 
     onEditorKeyDown(e) {
-        let {instance} = this.props;
+        let { instance } = this.props;
 
         switch (e.keyCode) {
             case 13:
@@ -245,8 +245,8 @@ class TaskCmp extends VDOM.Component {
     }
 
     componentDidMount() {
-        this.props.instance.parent.toggleEditMode = ::this.toggleEditMode;
-        let {data} = this.props;
+        this.props.instance.parent.toggleEditMode = this.toggleEditMode.bind(this);
+        let { data } = this.props;
 
         if (this.dom.el.parentNode.parentNode.parentNode.contains(document.activeElement))
             this.toggleEditMode();

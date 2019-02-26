@@ -23,13 +23,11 @@ export default ({ ref, get, set }) => {
     const tasks = ref("$page.tasks").as(ArrayRef);
     const boardId = get("$route.boardId");
     const boardDoc = firestore.collection("boards").doc(boardId);
-
     const unsubscribeLists = boardDoc
         .collection("lists")
         .onSnapshot(snapshot => {
             lists.update(lists => mergeFirestoreSnapshot(lists, snapshot, "LISTS"));
         });
-
     const unsubscribeTasks = boardDoc
         .collection("tasks")
         .onSnapshot(snapshot => {
@@ -148,7 +146,6 @@ export default ({ ref, get, set }) => {
 
         deleteList(e, { store }) {
             let id = store.get("$list.id");
-
             updateList({
                 id,
                 deleted: true,

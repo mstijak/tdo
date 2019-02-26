@@ -41,8 +41,8 @@ function filterBoards(b, activeBoardId) {
     return b.id == activeBoardId && !b.deleted;
 }
 
-function filterLists(l, activeBoardId) {
-    return l.boardId == activeBoardId && !l.deleted;
+function filterLists(l, activeListId) {
+    return l.listId == activeListId && !l.deleted;
 }
 
 const editTaskboard = (e, { store }) => {
@@ -75,75 +75,80 @@ export default <cx>
                     keyField="id"
                     sortField="order"
                     sortDirection="ASC"
-                > <DropZone
-                    onDrop={(e, { store }) => {
-                        let targetIndex = store.get("$index");
-                        let sourceIndex = e.source.store.get("$index");
-                        store.update("$page.lists", widgets =>
-                            swapElements(widgets, sourceIndex, targetIndex)
-                        );
-                    }}
+                    filterParams-bind="$route.listId"
+                    filter={filterLists}
                 >
-
-                        <div
-                            class-tpl="cxb-tasklist {$list.className}"
-                            style-bind="$list.listStyle">
-                            <DragSource style="cursor:move;padding:1px">
-                                <header class="cxe-tasklist-header">
-                                    <h2
-                                        class-tpl="{$list.headerClass}"
-                                        text-bind="$list.name"
-                                        style-bind="$list.headerStyle"
-                                        onDoubleClick={editTaskboard}
-                                    />
-                                    <a href="#"
-                                        tabIndex={-1}
-                                        onClick={editTaskboard}
-                                    >
-                                        &#x270e;
+                    {/* <DropZone
+                        onDrop={(e, { store }) => {
+                            debugger;
+                            // if (e.source.t
+                            let targetIndex = store.get("$index");
+                            let sourceIndex = e.source.store.get("$index");
+                            store.update("$page.lists", widgets =>
+                                swapElements(widgets, sourceIndex, targetIndex)
+                            );
+                        }}
+                    > */}
+                    <div
+                        class-tpl="cxb-tasklist {$list.className}"
+                        style-bind="$list.listStyle">
+                        {/* <DragSource data={{ type: 'list' }} style="cursor:move;padding:1px"> */}
+                        <header class="cxe-tasklist-header">
+                            <h2
+                                class-tpl="{$list.headerClass}"
+                                text-bind="$list.name"
+                                style-bind="$list.headerStyle"
+                                onDoubleClick={editTaskboard}
+                            />
+                            <a
+                                href="#"
+                                tabIndex={-1}
+                                onClick={editTaskboard}
+                            >
+                                &#x270e;
                             </a>
-                                </header>
-                                <ListEditor visible-expr="!!{$list.edit}" />
-                                <Menu class="cxe-tasklist-items" onKeyDown="onTaskListKeyDown" itemPadding="small">
-                                    <Repeater
-                                        records-bind="$page.tasks"
-                                        recordName="$task"
-                                        keyField="id"
-                                        sortField="order"
-                                        sortDirection="ASC"
-                                        filter={filterItems}
-                                        filterParams={{
-                                            list: { bind: '$list' },
-                                            search: { bind: 'search' },
-                                            settings: { bind: 'settings' }
-                                        }}
-                                    >
-                                        <DropZone
-                                            onDrop="moveTask"
-                                            matchWidth
-                                            matchHeight
-                                            matchMargin
-                                            inflate={50}
-                                        >
-                                            <MenuItem pad={false}>
-                                                <DragSource hideOnDrag >
-                                                    <Task
-                                                        bind="$task"
-                                                        styleRules-bind="settings.taskStyles"
-                                                        autoFocus-expr="{activeTaskId}=={$task.id}"
-                                                        isNew-expr="{newTaskId}=={$task.id}"
-                                                        onKeyDown="onTaskKeyDown"
-                                                        onSave="onSaveTask"
-                                                    />
-                                                </DragSource>
-                                            </MenuItem>
-                                        </DropZone>
-                                    </Repeater>
-                                    <a class="cxe-tasklist-add" onClick="addTask" href="#">Add Task</a>
-                                </Menu>
-                            </DragSource>
-                        </div>
-                    </DropZone>
+                        </header>
+                        {/* </DragSource> */}
+                        <ListEditor visible-expr="!!{$list.edit}" />
+                        <Menu class="cxe-tasklist-items" onKeyDown="onTaskListKeyDown" itemPadding="small">
+                            <Repeater
+                                records-bind="$page.tasks"
+                                recordName="$task"
+                                keyField="id"
+                                sortField="order"
+                                sortDirection="ASC"
+                                filter={filterItems}
+                                filterParams={{
+                                    list: { bind: '$list' },
+                                    search: { bind: 'search' },
+                                    settings: { bind: 'settings' }
+                                }}
+                            >
+                                {/* <DropZone
+                                        onDrop="moveTask"
+                                        matchWidth
+                                        matchHeight
+                                        matchMargin
+                                        inflate={50}
+                                    > */}
+                                {/* <DragSource data={{ type: 'listItem' }} hideOnDrag> */}
+                                <MenuItem pad={false}>
+                                    <Task
+                                        bind="$task"
+                                        styleRules-bind="settings.taskStyles"
+                                        autoFocus-expr="{activeTaskId}=={$task.id}"
+                                        isNew-expr="{newTaskId}=={$task.id}"
+                                        onKeyDown="onTaskKeyDown"
+                                        onSave="onSaveTask"
+                                    />
+                                </MenuItem>
+                                {/* </DragSource> */}
+                                {/* </DropZone> */}
+                            </Repeater>
+                            <a class="cxe-tasklist-add" onClick="addTask" href="#">Add Task</a>
+                        </Menu>
+                    </div>
+                    {/* </DropZone> */}
                 </Repeater>
                 <div class="cxb-tasklist">
                     <Menu class="cxe-tasklist-items" onKeyDown="onTaskListKeyDown" itemPadding="small">

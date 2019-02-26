@@ -1,7 +1,7 @@
 import { append, updateArray } from 'cx/data';
 import { ADD_BOARD, REMOVE_BOARD } from '../../../actions';
 
-export default function(state = [], action) {
+export default function (state = [], action) {
     switch (action.type) {
         case 'ADD_BOARD':
             return append(state, action.data);
@@ -13,7 +13,7 @@ export default function(state = [], action) {
                     deleted: true,
                     deletedDate: new Date().toISOString()
                 }),
-                b=>b.id == action.id);
+                b => b.id == action.id);
 
         default:
             return state;
