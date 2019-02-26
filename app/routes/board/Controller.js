@@ -211,16 +211,27 @@ export default ({ ref, get, set }) => {
             let task1 = this.store.get("$page.tasks")[sourceIndex];
             let targetIndex = store.get("$index");
             let task2 = this.store.get("$page.tasks")[targetIndex];
-            updateTask({
-                id: task1.id,
-                listId: task2.listId,
-                order: task2.order
-            });
-            updateTask({
-                id: task2.id,
-                listId: task1.listId,
-                order: task1.order
-            });
+            if (task2.listId == task1.listId) {
+                let order = getSortedTaskOrderList(task1.listId);
+                if (task1.order < task2.order) {
+                    var newOrder = getNextOrder(task2.order, order);
+                }
+                else {
+                    newOrder = getPrevOrder(task2.order, order);
+                }
+                updateTask({
+                    ...task1,
+                    order: newOrder
+                });
+            } else {
+                let order = getSortedTaskOrderList(task2.listId);
+                let taskOrder = (order[order.length - 1] || 0) + 1;
+                updateTask({
+                    id: task1.id,
+                    listId: task2.listId,
+                    order: taskOrder
+                });
+            }
         },
 
         moveTaskLeft(e, { store }) {

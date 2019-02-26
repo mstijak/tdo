@@ -88,7 +88,7 @@ export default <cx>
                         <div
                             class-tpl="cxb-tasklist {$list.className}"
                             style-bind="$list.listStyle">
-                            <DragSource >
+                            <DragSource style="cursor:move;padding:1px">
                                 <header class="cxe-tasklist-header">
                                     <h2
                                         class-tpl="{$list.headerClass}"
@@ -120,9 +120,13 @@ export default <cx>
                                     >
                                         <DropZone
                                             onDrop="moveTask"
+                                            matchWidth
+                                            matchHeight
+                                            matchMargin
+                                            inflate={50}
                                         >
                                             <MenuItem pad={false}>
-                                                <DragSource >
+                                                <DragSource hideOnDrag >
                                                     <Task
                                                         bind="$task"
                                                         styleRules-bind="settings.taskStyles"
