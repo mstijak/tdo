@@ -210,11 +210,12 @@ export default ({ ref, get, set }) => {
             let task2 = this.store.get("$page.tasks")[targetIndex];
             if (task2.listId == task1.listId) {
                 let order = getSortedTaskOrderList(task1.listId);
+                console.log(order)
                 if (task1.order < task2.order) {
-                    var newOrder = getNextOrder(task2.order, order);
+                    var newOrder = getMyNextOrder(task2.order, order);
                 }
                 else {
-                    newOrder = getPrevOrder(task2.order, order);
+                    newOrder = getMyPrevOrder(task2.order, order);
                 }
                 updateTask({
                     ...task1,
@@ -428,6 +429,25 @@ function getNextOrder(currentOrder, orderList) {
     if (index + 1 == orderList.length) return orderList[orderList.length - 1];
     if (index + 2 == orderList.length) return orderList[orderList.length - 1] + 1;
     return (orderList[index + 1] + orderList[index + 2]) / 2;
+}
+
+function getMyPrevOrder(currentOrder, orderList) {
+    orderList.sort();
+    //debugger
+    let index = orderList.indexOf(currentOrder);
+    // if (index < -1) return 0;
+    if (index == 0) return orderList[0] - 1;
+    // if (index == 1) return (orderList[index - 1] + orderList[index]) / 2;
+    return (orderList[index - 1] + orderList[index - 2]) / 2;
+}
+
+function getMyNextOrder(currentOrder, orderList) {
+    orderList.sort();
+    let index = orderList.indexOf(currentOrder);
+    if (index < -1) return 0;
+    if (index + 1 == orderList.length) return orderList[orderList.length - 1] + 1;
+    //   if (index + 2 == orderList.length) return orderList[orderList.length - 1] + 1;
+    return (orderList[index] + orderList[index + 1]) / 2;
 }
 
 function getOrderList(items, filter = () => true) {
