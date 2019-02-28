@@ -13,7 +13,7 @@
 }
 
 .cxb-tasklist {
-  padding: 1rem 1.5rem;
+  padding: 1rem 1rem;
 
   @media screen and (min-width: 700px) {
     width: 29rem;
@@ -22,6 +22,7 @@
 
 .cxe-tasklist-header {
   display: flex;
+  padding-left: 10px;
 
   h2 {
     margin: 0 0 1rem 0;
@@ -62,7 +63,6 @@
 }
   
 .cxb-task {
-
   border: 1px solid transparent;
   margin: -1px;
   width: 100%;

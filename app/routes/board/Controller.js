@@ -422,10 +422,16 @@ export default ({ ref, get, set }) => {
         },
 
         deleteBoard(e, { store }) {
-            boardDoc.update({
-                deleted: true,
-                deletedDate: new Date().toISOString()
-            });
+            let { $board, $userId } = store.getData();
+            firestore
+                .collection("users")
+                .doc($userId)
+                .collection("boards")
+                .doc($board.id).update({
+                    id: $board.id,
+                    deleted: true,
+                    deletedDate: new Date().toISOString()
+                });
         },
 
         saveBoard(e, { store }) {

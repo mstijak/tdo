@@ -142,7 +142,9 @@ export default <cx>
                                                     isNew-expr="{newTaskId}=={$task.id}"
                                                     onKeyDown="onTaskKeyDown"
                                                     onSave="onSaveTask"
-                                                > </Task>
+                                                >
+                                                    <Icon name="drop-down" />
+                                                </Task>
                                             </DropZone>
                                         </DragSource>
 
