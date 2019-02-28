@@ -222,7 +222,6 @@ export default ({ ref, get, set }) => {
                     this.updateUpperTaskList(store, selectedTask, newTask)
                 }
             } else {
-                debugger
                 let order = getSortedTaskOrderList(newTask.listId);
                 let taskOrder = (order[order.length - 1] || 0) + 1;
                 updateTask({
@@ -231,7 +230,6 @@ export default ({ ref, get, set }) => {
                     order: taskOrder
                 });
             }
-            console.log(getSortedTaskOrderList(selectedTask.listId))
         },
 
         updateLowerTaskList(store, selectedTask, newTask) {

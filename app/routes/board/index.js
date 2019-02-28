@@ -1,5 +1,5 @@
-import { Repeater, Menu, MenuItem, Button, DropZone, DragSource, DragHandle } from 'cx/widgets';
-import { FirstVisibleChildLayout } from 'cx/ui';
+import { Repeater, Menu, MenuItem, Button, DropZone, DragSource, DragHandle, Icon } from 'cx/widgets';
+import { FirstVisibleChildLayout, LabelsTopLayout } from 'cx/ui';
 
 import { Task } from './Task';
 
@@ -101,11 +101,12 @@ export default <cx>
                                     />
                                     <a
                                         href="#"
+                                        style="padding-left: 10px;"
                                         tabIndex={-1}
                                         onClick={editTaskboard}
                                     >
                                         &#x270e;
-                            </a>
+                                     </a>
                                 </header>
                             </DragSource>
                             <ListEditor visible-expr="!!{$list.edit}" />
@@ -123,22 +124,17 @@ export default <cx>
                                         settings: { bind: 'settings' }
                                     }}
                                 >
-
-
-
-                                    <MenuItem>
-
+                                    <MenuItem class="menu-item">
                                         <DragSource data={{ type: 'item' }} >
                                             <DropZone
                                                 onDrop="moveTask"
                                                 onDropTest={e => e.source.data.type == "item"}
-
                                                 inflate={30}
                                             >
-                                                <DragHandle style="position:fixed; display: inline;margin-right:10px;width:30px;margin:3px; cursor:move;font-size:15px">
-                                                    &#x2807;
+                                                <DragHandle style="position:fixed; display: inline;margin:3px; cursor:move;font-size:15px">
+                                                    <div class="drag-icon"> &#x2807;
+                                                       </div>
                                                 </DragHandle>
-
                                                 <Task
                                                     bind="$task"
                                                     styleRules-bind="settings.taskStyles"

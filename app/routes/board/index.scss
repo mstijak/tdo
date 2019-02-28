@@ -52,10 +52,20 @@
   padding: 0.5rem 0.5rem 0.5rem 2.5rem;
 }
 
+.menu-item {
+  .drag-icon {
+    visibility: hidden;
+  }
+  &:hover .drag-icon {
+    visibility: visible;
+  }
+}
+  
 .cxb-task {
 
   border: 1px solid transparent;
   margin: -1px;
+  width: 100%;
   display: inline-block;
 
 
@@ -70,6 +80,7 @@
   p {
     margin: 0.5rem 0 0.5rem 0;
     white-space: pre-wrap;
+    word-break: break-all;
   }
 
   .cxe-checkbox-input {
@@ -84,6 +95,7 @@
     color: white;
     border: none;
     font-family: inherit;
+    word-wrap: break-word;
     padding: 0.5rem 0;
     font-size: inherit;
     overflow: hidden;
