@@ -172,11 +172,20 @@ export default ({ ref, get, set }) => {
             e.stopPropagation();
             e.preventDefault();
             let { $task } = store.getData();
-            let order = getSortedTaskOrderList($task.listId);
-            let newOrder = getPrevOrder($task.order, order);
+            let oldTask = findUpperTask(store, $task);
+            if (oldTask) {
+                this.replaceTaskOrders(oldTask, $task)
+            }
+        },
+
+        replaceTaskOrders(firstTask, secondTask) {
             updateTask({
-                ...$task,
-                order: newOrder
+                ...secondTask,
+                order: firstTask.order
+            });
+            updateTask({
+                ...firstTask,
+                order: secondTask.order
             });
         },
 
@@ -184,12 +193,10 @@ export default ({ ref, get, set }) => {
             e.stopPropagation();
             e.preventDefault();
             let { $task } = store.getData();
-            let order = getSortedTaskOrderList($task.listId);
-            let newOrder = getNextOrder($task.order, order);
-            updateTask({
-                ...$task,
-                order: newOrder
-            });
+            let oldTask = findUnderlyingTask(store, $task);
+            if (oldTask) {
+                this.replaceTaskOrders(oldTask, $task)
+            }
         },
 
         moveTaskRight(e, { store }) {
@@ -205,31 +212,59 @@ export default ({ ref, get, set }) => {
 
         moveTask(e, { store }) {
             let sourceIndex = e.source.store.get("$index");
-            let task1 = this.store.get("$page.tasks")[sourceIndex];
+            let selectedTask = this.store.get("$page.tasks")[sourceIndex];
             let targetIndex = store.get("$index");
-            let task2 = this.store.get("$page.tasks")[targetIndex];
-            if (task2.listId == task1.listId) {
-                let order = getSortedTaskOrderList(task1.listId);
-                console.log(order)
-                if (task1.order < task2.order) {
-                    var newOrder = getMyNextOrder(task2.order, order);
+            let newTask = this.store.get("$page.tasks")[targetIndex];
+            if (newTask.listId == selectedTask.listId) {
+                if (selectedTask.order < newTask.order) {
+                    this.updateLowerTaskList(store, selectedTask, newTask);
+                } else {
+                    this.updateUpperTaskList(store, selectedTask, newTask)
                 }
-                else {
-                    newOrder = getMyPrevOrder(task2.order, order);
-                }
-                updateTask({
-                    ...task1,
-                    order: newOrder
-                });
             } else {
-                let order = getSortedTaskOrderList(task2.listId);
+                debugger
+                let order = getSortedTaskOrderList(newTask.listId);
                 let taskOrder = (order[order.length - 1] || 0) + 1;
                 updateTask({
-                    id: task1.id,
-                    listId: task2.listId,
+                    id: selectedTask.id,
+                    listId: newTask.listId,
                     order: taskOrder
                 });
             }
+            console.log(getSortedTaskOrderList(selectedTask.listId))
+        },
+
+        updateLowerTaskList(store, selectedTask, newTask) {
+            let tasks = getTasksFromList(this.store, selectedTask.listId)
+            tasks.forEach(e => {
+                if (e.order > newTask.order) {
+                    updateTask({
+                        ...e,
+                        order: e.order + 1
+                    });
+                }
+            });
+            updateTask({
+                ...selectedTask,
+                order: newTask.order + 1
+            });
+        },
+
+        updateUpperTaskList(store, selectedTask, newTask) {
+            let tasks = getTasksFromList(this.store, selectedTask.listId)
+            tasks.forEach(e => {
+                if (e.order >= newTask.order) {
+                    updateTask({
+                        ...e,
+                        order: e.order + 1
+                    });
+                }
+            });
+            updateTask({
+                ...selectedTask,
+                order: newTask.order
+            });
+
         },
 
         moveTaskLeft(e, { store }) {
@@ -431,27 +466,39 @@ function getNextOrder(currentOrder, orderList) {
     return (orderList[index + 1] + orderList[index + 2]) / 2;
 }
 
-function getMyPrevOrder(currentOrder, orderList) {
-    orderList.sort();
-    //debugger
-    let index = orderList.indexOf(currentOrder);
-    // if (index < -1) return 0;
-    if (index == 0) return orderList[0] - 1;
-    // if (index == 1) return (orderList[index - 1] + orderList[index]) / 2;
-    return (orderList[index - 1] + orderList[index - 2]) / 2;
-}
-
-function getMyNextOrder(currentOrder, orderList) {
-    orderList.sort();
-    let index = orderList.indexOf(currentOrder);
-    if (index < -1) return 0;
-    if (index + 1 == orderList.length) return orderList[orderList.length - 1] + 1;
-    //   if (index + 2 == orderList.length) return orderList[orderList.length - 1] + 1;
-    return (orderList[index] + orderList[index + 1]) / 2;
+function getTasksFromList(store, listId) {
+    let tasks = store.get("$page.tasks");
+    return tasks.filter(item => !item.deleted && item.listId == listId);
 }
 
 function getOrderList(items, filter = () => true) {
     let list = items.filter(item => !item.deleted && filter(item)).map(a => a.order);
     list.sort();
     return list;
+}
+
+function findUpperTask(store, task) {
+    let tasks = getTasksFromList(store, task.listId)
+    let max = Number.MAX_VALUE;
+    var oldTask;
+    tasks.forEach(e => {
+        if (e.id != task.id && task.order - e.order < max && task.order > e.order) {
+            max = task.order - e.order;
+            oldTask = e;
+        }
+    });
+    return oldTask;
+}
+
+function findUnderlyingTask(store, task) {
+    let tasks = getTasksFromList(store, task.listId)
+    let max = Number.MAX_VALUE;
+    var oldTask;
+    tasks.forEach(e => {
+        if (e.id != task.id && e.order - task.order < max && task.order < e.order) {
+            max = e.order - task.order;
+            oldTask = e;
+        }
+    });
+    return oldTask;
 }
