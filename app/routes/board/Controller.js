@@ -1,6 +1,6 @@
 import { FocusManager, batchUpdatesAndNotify } from "cx/ui";
 import { ArrayRef, updateArray } from "cx/data";
-import { KeyCode, closest } from "cx/util";
+import { KeyCode, closest, getSearchQueryPredicate } from "cx/util";
 
 import uid from "uid";
 import { firestore } from "../../data/db/firestore";
@@ -28,6 +28,7 @@ export default ({ ref, get, set }) => {
         .onSnapshot(snapshot => {
             lists.update(lists => mergeFirestoreSnapshot(lists, snapshot, "LISTS"));
         });
+
     const unsubscribeTasks = boardDoc
         .collection("tasks")
         .onSnapshot(snapshot => {
@@ -69,13 +70,17 @@ export default ({ ref, get, set }) => {
             id,
             listId,
             createdDate: new Date().toISOString(),
-            order: maxOrder + 1
+            order: maxOrder + 1,
+            deleted: false
         };
 
     };
 
     const getSortedTaskOrderList = (listId) => {
         return getOrderList(tasks.get(), t => t.listId == listId);
+    };
+    const getSortedListOrderList = (boardId) => {
+        return getOrderList(lists.get(), t => t.boardId == boardId);
     };
 
     const moveTaskToList = (taskId, listId) => {
@@ -119,7 +124,8 @@ export default ({ ref, get, set }) => {
         addList(e) {
             if (e) e.preventDefault();
             let id = uid();
-
+            let order = getSortedListOrderList(boardId);
+            let maxOrder = order[order.length - 1] || 0;
             boardDoc
                 .collection("lists")
                 .doc(id)
@@ -128,7 +134,8 @@ export default ({ ref, get, set }) => {
                     name: "New List",
                     edit: true,
                     createdDate: new Date().toISOString(),
-                    boardId: boardId
+                    boardId: boardId,
+                    order: maxOrder + 1
                 });
         },
 
@@ -217,9 +224,9 @@ export default ({ ref, get, set }) => {
             let newTask = this.store.get("$page.tasks")[targetIndex];
             if (newTask.listId == selectedTask.listId) {
                 if (selectedTask.order < newTask.order) {
-                    this.updateLowerTaskList(store, selectedTask, newTask);
+                    this.updateLowerTaskList(selectedTask, newTask);
                 } else {
-                    this.updateUpperTaskList(store, selectedTask, newTask)
+                    this.updateUpperTaskList(selectedTask, newTask)
                 }
             } else {
                 let order = getSortedTaskOrderList(newTask.listId);
@@ -232,7 +239,7 @@ export default ({ ref, get, set }) => {
             }
         },
 
-        updateLowerTaskList(store, selectedTask, newTask) {
+        updateLowerTaskList(selectedTask, newTask) {
             let tasks = getTasksFromList(this.store, selectedTask.listId)
             tasks.forEach(e => {
                 if (e.order > newTask.order) {
@@ -248,7 +255,7 @@ export default ({ ref, get, set }) => {
             });
         },
 
-        updateUpperTaskList(store, selectedTask, newTask) {
+        updateUpperTaskList(selectedTask, newTask) {
             let tasks = getTasksFromList(this.store, selectedTask.listId)
             tasks.forEach(e => {
                 if (e.order >= newTask.order) {
@@ -273,6 +280,31 @@ export default ({ ref, get, set }) => {
             lists.sort((a, b) => a.order - b.order);
             let listIndex = lists.findIndex(a => a.id == $task.listId);
             if (listIndex > 0) moveTaskToList($task.id, lists[listIndex - 1].id);
+        },
+
+        insertTaskAtCertainPoint(e, instance) {
+            e.stopPropagation();
+            e.preventDefault();
+            let { store, data } = instance;
+            let t = data.task;
+            let { $task } = store.getData();
+
+            let task = prepareTask(t.listId);
+            task.order = $task.order + 1;
+            let tasksFromList = getTasksFromList(this.store, t.listId)
+            tasksFromList.forEach(e => {
+                if (e.order > $task.order) {
+                    updateTask({
+                        ...e,
+                        order: e.order + 1
+                    });
+                }
+            });
+            tasks.append(task);
+            boardDoc
+                .collection("tasks")
+                .doc(task.id)
+                .set(task);
         },
 
         onTaskKeyDown(e, instance) {
@@ -306,20 +338,9 @@ export default ({ ref, get, set }) => {
 
                 case KeyCode.insert:
                 case code("O"):
-                    let nt = prepareTask(t.listId);
-                    let order = getSortedTaskOrderList(t.listId);
-                    let index = order.indexOf($task.order);
+                    if (e.ctrlKey) this.insertTaskAtCertainPoint(e, instance);
 
-                    //TODO: Fix insertion point
-                    let below =
-                        index < order.length - 1 && e.keyCode === code("O") && !e.shiftKey;
-                    nt.order = below
-                        ? getNextOrder($task.order, order)
-                        : getPrevOrder($task.order, order);
-                    set("activeTaskId", nt.id);
-                    updateTask(nt);
                     break;
-
                 case KeyCode.up:
                     if (e.ctrlKey) this.moveTaskUp(e, instance);
                     break;
@@ -370,65 +391,90 @@ export default ({ ref, get, set }) => {
         listMoveLeft(e, { store }) {
             let { $list } = store.getData();
             let listOrder = getOrderList(lists.get());
-            let newOrder = getPrevOrder($list.order, listOrder);
+            let index = listOrder.indexOf($list.order);
+            if (index > 0) {
+                let leftList = getListByOrder(listOrder[index - 1], lists.get(), $list.boardId)
+                this.swapLists(leftList, $list)
+            }
+        },
+
+        swapLists(firstList, secondList) {
             updateList({
-                id: $list.id,
-                order: newOrder || 0
+                id: firstList.id,
+                order: secondList.order
+            });
+            updateList({
+                id: secondList.id,
+                order: firstList.order
             });
         },
 
         listMoveRight(e, { store }) {
             let { $list } = store.getData();
             let listOrder = getOrderList(lists.get());
-            let newOrder = getNextOrder($list.order, listOrder);
-            updateList({
-                id: $list.id,
-                order: newOrder || 0
-            });
+            let index = listOrder.indexOf($list.order);
+            if (index < listOrder.length) {
+                let rightList = getListByOrder(listOrder[index + 1], lists.get(), $list.boardId)
+                this.swapLists(rightList, $list)
+            }
         },
 
         boardMoveLeft(e, { store }) {
             let { boards, $board } = store.getData();
-            let boardOrder = getOrderList(boards);
-            let newOrder = getPrevOrder($board.order, boardOrder);
-            let userId = store.get("user.id");
+            let orderList = getOrderList(boards);
+            let index = orderList.indexOf($board.order)
 
-            firestore
-                .collection("users")
-                .doc(userId)
-                .collection("boards")
-                .doc($board.id)
-                .update({
-                    id: $board.id,
-                    order: newOrder || 0
-                });
+            if (index != 0) {
+                this.swapBoards(store, $board, boards, orderList, index, index - 1);
+            }
         },
+
 
         boardMoveRight(e, { store }) {
             let { boards, $board } = store.getData();
-            let boardOrder = getOrderList(boards);
-            let newOrder = getNextOrder($board.order, boardOrder);
+            let orderList = getOrderList(boards);
+            let index = orderList.indexOf($board.order)
+
+            if ((index + 1) < orderList.length) {
+                this.swapBoards(store, $board, boards, orderList, index, index + 1);
+            }
+        },
+
+        swapBoards(store, board, boards, orderList, firstIndex, secondIndex) {
             let userId = store.get("user.id");
+            let leftOrder = orderList[secondIndex];
+            let leftBoard = boards.filter(e => e.order == leftOrder)[0];
 
             firestore
                 .collection("users")
                 .doc(userId)
                 .collection("boards")
-                .doc($board.id)
+                .doc(board.id)
                 .update({
-                    id: $board.id,
-                    order: newOrder || 0
+                    id: board.id,
+                    order: orderList[secondIndex] || 0
+                });
+
+            firestore
+                .collection("users")
+                .doc(userId)
+                .collection("boards")
+                .doc(leftBoard.id)
+                .update({
+                    id: leftBoard.id,
+                    order: orderList[firstIndex] || 0
                 });
         },
 
         deleteBoard(e, { store }) {
-            let { $board, $userId } = store.getData();
+            let board = store.get("$board");
+            let userId = store.get("user.id");
             firestore
                 .collection("users")
-                .doc($userId)
+                .doc(userId)
                 .collection("boards")
-                .doc($board.id).update({
-                    id: $board.id,
+                .doc(board.id).update({
+                    id: board.id,
                     deleted: true,
                     deletedDate: new Date().toISOString()
                 });
@@ -450,24 +496,6 @@ export default ({ ref, get, set }) => {
                 });
         }
     }
-}
-
-function getPrevOrder(currentOrder, orderList) {
-    orderList.sort();
-    let index = orderList.indexOf(currentOrder);
-    if (index < -1) return 0;
-    if (index == 0) return orderList[0];
-    if (index == 1) return orderList[0] - 1;
-    return (orderList[index - 2] + orderList[index - 1]) / 2;
-}
-
-function getNextOrder(currentOrder, orderList) {
-    orderList.sort();
-    let index = orderList.indexOf(currentOrder);
-    if (index < -1) return 0;
-    if (index + 1 == orderList.length) return orderList[orderList.length - 1];
-    if (index + 2 == orderList.length) return orderList[orderList.length - 1] + 1;
-    return (orderList[index + 1] + orderList[index + 2]) / 2;
 }
 
 function getTasksFromList(store, listId) {
@@ -494,6 +522,9 @@ function findUpperTask(store, task) {
     return oldTask;
 }
 
+function getListByOrder(order, list, boardId) {
+    return list.filter(e => boardId == e.boardId && e.order == order)[0];
+}
 function findUnderlyingTask(store, task) {
     let tasks = getTasksFromList(store, task.listId)
     let max = Number.MAX_VALUE;
