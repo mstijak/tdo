@@ -6,7 +6,6 @@ import { Task } from './Task';
 import Controller from './Controller';
 import ListEditor from './ListEditor';
 import BoardEditor from './BoardEditor';
-import { swapElements } from '../../util/swapElements';
 
 let searchTerms = null;
 let searchQuery = null;
@@ -80,13 +79,7 @@ export default <cx>
                 >
                     <DropZone
                         onDropTest={e => e.source.data.type == "list"}
-                        onDrop={(e, { store }) => {
-                            let targetIndex = store.get("$index");
-                            let sourceIndex = e.source.store.get("$index");
-                            store.update("$page.lists", widgets =>
-                                swapElements(widgets, sourceIndex, targetIndex)
-                            );
-                        }}
+                        onDrop='replaceLists'
                     >
                         <div
                             class-tpl="cxb-tasklist {$list.className}"

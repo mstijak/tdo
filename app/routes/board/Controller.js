@@ -359,6 +359,18 @@ export default ({ ref, get, set }) => {
             }
         },
 
+        replaceLists(e, { store }) {
+            let targetIndex = store.get("$index");
+            let sourceIndex = e.source.store.get("$index");
+
+            store.update("$page.lists", widgets => {
+                let secondList = widgets[sourceIndex];
+                let firstList = widgets[targetIndex];
+                this.swapLists(secondList, firstList)
+            }
+            );
+        },
+
         onTaskListKeyDown(e, instance) {
             let code = c => c.charCodeAt(0),
                 list;
