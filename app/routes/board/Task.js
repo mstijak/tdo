@@ -246,17 +246,10 @@ class TaskCmp extends VDOM.Component {
 
     componentDidMount() {
         this.props.instance.parent.toggleEditMode = this.toggleEditMode.bind(this);
-        let { data } = this.props;
-
         if (this.dom.el.parentNode.parentNode.parentNode.contains(document.activeElement))
             this.toggleEditMode();
 
-        if (data.autoFocus || this.state.edit) {
-            if (this.state.edit)
-                this.dom.editor.focus();
-            else
-                this.dom.el.focus();
-        }
+        this.autoFocus();
     }
 
     componentDidUpdate() {
@@ -267,6 +260,17 @@ class TaskCmp extends VDOM.Component {
                     scrollHeight: Math.ceil(this.dom.editor.scrollHeight)
                 });
             }
+        }
+        this.autoFocus();
+    }
+
+    autoFocus() {
+        let {data} = this.props;
+        if (data.autoFocus || this.state.edit) {
+            if (this.state.edit)
+                this.dom.editor.focus();
+            else
+                this.dom.el.focus();
         }
     }
 }

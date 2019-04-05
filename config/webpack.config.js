@@ -15,14 +15,15 @@ module.exports = {
             app: paths.app
             //uncomment the line below to alias cx-react to cx-preact or some other React replacement library
             //'cx-react': 'cx-preact',
-        }
+        },
+        extensions: ['.js', '.ts', '.tsx']
     },
 
     module: {
         rules: [{
-            test: /\.js$/,
+            test: /\.(js|ts|tsx)$/,
             //add here any ES6 based library
-            include: /[\\\/](app|cx-redux|cx|redux|redux-thunk|lodash)[\\\/]/,
+            include: /[\\\/](tdo\\app|cx-redux|cx|redux|redux-thunk|lodash)[\\\/]/,
             loader: 'babel-loader',
             query: babelCfg
         }]

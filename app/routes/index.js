@@ -78,7 +78,8 @@ export default <cx>
                     placeholder="Search..."
                     mod="search"
                     id="search"
-                    autoFocus inputAttrs={{ autocomplete: "off" }}
+                    autoFocus
+                    inputAttrs={{ autoComplete: "off" }}
                 />
 
                 <Menu horizontal>

@@ -28,13 +28,6 @@ export default <cx>
 
         <div layout={LabelsLeftLayout}>
             <NumberField
-                value:bind="settings.completedTasksRetentionDays"
-                label="Show completed tasks for"
-                style="width:5rem"
-                inputStyle="text-align:center"
-                help="day(s)."
-            />
-            <NumberField
                 value:bind="settings.deleteCompletedTasksAfterDays"
                 enabled:bind="settings.deleteCompletedTasks"
                 style="width:5rem"
