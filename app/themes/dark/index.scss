@@ -76,6 +76,18 @@ code {
   }
 }
 
+.cxb-dragclone {
+  background: rgba(black, 0.1);
+}
+
+.cxb-dropzone.cxm-block {
+  box-sizing: border-box;
+
+  &.cxs-over {
+    border: 1px dotted rgba(white, 0.1);
+  }
+}
+
 .cxe-window-body {
   background: gray;
 }

@@ -21,6 +21,12 @@ export class ShallowIndex<T extends HasId> {
         return true;
     }
 
+    load(items: T[]) {
+      items.forEach(item => {
+        this.data[item.id] = item;
+      })
+    }
+
     remove(item: T) {
         let existing = this.data[item.id];
         if (!existing)
