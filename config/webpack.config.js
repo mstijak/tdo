@@ -23,7 +23,8 @@ module.exports = {
         rules: [{
             test: /\.(js|ts|tsx)$/,
             //add here any ES6 based library
-            include: /[\\\/](tdo\\app|cx-redux|cx|redux|redux-thunk|lodash)[\\\/]/,
+            include: /[\\\/](app|cx-redux|cx|redux|redux-thunk|lodash)[\\\/]/,
+            exclude: /\@firebase[\\\/]app/,
             loader: 'babel-loader',
             query: babelCfg
         }]
