@@ -1,148 +1,195 @@
-import { Controller, History } from 'cx/ui';
-import uid from 'uid';
+import { Controller, History } from "cx/ui";
+import uid from "uid";
 import { firestore } from "../data/db/firestore";
 import { auth } from "../data/db/auth";
 import { isNonEmptyArray } from "cx/util";
+import { UserBoardTracker } from "../data/UserBoardsTracker";
 
 //TODO: For anonymous users save to local storage
 
-export default class extends Controller {
-    onInit() {
-        this.store.set('layout.mode', this.getLayoutMode());
+export default ({ store, get, set, init }) => {
 
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                this.store.set(
-                    "user",
-                    {
-                        email: user.email,
-                        displayName: user.displayName,
-                        photoURL: user.photoURL,
-                        id: user.uid
-                    }
-                );
-            }
-            else {
-                let userId = localStorage.getItem('anonymousUserId');
-                if (!userId) {
-                    userId = uid();
-                    localStorage.setItem('anonymousUserId', userId);
-                    console.warn('Creating anonymous user', userId);
+    init("settings", {
+        deleteCompletedTasks: true,
+        deleteCompletedTasksAfterDays: 7,
+        purgeDeletedObjectsAfterDays: 3,
+        taskStyles: [{
+            regex: "!important",
+            style: "color: orange"
+        }, {
+            regex: "#idea",
+            style: "color: yellow"
+        }]
+    });
+
+    let boardTracker = null;
+
+    return {
+        onInit() {
+            this.store.set("layout.mode", this.getLayoutMode());
+
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    this.store.set(
+                        "user",
+                        {
+                            email: user.email,
+                            displayName: user.displayName,
+                            photoURL: user.photoURL,
+                            id: user.uid
+                        }
+                    );
                 }
-                this.store.set('user', {
-                    id: userId,
-                    name: 'Anonymous',
-                    anonymous: true
-                })
-            }
-        });
-
-        this.store.init('settings', {
-            completedTasksRetentionDays: 1,
-            deleteCompletedTasks: true,
-            deleteCompletedTasksAfterDays: 7,
-            purgeDeletedObjectsAfterDays: 3,
-            taskStyles: [{
-                regex: '!important',
-                style: 'color: orange'
-            }, {
-                regex: '#idea',
-                style: 'color: yellow'
-            }]
-        });
-
-        this.addTrigger('boardLoader', ['user.id'], userId => {
-
-            if (!userId)
-                return;
-
-            //clean up
-            this.onDestroy();
-
-            this.unsubscribeBoards = firestore
-                .collection('users')
-                .doc(userId)
-                .collection('boards')
-                .onSnapshot(snapshot => {
-                    let boards = [];
-
-                    snapshot.forEach(doc => {
-                        boards.push(doc.data());
+                else {
+                    let userId = localStorage.getItem("anonymousUserId");
+                    if (!userId) {
+                        userId = uid();
+                        localStorage.setItem("anonymousUserId", userId);
+                        console.warn("Creating anonymous user", userId);
+                    }
+                    this.store.set("user", {
+                        id: userId,
+                        name: "Anonymous",
+                        anonymous: true
                     });
+                }
+            });
 
-                    this.store.set('boards', boards);
+            this.addTrigger("boardLoader", ["user.id"], userId => {
+
+                if (!userId)
+                    return;
+
+                //clean up
+                this.onDestroy();
+
+                boardTracker = new UserBoardTracker(userId, () => {
+                    let boards = boardTracker.index.filter(b => !b.deleted);
+                    this.store.set("boards", boards);
+
+                    set("boards", boards);
 
                     if (!isNonEmptyArray(boards)) {
                         //TODO: Ask the user to create the Welcome board
                     }
-                    else if (this.store.get('url') == "~/")
+                    else if (get("url") == "~/")
                         History.pushState({}, null, "~/b/" + boards[0].id);
                 });
 
-            this.unsubscribeSettings = firestore
-                .collection('users')
-                .doc(userId)
-                .onSnapshot(doc => {
-                    let data = doc.exists ? doc.data() : {};
-                    this.store.update('settings', settings => ({
-                        ...settings,
-                        ...data
-                    }));
-                    this.store.set('settingsLoaded', true);
-                });
-        }, true);
-    }
+                boardTracker.start();
 
-    onDestroy() {
-        this.unsubscribeBoards && this.unsubscribeBoards();
-        this.unsubscribeSettings && this.unsubscribeSettings();
-    }
+                this.unsubscribeSettings = firestore
+                    .collection("users")
+                    .doc(userId)
+                    .onSnapshot(doc => {
+                        let data = doc.exists ? doc.data() : {};
+                        this.store.update("settings", settings => ({
+                            ...settings,
+                            ...data
+                        }));
+                        this.store.set("settingsLoaded", true);
+                    });
+            }, true);
+        },
 
-    getLayoutMode() {
-        if (window.innerWidth >= 1200)
-            return 'desktop';
+        onDestroy() {
+            boardTracker && boardTracker.stop();
+            this.unsubscribeSettings && this.unsubscribeSettings();
+        },
 
-        if (window.innerWidth >= 760)
-            return 'tablet';
+        getLayoutMode() {
+            if (window.innerWidth >= 1200)
+                return "desktop";
 
-        return 'phone';
-    }
+            if (window.innerWidth >= 760)
+                return "tablet";
 
-    async addBoard(e) {
-        e.preventDefault();
+            return "phone";
+        },
 
-        let id = uid();
-        let boards = this.store.get("boards");
-        let maxValue = 0;
-        boards.filter(e => !e.deleted).map(e => e.order).forEach(e => {
-            if (e > maxValue) maxValue = e;
-        });
+        async onAddBoard(e) {
+            e.preventDefault();
 
-        let p1 = firestore
-            .collection('boards')
-            .doc('id')
-            .set({
-                id: id,
-                name: 'New Board',
-                edit: true,
-                order: maxValue + 1
-            });
+            let id = uid();
 
-        let userId = this.store.get('user.id');
-        let p2 = firestore
-            .collection('users')
-            .doc(userId)
-            .collection('boards')
-            .doc(id)
-            .set({
+            boardTracker.add({
                 id,
                 name: 'New Board',
                 edit: true,
-                order: maxValue + 1
-            });
+                order: 1e6
+            }, { suppressUpdate: true, suppressSync: true });
 
-        await Promise.all([p1, p2]);
+            boardTracker.reorder();
 
-        History.pushState({}, null, "~/b/" + id);
+            let userId = get("user.id");
+
+            History.pushState({}, null, "~/b/" + id);
+
+            await firestore
+                .collection("boards")
+                .doc("id")
+                .set({
+                    id: id,
+                    owners: [userId]
+                });
+        },
+
+        onMoveBoardLeft(e, { store }) {
+            let { $board } = store.getData();
+            let boards = boardTracker.getActiveBoards();
+            let index = boards.findIndex(b => b.id == $board.id);
+
+            if (index > 0) {
+                boardTracker.update($board.id, {
+                    order: boards[index - 1].order - 0.1
+                }, { suppressUpdate: true, suppressSync: true });
+                boardTracker.reorder();
+            }
+        },
+
+        onMoveBoardRight(e, { store }) {
+            let { $board } = store.getData();
+            let boards = boardTracker.getActiveBoards();
+            let index = boards.findIndex(b => b.id == $board.id);
+
+            if (index + 1 < boards.length) {
+                boardTracker.update($board.id, {
+                    order: boards[index + 1].order + 0.1
+                }, { suppressUpdate: true, suppressSync: true });
+                boardTracker.reorder();
+            }
+        },
+
+        onDeleteBoard(e, { store }) {
+            let board = store.get("$board");
+            boardTracker.update(board.id, {
+                deleted: true,
+                deletedDate: new Date().toISOString()
+            }, { suppressUpdate: true });
+            boardTracker.reorder(true);
+            boardTracker.forceUpdate();
+            let boards = boardTracker.getActiveBoards();
+            History.pushState({}, null, boards.length > 0 ? "~/b/" + boards[0].id : "~/")
+        },
+
+        onSaveBoard(e, { store }) {
+            let board = store.get("$board");
+            boardTracker.update(board.id, {
+                ...board,
+                edit: false,
+                lastChangeDate: new Date().toISOString()
+            })
+        },
+
+        onEditBoard(e, { store }) {
+            e.preventDefault();
+            e.stopPropagation();
+            let board = store.get("$board");
+            boardTracker.update(board.id, {
+                edit: true
+            })
+        }
     }
 }
+
+

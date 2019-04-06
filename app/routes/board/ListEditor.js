@@ -16,8 +16,8 @@ export default <cx>
         <br/>
 
         <div>
-            <Button onClick="listMoveLeft">Move Left</Button>
-            <Button onClick="listMoveRight" style="float:right">Move Right</Button>
+            <Button onClick="onMoveListLeft">Move Left</Button>
+            <Button onClick="onMoveListRight" style="float:right">Move Right</Button>
         </div>
 
         <div layout={{type: LabelsTopLayout, mod: 'stretch'}}>
@@ -62,7 +62,7 @@ export default <cx>
 
         <div>
             <Button onClick="onSaveList">Save</Button>
-            <Button mod="danger" confirm="Are you sure?" onClick="deleteList" style="float:right">Delete</Button>
+            <Button mod="danger" confirm="Are you sure?" onClick="onDeleteList" style="float:right">Delete</Button>
         </div>
         <br/>
     </div>

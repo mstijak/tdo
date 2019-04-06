@@ -182,14 +182,19 @@ class TaskCmp extends VDOM.Component {
     }
 
     onEditorKeyDown(e) {
-        let { instance } = this.props;
-
         switch (e.keyCode) {
             case 13:
                 e.stopPropagation();
-                if (e.ctrlKey) {
+                if (!e.ctrlKey) {
+                    e.preventDefault();
                     this.save(e);
                     this.toggleEditMode();
+                }
+                else {
+                    let start = e.target.selectionStart;
+                    e.target.value = e.target.value.substring(0, start) + '\n' + e.target.value.substring(e.target.selectionEnd);
+                    e.target.selectionEnd = e.target.selectionStart = start + 1;
+                    this.componentDidUpdate();
                 }
                 break;
 

@@ -79,7 +79,7 @@
 
 
   p {
-    margin: 0.5rem 0 0.5rem 0;
+    margin: 6px 0 6px 0;
     white-space: pre-wrap;
     word-break: break-all;
   }
@@ -92,16 +92,17 @@
 
   textarea {
     width: 100%;
-    background: rgba(128, 128, 128, 0.1);
+    background: none;
     color: white;
     border: none;
     font-family: inherit;
     word-wrap: break-word;
-    padding: 0.5rem 0;
+    padding: 6px 0 3px;
     font-size: inherit;
     overflow: hidden;
     display: block;
     box-sizing: border-box;
+    resize: none;
 
     &:focus {
       outline: none;

@@ -1,8 +1,6 @@
 import {shallowEquals} from "cx/util";
+import { HasId } from "./HasId";
 
-interface HasId {
-    id: string;
-}
 
 export class ShallowIndex<T extends HasId> {
 
@@ -27,11 +25,11 @@ export class ShallowIndex<T extends HasId> {
       })
     }
 
-    remove(item: T) {
-        let existing = this.data[item.id];
+    remove(id: string) {
+        let existing = this.data[id];
         if (!existing)
             return false;
-        delete this.data[item.id];
+        delete this.data[id];
         return true;
     }
 

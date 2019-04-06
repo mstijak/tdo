@@ -1,9 +1,9 @@
-import { HtmlElement, TextField, TextArea, Button } from 'cx/widgets';
-import { LabelsTopLayout } from 'cx/ui';
+import { HtmlElement, TextField, TextArea, Button } from "cx/widgets";
+import { LabelsTopLayout } from "cx/ui";
 
 export default <cx>
     <div class="cxb-listeditor">
-        <div layout={{ type: LabelsTopLayout, mod: 'stretch' }}>
+        <div layout={{ type: LabelsTopLayout, mod: "stretch" }}>
             <TextField
                 value-bind="$board.name"
                 label="Name"
@@ -12,14 +12,14 @@ export default <cx>
             />
         </div>
 
-        <br />
+        <br/>
 
         <div>
-            <Button onClick="boardMoveLeft">Move Left</Button>
-            <Button onClick="boardMoveRight" style="float:right">Move Right</Button>
+            <Button onClick="onMoveBoardLeft">Move Left</Button>
+            <Button onClick="onMoveBoardRight" style="float:right">Move Right</Button>
         </div>
 
-        <div layout={{ type: LabelsTopLayout, mod: 'stretch' }}>
+        <div layout={{ type: LabelsTopLayout, mod: "stretch" }}>
             <TextField
                 value-bind="$board.headerClass"
                 label="Header Class"
@@ -28,7 +28,7 @@ export default <cx>
             />
         </div>
 
-        <div layout={{ type: LabelsTopLayout, mod: 'stretch' }}>
+        <div layout={{ type: LabelsTopLayout, mod: "stretch" }}>
             <TextArea
                 value-bind="$board.headerStyle"
                 label="Header Style"
@@ -38,7 +38,7 @@ export default <cx>
             />
         </div>
 
-        <div layout={{ type: LabelsTopLayout, mod: 'stretch' }}>
+        <div layout={{ type: LabelsTopLayout, mod: "stretch" }}>
             <TextField
                 value-bind="$board.className"
                 label="Board Class"
@@ -47,7 +47,7 @@ export default <cx>
             />
         </div>
 
-        <div layout={{ type: LabelsTopLayout, mod: 'stretch' }}>
+        <div layout={{ type: LabelsTopLayout, mod: "stretch" }}>
             <TextArea
                 value-bind="$board.style"
                 label="Board Style"
@@ -57,12 +57,18 @@ export default <cx>
             />
         </div>
 
-        <br />
+        <br/>
 
         <div>
-            <Button onClick="saveBoard">Save</Button>
-            <Button mod="danger" confirm="All lists and tasks from this board will be deleted. Are you sure?" onClick="deleteBoard" style="float:right">Delete</Button>
+            <Button onClick="onSaveBoard">Save</Button>
+            <Button
+                mod="danger"
+                confirm="All lists and tasks from this board will be deleted. Are you sure?"
+                onClick="onDeleteBoard"
+                style="float:right"
+                text="Delete"
+            />
         </div>
-        <br />
+        <br/>
     </div>
-</cx>
+</cx>;

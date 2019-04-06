@@ -31,7 +31,7 @@ const BoardItems = <cx>
         </Repeater>
 
         <MenuItem pad>
-            <a href="#" onClick="addBoard">Add Board</a>
+            <a href="#" onClick="onAddBoard">Add Board</a>
         </MenuItem>
 
         <div class="spacer" visible-expr="{layout.mode}=='desktop'" />
