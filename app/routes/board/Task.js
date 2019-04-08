@@ -52,6 +52,7 @@ class TaskCmp extends VDOM.Component {
         });
 
         return <div
+            id={`task-${data.task.id}`}
             className={className}
             onKeyDown={this.onKeyDown.bind(this)}
             ref={el => {

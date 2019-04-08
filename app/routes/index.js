@@ -1,10 +1,11 @@
 import { HtmlElement, Tab, TextField, Route, Menu, MenuItem, Submenu, Sandbox, Repeater, PureContainer, Link } from 'cx/widgets';
-import { FirstVisibleChildLayout } from 'cx/ui';
+import { FirstVisibleChildLayout, executeKeyboardShortcuts } from 'cx/ui';
 
 import Board from './board';
 import Settings from './settings';
 import Help from './help';
 import Controller from './Controller';
+import "./keyboard-shortcuts";
 
 const BoardItems = <cx>
     <PureContainer>
@@ -68,7 +69,11 @@ const MenuItems = <cx>
 </cx>;
 
 export default <cx>
-    <div class="cxb-layout" controller={Controller}>
+    <div
+        class="cxb-layout"
+        controller={Controller}
+        onKeyDown={executeKeyboardShortcuts}
+    >
         <style innerHtml-bind="settings.css" />
         <Sandbox key-bind="url" storage-bind="pages">
             <header class="cxe-layout-header">

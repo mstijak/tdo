@@ -4,6 +4,7 @@ import { firestore } from "../data/db/firestore";
 import { auth } from "../data/db/auth";
 import { isNonEmptyArray } from "cx/util";
 import { UserBoardTracker } from "../data/UserBoardsTracker";
+import { registerKeyboardShortcuts } from "./keyboard-shortcuts";
 
 //TODO: For anonymous users save to local storage
 
@@ -61,7 +62,8 @@ export default ({ store, get, set, init }) => {
                     return;
 
                 //clean up
-                this.onDestroy();
+                boardTracker && boardTracker.stop();
+                this.unsubscribeSettings && this.unsubscribeSettings();
 
                 boardTracker = new UserBoardTracker(userId, () => {
                     let boards = boardTracker.index.filter(b => !b.deleted);
@@ -90,11 +92,14 @@ export default ({ store, get, set, init }) => {
                         this.store.set("settingsLoaded", true);
                     });
             }, true);
+
+            this.unregisterKeyboardShortcuts = registerKeyboardShortcuts(store);
         },
 
         onDestroy() {
             boardTracker && boardTracker.stop();
             this.unsubscribeSettings && this.unsubscribeSettings();
+            this.unregisterKeyboardShortcuts();
         },
 
         getLayoutMode() {

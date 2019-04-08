@@ -30,13 +30,10 @@
     "core-js": "^3.0.0",
     "cx": "^19.3.2",
     "cx-react": "^17.10.0",
-    "cx-redux": "^18.5.2",
     "firebase": "^5.3.0",
     "marked": "^0.6.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "redux": "^4.0.1",
-    "redux-thunk": "^2.3.0",
     "uid": "0.0.2"
   },
   "devDependencies": {

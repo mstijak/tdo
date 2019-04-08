@@ -52,14 +52,9 @@ export default ({ store, ref, get, set }) => {
     };
 
     function activateTask(id) {
-        batchUpdatesAndNotify(
-            () => {
-                set("activeTaskId", id);
-            }, () => {
-                if (get("activeTaskId") == id)
-                    store.silently(() => set("activeTaskId", null));
-            }
-        );
+        let taskEl = document.getElementById(`task-${id}`);
+        if (taskEl)
+            taskEl.focus();
     }
 
     function editTask(id) {
@@ -74,20 +69,24 @@ export default ({ store, ref, get, set }) => {
     }
 
     function deleteTask(task) {
-        let listTasks = taskTracker.getListTasksSorted(task.listId);
-        let taskIndex = listTasks.indexOf(task);
 
-        taskTracker.update(task.id, {
-            deleted: true,
-            deletedDate: new Date().toISOString()
-        }, { suppressUpdate: true });
-
+        let listTasks = getVisibleListTasks(task.listId);
+        let taskIndex = listTasks.findIndex(t => t.id == task.id);
         let nextTask = listTasks[taskIndex + 1] || listTasks[taskIndex - 1];
-        taskTracker.reorderList(task.listId, true);
-        refreshTasks();
 
-        if (nextTask)
-            activateTask(nextTask.id);
+        batchUpdatesAndNotify(() => {
+            taskTracker.update(task.id, {
+                deleted: true,
+                deletedDate: new Date().toISOString()
+            }, { suppressUpdate: true });
+            taskTracker.reorderList(task.listId, true);
+            refreshTasks();
+        }, () => {
+            if (nextTask) {
+                activateTask(nextTask.id);
+                console.log(nextTask);
+            }
+        });
     }
 
     function getListsSorted() {
@@ -218,11 +217,13 @@ export default ({ store, ref, get, set }) => {
             e.preventDefault();
             let { $task } = store.getData();
             let lists = getListsSorted();
-            lists.sort((a, b) => a.order - b.order);
             let listIndex = lists.findIndex(a => a.id == $task.listId);
             if (listIndex > 0) {
-                taskTracker.moveTaskToList($task.id, lists[listIndex - 1].id);
-                activateTask($task.id);
+                batchUpdatesAndNotify(() => {
+                    taskTracker.moveTaskToList($task.id, lists[listIndex - 1].id);
+                }, () => {
+                    activateTask($task.id);
+                });
             }
         },
 
@@ -234,8 +235,11 @@ export default ({ store, ref, get, set }) => {
             lists.sort((a, b) => a.order - b.order);
             let listIndex = lists.findIndex(a => a.id == $task.listId);
             if (listIndex + 1 < lists.length) {
-                taskTracker.moveTaskToList($task.id, lists[listIndex + 1].id);
-                activateTask($task.id);
+                batchUpdatesAndNotify(() => {
+                    taskTracker.moveTaskToList($task.id, lists[listIndex + 1].id);
+                }, () => {
+                    activateTask($task.id);
+                })
             }
         },
 
@@ -298,7 +302,7 @@ export default ({ store, ref, get, set }) => {
                         id,
                         listId: $task.listId,
                         order: $task.order + offset,
-                        createdDate: new Date().toISOString(),
+                        createdDate: new Date().toISOString()
                     }, { suppressUpdate: true, suppressSync: true });
                     taskTracker.reorderList($task.listId);
                     editTask(id);
