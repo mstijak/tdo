@@ -60,11 +60,6 @@ const MenuItems = <cx>
         <MenuItem pad>
             <a href="https://github.com/codaxy/tdo" target="_blank">Report/Suggest</a>
         </MenuItem>
-
-        <MenuItem pad>
-            <a href={`http://twitter.com/home?status=${encodeURIComponent("tdo - hackable todo list #todo https://goo.gl/rhkuYP")}`}
-                target="_blank">Tweet</a>
-        </MenuItem>
     </PureContainer>
 </cx>;
 
