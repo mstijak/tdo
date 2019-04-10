@@ -132,10 +132,10 @@ export default ({ store, get, set, init }) => {
 
             await firestore
                 .collection("boards")
-                .doc("id")
+                .doc(id)
                 .set({
                     id: id,
-                    owners: [userId]
+                    owner: userId
                 });
         },
 
