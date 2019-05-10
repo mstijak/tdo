@@ -1,8 +1,15 @@
 import { VDOM, Widget } from 'cx/ui';
 import { isFocused } from 'cx/util';
 
-import marked from 'marked';
+import marked, {Renderer} from 'marked';
 import { getStyles } from './styling';
+
+const renderer = new Renderer();
+const linkRenderer = renderer.link;
+renderer.link = (href, title, text) => {
+    const html = linkRenderer.call(renderer, href, title, text);
+    return html.replace(/^<a /, '<a target="_blank" rel="nofollow" ');
+};
 
 export class Task extends Widget {
 
@@ -73,7 +80,7 @@ class TaskCmp extends VDOM.Component {
     renderContent() {
         let { data, instance } = this.props;
         let { widget } = this.props.instance;
-        let html = data.task.name ? marked(data.task.name) : '<p>&nbsp;</p>';
+        let html = data.task.name ? marked(data.task.name, { renderer }) : '<p>&nbsp;</p>';
 
         let styles = getStyles(data.task.name, data.styleRules);
         let className = widget.CSS.element('checkbox', "input", {
@@ -222,7 +229,9 @@ class TaskCmp extends VDOM.Component {
     }
 
     onClick(e) {
-        e.preventDefault();
+        if (e.target.tagName != "A") {
+            e.preventDefault();
+        }
         e.stopPropagation();
     }
 

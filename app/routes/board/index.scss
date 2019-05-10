@@ -108,6 +108,21 @@
       outline: none;
     }
   }
+
+  ul, ol {
+    margin: 0;
+    padding-left: 20px;
+  }
+
+  li {
+    margin-bottom: 8px;
+  }
+
+  a {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 
