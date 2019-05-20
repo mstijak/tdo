@@ -12,7 +12,7 @@ A flexible TODO list with the following features:
 
 ![Screenshot](/assets/screenshot.png)
 
-[Open](https://mstijak.github.io/tdo/)
+[Open](https://tdo.cxjs.io)
 
 Also available as a [Chrome extension](https://chrome.google.com/webstore/detail/tdo/aaaabkbhklmpmlnjnbicdahijpkgnkfk).
 
@@ -35,4 +35,3 @@ Thanks to CircleCI the app is auto deployed to GH Pages.
  
 Thanks to https://github.com/Villanuevand/deployment-circleci-gh-pages for 
 providing instructions for setting up CircleCI.
-
