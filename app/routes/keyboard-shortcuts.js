@@ -11,7 +11,7 @@ export function registerKeyboardShortcuts(store) {
         if (els && els.length > 0) FocusManager.focusFirst(els[0]);
     });
 
-    let u2 = registerKeyboardShortcut({ keyCode: "/".charCodeAt(0) }, (e) => {
+    let u2 = registerKeyboardShortcut({ keyCode: 191 }, (e) => {
         if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")
             return;
         e.preventDefault();

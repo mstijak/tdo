@@ -288,13 +288,11 @@ export default ({ store, ref, get, set }) => {
 
                 case KeyCode.insert:
                 case code("O"):
-                    if (e.keyCode === code("O") && !e.shiftKey) return;
-
                     e.preventDefault();
                     e.stopPropagation();
 
                     let offset = -0.1;
-                    if (e.ctrlKey)
+                    if (e.ctrlKey || (e.keyCode === code("O") && !e.shiftKey))
                         offset = +0.1;
 
                     let id = uid();
@@ -343,12 +341,14 @@ export default ({ store, ref, get, set }) => {
 
                 case KeyCode.left:
                 case code("H"):
+                case code("B"):
                     list = closest(e.target, el => el.classList.contains("cxb-tasklist"));
                     if (list.previousSibling && list.previousSibling.previousSibling)
                         FocusManager.focusFirst(list.previousSibling.previousSibling);
                     break;
 
                 case KeyCode.right:
+                case code("W"):
                 case code("L"):
                     list = closest(e.target, el => el.classList.contains("cxb-tasklist"));
                     if (list.nextSibling && list.nextSibling.nextSibling)
@@ -389,6 +389,3 @@ export default ({ store, ref, get, set }) => {
         }
     };
 }
-
-
-
