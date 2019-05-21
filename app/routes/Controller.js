@@ -1,10 +1,11 @@
-import { Controller, History } from "cx/ui";
+import { History } from "cx/ui";
 import uid from "uid";
 import { firestore } from "../data/db/firestore";
 import { auth } from "../data/db/auth";
 import { isNonEmptyArray } from "cx/util";
 import { UserBoardTracker } from "../data/UserBoardsTracker";
 import { registerKeyboardShortcuts } from "./keyboard-shortcuts";
+import { Toast, Button, Text } from "cx/widgets";
 
 //TODO: For anonymous users save to local storage
 
@@ -169,12 +170,35 @@ export default ({ store, get, set, init }) => {
             let board = store.get("$board");
             boardTracker.update(board.id, {
                 deleted: true,
-                deletedDate: new Date().toISOString()
+                deletedDate: new Date().toISOString(),
+                edit: false
             }, { suppressUpdate: true });
             boardTracker.reorder(true);
             boardTracker.forceUpdate();
             let boards = boardTracker.getActiveBoards();
             History.pushState({}, null, boards.length > 0 ? "~/b/" + boards[0].id : "~/")
+
+            Toast.create({
+                mod: 'warning',
+                timeout: 3000,
+                items: (
+                    <cx>
+                        <div ws>
+                            <Text value={`Board ${board.name} has been deleted`} />
+                            <Button dismiss text="Undo" onClick={() => this.onUndoDeleteBoard(board.id)} />
+                        </div>
+                    </cx>
+                )
+            }).open();
+        },
+
+        onUndoDeleteBoard(id) {
+            boardTracker.update(id, {
+                deleted: false,
+                deletedDate: null
+            }, { suppressUpdate: true });
+            boardTracker.reorder(true);
+            boardTracker.forceUpdate();
         },
 
         onSaveBoard(e, { store }) {
@@ -196,5 +220,3 @@ export default ({ store, get, set, init }) => {
         }
     }
 }
-
-

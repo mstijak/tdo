@@ -1,6 +1,7 @@
-import { FocusManager, batchUpdatesAndNotify } from "cx/ui";
+import { FocusManager, batchUpdatesAndNotify, batchUpdates } from "cx/ui";
 import { ArrayRef } from "cx/data";
 import { KeyCode, closest, getSearchQueryPredicate } from "cx/util";
+import { Toast, Button, Text } from "cx/widgets";
 
 import uid from "uid";
 import { BoardTasksTracker } from "../../data/BoardTasksTracker";
@@ -87,6 +88,30 @@ export default ({ store, ref, get, set }) => {
                 console.log(nextTask);
             }
         });
+
+        Toast.create({
+            mod: 'warning',
+            timeout: 3000,
+            items: (
+                <cx>
+                    <div ws>
+                        <Text value={`Task ${task.name} has been deleted`} />
+                        <Button dismiss text="Undo" onClick={() => undoDeleteTask(task.id, task.listId)} />
+                    </div>
+                </cx>
+            )
+        }).open();
+    }
+
+    function undoDeleteTask(id, listId) {
+        batchUpdates(() => {
+            taskTracker.update(id, {
+                deleted: false,
+                deletedDate: null
+            }, { suppressUpdate: true });
+            taskTracker.reorderList(listId, true);
+            refreshTasks();
+        });
     }
 
     function getListsSorted() {
@@ -145,16 +170,40 @@ export default ({ store, ref, get, set }) => {
             let list = store.get("$list");
             listTracker.update(list.id, {
                 ...list,
-                edit: null,
+                edit: false,
                 lastChangeDate: new Date().toISOString()
             });
         },
 
         onDeleteList(e, { store }) {
-            let id = store.get("$list.id");
+            let list = store.get("$list"),
+                id = list.id;
             listTracker.update(id, {
                 deleted: true,
-                deletedDate: new Date().toISOString()
+                deletedDate: new Date().toISOString(),
+                edit: false
+            }, { suppressUpdate: true });
+            listTracker.reorder(true);
+            listTracker.forceUpdate();
+
+            Toast.create({
+                mod: 'warning',
+                timeout: 3000,
+                items: (
+                    <cx>
+                        <div ws>
+                            <Text value={`List ${list.name} has been deleted`} />
+                            <Button dismiss text="Undo" onClick={() => this.onUndoDeleteList(id)} />
+                        </div>
+                    </cx>
+                )
+            }).open();
+        },
+
+        onUndoDeleteList(id) {
+            listTracker.update(id, {
+                deleted: false,
+                deletedDate: null
             }, { suppressUpdate: true });
             listTracker.reorder(true);
             listTracker.forceUpdate();
@@ -169,12 +218,12 @@ export default ({ store, ref, get, set }) => {
             let listId = store.get("$list.id");
             let id = uid();
             taskTracker.add({
-                    id,
-                    name: null,
-                    listId,
-                    createdDate: new Date().toISOString(),
-                    order: 1e6
-                }, { suppressUpdate: true, suppressSync: true }
+                id,
+                name: null,
+                listId,
+                createdDate: new Date().toISOString(),
+                order: 1e6
+            }, { suppressUpdate: true, suppressSync: true }
             );
             taskTracker.reorderList(listId);
             editTask(id);
