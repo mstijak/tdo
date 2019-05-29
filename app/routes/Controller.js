@@ -1,4 +1,4 @@
-import { History } from "cx/ui";
+import { History, ResizeManager } from "cx/ui";
 import uid from "uid";
 import { firestore } from "../data/db/firestore";
 import { auth } from "../data/db/auth";
@@ -29,6 +29,9 @@ export default ({ store, get, set, init }) => {
     return {
         onInit() {
             this.store.set("layout.mode", this.getLayoutMode());
+            ResizeManager.subscribe(() => {
+                this.store.set("layout.mode", this.getLayoutMode());
+            });
 
             auth.onAuthStateChanged(user => {
                 if (user) {
@@ -73,7 +76,7 @@ export default ({ store, get, set, init }) => {
                     set("boards", boards);
 
                     if (!isNonEmptyArray(boards)) {
-                        //TODO: Ask the user to create the Welcome board
+                        History.pushState({}, null, "~/new");
                     }
                     else if (get("url") == "~/")
                         History.pushState({}, null, "~/b/" + boards[0].id);
@@ -113,32 +116,11 @@ export default ({ store, get, set, init }) => {
             return "phone";
         },
 
-        async onAddBoard(e) {
-            e.preventDefault();
-
-            let id = uid();
-
-            boardTracker.add({
-                id,
-                name: 'New Board',
-                edit: true,
-                order: 1e6
-            }, { suppressUpdate: true, suppressSync: true });
-
-            boardTracker.reorder();
-
-            let userId = get("user.id");
-
-            History.pushState({}, null, "~/b/" + id);
-
-            await firestore
-                .collection("boards")
-                .doc(id)
-                .set({
-                    id: id,
-                    owner: userId
-                });
+        getBoardTracker() {
+            return boardTracker;
         },
+
+
 
         onMoveBoardLeft(e, { store }) {
             let { $board } = store.getData();

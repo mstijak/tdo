@@ -27,6 +27,9 @@ module.exports = {
             exclude: /\@firebase[\\\/]app/,
             loader: 'babel-loader',
             query: babelCfg
+        }, {
+            test: /\.(png|svg)$/,
+            loader: 'url-loader'
         }]
     },
     entry: {

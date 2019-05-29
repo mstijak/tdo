@@ -1,0 +1,48 @@
+.boardtemplates {
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.boardtemplate {
+    box-sizing: content-box;
+    width: 196px;
+    height: 196px;
+    background: rgba(white, 0.1);
+    margin: 10px;
+    border: 2px solid rgba(white, 0.2);
+    opacity: 0.6;
+    transition: opacity 500ms;
+    position: relative;
+
+    &:hover, .cxs-cursor > & {
+        opacity: 1;
+    }
+}
+
+.boardtemplate_img {
+    width: 196px;
+    height: 196px;
+    opacity: 0.5;
+}
+
+.boardtemplate_info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(black, 0.85);
+    padding: 8px;
+    height: 60px;
+}
+
+.boardtemplate_name {
+    margin-bottom: 2px;
+    color: white;
+    font-weight: bold;
+}
+
+.boardtemplate_desc {
+    opacity: 0.7;
+    white-space: normal;
+}
