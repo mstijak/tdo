@@ -22,7 +22,8 @@ export class CollectionTracker<T extends HasId> {
                 let dirty = false;
                 snapshot.forEach(doc => {
                     let data: any = doc.data();
-                    dirty = this.index.index(data);
+                    if (this.index.index({ ...data }))
+                        dirty = true;
                 });
                 if (dirty)
                     this.onUpdate();
