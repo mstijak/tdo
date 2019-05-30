@@ -1,5 +1,7 @@
 # tdo
 
+> This project is not maintained anymore. The new version of tdo based on Firebase is available at https://github.com/codaxy/tdo.
+
 A flexible TODO list with the following features:
 
 - Markdown support
