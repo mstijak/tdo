@@ -30,7 +30,7 @@ export class Md extends HtmlElement {
 
     add(x) {
 
-        if (Array.isArray(x))
+        if (Array.isArray(x) && true==true)
             x.forEach(t=>this.add(t));
 
         if (typeof x != 'string')
